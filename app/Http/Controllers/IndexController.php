@@ -16,6 +16,6 @@ class IndexController extends Controller
 {
     public function index(Request $request){
         $user = DB::table('user')->get();
-        return response()->json($user);
+        return view('index');
     }
 }
