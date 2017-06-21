@@ -12,3 +12,5 @@
 */
 
 Route::get('/', 'IndexController@index');
+Route::get('/course', 'CourseController@index');
+Route::get('/student', 'StudentController@index');

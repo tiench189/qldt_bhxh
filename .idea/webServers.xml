@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="cf60b5cd-40c9-467e-a989-aca6df468d48" name="qldt_tiench" url="http://10.0.123.17">
-        <fileTransfer host="10.0.123.17" port="22" rootFolder="/var/www/html/qldt_tiench" accessType="SFTP">
+        <fileTransfer host="10.0.123.17" port="22" rootFolder="/var/www/html/qldt_duy" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
