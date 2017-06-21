@@ -40,19 +40,22 @@
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav my-nav">
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b
+                                    class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Bồi dưỡng lãnh đạo quản lý</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Chuyên môn nghiệp vụ</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Kiến thức quản lý nhà nước</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Theo nhu cầu xã hội</a></li>
+                            <?php $categories = \App\Utils::listCategories()?>
+                            @foreach($categories as $idx=>$cate)
+                                @if($idx > 0)
+                                    <li class="divider"></li>
+                                @endif
+                                <li><a href="#">{{$cate->name}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li><a href="#">Giảng viên</a></li>
                     <li><a href="#">Học viên</a></li>
+                    <li><a href="#">Tra cứu</a></li>
+                    <li><a href="#">Báo cáo</a></li>
                     <li><a href="#">Phiếu khảo sát</a></li>
                 </ul>
                 <form class="navbar-form navbar-left hidden" role="search">
@@ -74,8 +77,8 @@
                         </ul>
                     </li>
                 </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </nav>
 
     <div id="content">
