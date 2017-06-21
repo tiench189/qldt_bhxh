@@ -1,0 +1,21 @@
+[2017-06-20 08:21:48] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
+[2017-06-20 08:24:51] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
+[2017-06-20 08:24:52] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
+[2017-06-20 08:24:53] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
+[2017-06-20 08:24:54] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
+[2017-06-20 08:24:54] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
+[2017-06-20 08:24:55] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
+Stack trace:
+#0 {main}  
