@@ -11,6 +11,13 @@
     <link href="{{env('ALIAS')}}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="{{env('ALIAS')}}/css/main.css" rel="stylesheet" type="text/css">
 
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css"
+          href="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/css/dataTables.bootstrap.min.css"/>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/js/dataTables.bootstrap.min.js"></script>
     <title>@section('page-title')
         @show</title>
 </head>
