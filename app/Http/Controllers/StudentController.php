@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class StudentController extends Controller
 {
     public function index(Request $request){
-        $course = DB::table('user')->get();
-        dd($course);
+        $users = DB::table('user')->get();
+        return view('student.index', ['users'=>$users]);
     }
 }
