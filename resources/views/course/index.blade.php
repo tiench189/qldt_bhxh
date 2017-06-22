@@ -1,42 +1,45 @@
 @extends('layout')
 
 @section('page-title')
-    Quản lý Học Viên
+    Quản lý Khóa Học
 @stop
 
 @section('content')
     <div class="col-lg-12">
-    <h1>Danh sách học viên</h1>
+    <h1>Danh sách Khóa Học</h1>
 
 
     <table id="table" class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>T&ecirc;n đệm v&agrave; t&ecirc;n&nbsp;/&nbsp;Họ
+            <th>#
             </th>
-            <th>Username
+            <th>Tên khóa học
             </th>
-            <th>Thư điện tử
+            <th>Tên khóa học (đầy đủ)
             </th>
-            <th>Tỉnh/Th&agrave;nh phố
+            <th>Mô Tả
             </th>
-            <th>Quốc gia
+            <th>Hiển thị
             </th>
-            <th>Truy cập gần nhất
+            <th>Ngày kết thúc
             </th>
-            <th>Chỉnh sửa
+            <th>Ngày tạo / Ngày sửa
+            </th>
+            <th>
             </th>
         </tr>
         </thead>
         <tbody>
-        @foreach ($users as $row)
+        @foreach ($course as $row)
             <tr>
-                <td> {{$row->firstname}} {{$row->lastname}} </td>
-                <td> {{$row->username}} </td>
-                <td> {{$row->email}} </td>
-                <td> {{$row->city}} </td>
-                <td> {{$row->country}} </td>
-                <td> {{$row->lastlogin}} </td>
+                <td> {{$row->id}} </td>
+                <td> {{$row->shortname}} </td>
+                <td> {{$row->fullname}} </td>
+                <td> {{$row->summary}} </td>
+                <td> {{$row->visible}} </td>
+                <td> {{$row->enddate}} </td>
+                <td> {{$row->timecreated}} / {{$row->timemodified}} </td>
                 <td> / </td>
             </tr>
         @endforeach
