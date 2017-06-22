@@ -19,3 +19,33 @@ Stack trace:
 [2017-06-20 08:24:55] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Yajra\Pdo\oci_connect()' in C:\xampp\htdocs\qldt\vendor\yajra\laravel-pdo-via-oci8\src\Pdo\Oci8.php:455
 Stack trace:
 #0 {main}  
+[2017-06-22 08:49:06] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined method Illuminate\Foundation\Application::bindShared()' in C:\xampp\htdocs\qldt_bhxh\vendor\illuminate\html\HtmlServiceProvider.php:36
+Stack trace:
+#0 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(134): Symfony\Component\Debug\Exception\FatalErrorException->__construct()
+#1 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(119): Illuminate\Foundation\Bootstrap\HandleExceptions->fatalExceptionFromError()
+#2 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(0): Illuminate\Foundation\Bootstrap\HandleExceptions->handleShutdown()
+#3 C:\xampp\htdocs\qldt_bhxh\vendor\illuminate\html\HtmlServiceProvider.php(21): Illuminate\Html\HtmlServiceProvider->registerHtmlBuilder()
+#4 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(574): Illuminate\Html\HtmlServiceProvider->register()
+#5 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(683): Illuminate\Foundation\Application->register()
+#6 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(663): Illuminate\Foundation\Application->registerDeferredProvider()
+#7 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(639): Illuminate\Foundation\Application->loadDeferredProvider()
+#8 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(273): Illuminate\Foundation\Application->loadDeferredProviders()
+#9 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(114): Illuminate\Foundation\Console\Kernel->bootstrap()
+#10 C:\xampp\htdocs\qldt_bhxh\artisan(36): Illuminate\Foundation\Console\Kernel->handle()
+#11 C:\xampp\htdocs\qldt_bhxh\artisan(0): {main}()
+#12 {main}  
+[2017-06-22 09:01:26] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined method Illuminate\Foundation\Application::bindShared()' in C:\xampp\htdocs\qldt_bhxh\vendor\illuminate\html\HtmlServiceProvider.php:36
+Stack trace:
+#0 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(134): Symfony\Component\Debug\Exception\FatalErrorException->__construct()
+#1 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(119): Illuminate\Foundation\Bootstrap\HandleExceptions->fatalExceptionFromError()
+#2 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Bootstrap\HandleExceptions.php(0): Illuminate\Foundation\Bootstrap\HandleExceptions->handleShutdown()
+#3 C:\xampp\htdocs\qldt_bhxh\vendor\illuminate\html\HtmlServiceProvider.php(21): Illuminate\Html\HtmlServiceProvider->registerHtmlBuilder()
+#4 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(574): Illuminate\Html\HtmlServiceProvider->register()
+#5 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(683): Illuminate\Foundation\Application->register()
+#6 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(663): Illuminate\Foundation\Application->registerDeferredProvider()
+#7 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(639): Illuminate\Foundation\Application->loadDeferredProvider()
+#8 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(273): Illuminate\Foundation\Application->loadDeferredProviders()
+#9 C:\xampp\htdocs\qldt_bhxh\vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php(114): Illuminate\Foundation\Console\Kernel->bootstrap()
+#10 C:\xampp\htdocs\qldt_bhxh\artisan(36): Illuminate\Foundation\Console\Kernel->handle()
+#11 C:\xampp\htdocs\qldt_bhxh\artisan(0): {main}()
+#12 {main}  
