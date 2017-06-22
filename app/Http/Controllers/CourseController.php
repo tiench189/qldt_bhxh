@@ -47,6 +47,6 @@ class CourseController extends Controller
 
         $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai];
 //        return response()->json($output);
-        return view('index', $output);
+        return view('course.result', $output);
     }
 }

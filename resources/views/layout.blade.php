@@ -93,4 +93,20 @@
     </div>
 </div>
 </body>
+<script>
+    $(document).ready(function () {
+
+        //Datatables
+        table = $('#table').DataTable({
+            autoWidth: false,
+            bSort: false,
+            bLengthChange: false,
+            "pageLength": 20,
+            "language": {
+                "url": "{{$_ENV['ALIAS']}}/js/datatables/Vietnamese.json"
+            },
+        });
+        //End Datatable
+    });
+</script>
 </html>
