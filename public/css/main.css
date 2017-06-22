@@ -59,3 +59,10 @@ li.dropdown:hover > .dropdown-menu {
 .my-nav>li>a:focus, .my-nav>li>a:hover, .my-nav>li>a:active{
     background: #3099D2 !important;
 }
+.page-title{
+    font-size: 1.2em;
+    padding-bottom: 20px;
+}
+.stt{
+    width: 40px;
+}
