@@ -19,4 +19,17 @@ class Utils extends Model
             ->orderBy('sortorder', 'asc')
             ->get();
     }
+
+    public static function row2Array($rows){
+        $arr = array();
+        foreach ($rows as $r){
+            $arr[$r->id] = $r;
+        }
+        return $arr;
+    }
+
+    public static function formatTimestamp($time){
+        if ($time == null) return '';
+        return date('d/m/Y', strtotime($time));
+    }
 }

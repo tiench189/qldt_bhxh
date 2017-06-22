@@ -12,5 +12,9 @@
 */
 
 Route::get('/', 'IndexController@index');
-Route::get('/course', 'CourseController@index');
+
 Route::get('/student', 'StudentController@index');
+Route::group(['prefix' => 'course'], function () {
+    Route::get('/', 'CourseController@index');
+    Route::get('/result', 'CourseController@allResult');
+});
