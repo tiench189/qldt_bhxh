@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 class Utils extends Model
 {
     public static function listCategories(){
-        return DB::table('course_categories')->get();
+        return DB::table('course_categories')
+            ->orderBy('sortorder', 'asc')
+            ->get();
     }
 }
