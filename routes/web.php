@@ -11,13 +11,15 @@
 |
 */
 
+Route::get('/', 'StudentController@index');
 
-Route::get('/', 'IndexController@index');
-
-Route::get('/student', 'StudentController@index');
 Route::group(['prefix' => 'course'], function () {
     Route::get('/', 'CourseController@index');
     Route::get('/result', 'CourseController@allResult');
     Route::get('/update', 'CourseController@edit')->name('course-update');
     Route::post('/update', 'CourseController@update')->name('course-update');
+});
+Route::group(['prefix' => 'hocvien'], function () {
+    Route::get('/', 'StudentController@index');
+    Route::get('/histories', 'StudentController@histories');
 });
