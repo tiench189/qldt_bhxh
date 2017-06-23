@@ -29,7 +29,12 @@ class Utils extends Model
     }
 
     public static function formatTimestamp($time){
-        if ($time == null) return '';
+        if ($time == null || $time == 0) return '';
         return date('d/m/Y', strtotime($time));
+    }
+
+    public static function toTimeFormat($time){
+        if ($time == null || $time == 0) return '';
+        return date('d/m/Y', $time);
     }
 }
