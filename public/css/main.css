@@ -65,3 +65,15 @@ li.dropdown:hover > .dropdown-menu {
 .stt{
     width: 40px;
 }
+.ico-action{
+    background-size: 100% 100%;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+}
+.ico-action.history{
+    background-image: url("../img/ico_history.png");
+}
+th.action{
+    width: 10px;
+}

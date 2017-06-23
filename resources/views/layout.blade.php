@@ -47,7 +47,7 @@
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav my-nav">
                     <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b
+                        <a href="{{'ALIAS'}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b
                                     class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <?php $categories = \App\Utils::listCategories()?>
@@ -60,7 +60,7 @@
                         </ul>
                     </li>
                     <li><a href="#">Giảng viên</a></li>
-                    <li><a href="#">Học viên</a></li>
+                    <li><a href="{{env('ALIAS')}}/hocvien">Học viên</a></li>
                     <li><a href="#">Tra cứu</a></li>
                     <li><a href="#">Báo cáo</a></li>
                     <li><a href="#">Phiếu khảo sát</a></li>
