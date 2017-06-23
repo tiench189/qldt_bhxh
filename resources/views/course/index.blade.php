@@ -12,21 +12,21 @@
     <table id="table" class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>#
+            <th width="20">#
             </th>
-            <th>Tên khóa học
+            <th width="15%">Tên khóa học
             </th>
-            <th>Tên khóa học (đầy đủ)
+            <th width="15%">Tên khóa học (đầy đủ)
             </th>
             <th>Mô Tả
             </th>
             <th>Hiển thị
             </th>
-            <th>Ngày kết thúc
+            <th width="10%">Ngày kết thúc
             </th>
-            <th>Ngày tạo / Ngày sửa
+            <th width="10%">Ngày tạo / Ngày sửa
             </th>
-            <th>
+            <th width="10%">
             </th>
         </tr>
         </thead>
