@@ -16,6 +16,58 @@ class StudentController extends Controller
 {
     public function index(Request $request){
         $users = DB::table('user')->get();
-        return view('student.index', ['users'=>$users]);
+
+        //Lay thong tin don vi
+        $iddv = array();
+        foreach ($users as $row){
+            $iddv[] = $row->donvi;
+        }
+        $datadonvi = DB::table('donvi')
+            ->whereIn('id', $iddv)
+            ->get();
+        $donvi = \App\Utils::row2Array($datadonvi);
+        return view('student.index', ['users'=>$users, 'donvi' => $donvi]);
+    }
+
+    public function histories(Request $request){
+        $uid = intval($request->u);
+
+        $histories = DB::table('lop_hocvien')
+            ->where('user_id', $uid)
+            ->get();
+        //Lay thong tin hoc vien
+        $user = DB::table('user')
+            ->where('id', $uid)
+            ->first();
+
+        //Lay thong tin lop va khoa hoc
+        $lid = array();
+        foreach ($histories as $row){
+            $lid[] = $row->lop_id;
+        }
+        $datalop = DB::table('lop')
+            ->join('course', 'lop.course_id', '=', 'course.id')
+            ->whereIn('lop.id', $lid)
+            ->select('lop.id',  'lop.ten_lop', 'course.fullname as course_name', 'course.id as course_id')
+            ->get();
+        $lop = \App\Utils::row2Array($datalop);
+
+        //Lấy kết quả
+        $dataketqua = DB::table('ketqua')
+            ->where('user_id', $uid)
+            ->get();
+        $ketqua = array();
+        foreach ($dataketqua as $row){
+            $ketqua[$row->course_id] = $row;
+        }
+        //lay thong tin xeploai
+        //Lay thong tin xep loai
+        $dataXeploai = DB::table('xeploai')->get();
+        $xeploai = \App\Utils::row2Array($dataXeploai);
+
+        $output = ['user' => $user, 'histories' => $histories, 'lop' => $lop,
+            'ketqua' => $ketqua, 'xeploai' => $xeploai];
+//        return response()->json($output);
+        return view('student.histories', $output);
     }
 }

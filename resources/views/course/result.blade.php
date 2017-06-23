@@ -20,7 +20,7 @@
         <tbody>
         @foreach($allResult as $idx=>$row)
             <tr>
-                <td>{{$idx}}</td>
+                <td>{{$idx + 1}}</td>
                 <td>{{$users[$row->user_id]->firstname}} {{$users[$row->user_id]->lastname}}</td>
                 <td>{{$users[$row->user_id]->email}}</td>
                 <td>{{$row->grade}}</td>

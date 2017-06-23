@@ -32,4 +32,11 @@ class Utils extends Model
         if ($time == null) return '';
         return date('d/m/Y', strtotime($time));
     }
+
+    public static function getStatus($status){
+        $dict = array();
+        $dict['finished'] = 'Hoàn thành';
+        if (! array_key_exists($status, $dict)) return '';
+        return $dict[$status];
+    }
 }
