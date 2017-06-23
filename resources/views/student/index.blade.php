@@ -12,9 +12,20 @@
     <table id="table" class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>Fullname</th>
-            <th>Username</th>
-            <th>Email</th>
+            <th>T&ecirc;n đệm v&agrave; t&ecirc;n&nbsp;/&nbsp;Họ
+            </th>
+            <th>Username
+            </th>
+            <th>Thư điện tử
+            </th>
+            <th>Tỉnh/Th&agrave;nh phố
+            </th>
+            <th>Quốc gia
+            </th>
+            <th>Truy cập gần nhất
+            </th>
+            <th>Chỉnh sửa
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -23,6 +34,10 @@
                 <td> {{$row->firstname}} {{$row->lastname}} </td>
                 <td> {{$row->username}} </td>
                 <td> {{$row->email}} </td>
+                <td> {{$row->city}} </td>
+                <td> {{$row->country}} </td>
+                <td> {{$row->lastlogin}} </td>
+                <td> / </td>
             </tr>
         @endforeach
         </tbody>

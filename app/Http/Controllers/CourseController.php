@@ -16,7 +16,7 @@ class CourseController extends Controller
 {
     public function index(Request $request){
         $course = DB::table('course')->get();
-        dd($course);
+        return view('course.index', ['course'=>$course]);
     }
 
     public function allResult(Request $request){
