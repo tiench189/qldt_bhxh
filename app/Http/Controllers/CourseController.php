@@ -41,8 +41,24 @@ class CourseController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        
 
+        $result = DB::table('course')
+            ->where('id', $id)
+            ->update([
+                'shortname'=>$request->input('shortname'),
+                'fullname'=>$request->input('fullname'),
+                'summary'=>$request->input('summary'),
+                ]);
+
+        if($result) {
+            $request->session()->flash('message', "Cập nhật thành công.");
+        } else {
+            $request->session()->flash('message', "Cập nhật không thành công.");
+        }
+
+        return redirect()->action(
+            'CourseController@index', ['update' => $result]
+        );
     }
 
 

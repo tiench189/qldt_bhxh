@@ -23,7 +23,7 @@
     </div>
     <div class="form-group">
         <label>Tóm tắt: <span class="required">(*)</span></label>
-        {!! Form::textarea('username', $course->summary,
+        {!! Form::textarea('summary', $course->summary,
             array('class'=>'form-control',
                   'placeholder'=>'Tóm tắt nội dung')) !!}
     </div>
