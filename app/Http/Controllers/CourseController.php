@@ -62,8 +62,6 @@ class CourseController extends Controller
         );
     }
 
-
-
     public function allResult(Request $request){
         $courseId = intval($request->c);
         //Lay thong tin khoa hoc

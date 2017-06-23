@@ -36,11 +36,11 @@
                 <td> {{$row->id}} </td>
                 <td> {{$row->shortname}} </td>
                 <td> {{$row->fullname}} </td>
-                <td> {{$row->summary}} </td>
+                <td> {!! $row->summary !!} </td>
                 <td> {{$row->visible}} </td>
                 <td> {{\App\Utils::toTimeFormat($row->enddate)}} </td>
-                <td>  {{\App\Utils::toTimeFormat($row->timecreated)}} <br /> {{\App\Utils::toTimeFormat($row->timemodified)}} </td>
-                <td> {{ link_to_action('CourseController@edit', $title = "edit", $parameters = ['id'=>$row->id], $attributes = []) }} / </td>
+                <td> {{\App\Utils::toTimeFormat($row->timecreated)}} <br /> {{\App\Utils::toTimeFormat($row->timemodified)}} </td>
+                <td> {{ link_to_action('CourseController@edit', $title = "edit", $parameters = ['id'=>$row->id], $attributes = ['class'=>'btn btn-sm btn-primary']) }} </td>
             </tr>
         @endforeach
         </tbody>
