@@ -33,6 +33,14 @@ class Utils extends Model
         return date('d/m/Y', strtotime($time));
     }
 
+
+    public static function toTimeFormat($time){
+        if ($time == null || $time == 0) return '';
+        return date('d/m/Y', $time);
+      
+    }
+  
+  
     public static function getStatus($status){
         $dict = array();
         $dict['finished'] = 'Hoàn thành';

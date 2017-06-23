@@ -48,6 +48,7 @@ class CourseController extends Controller
                 'shortname'=>$request->input('shortname'),
                 'fullname'=>$request->input('fullname'),
                 'summary'=>$request->input('summary'),
+                'timemodified'=>time(),
                 ]);
 
         if($result) {
