@@ -11,13 +11,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Validator;
 class CourseController extends Controller
 {
     public function index(Request $request){
         $course = DB::table('course')->get();
         return view('course.index', ['course'=>$course]);
     }
+
+    public function edit(Request $request){
+        $courseId = intval($request->id);
+        $course = DB::table('course')->where('id', $courseId)->first();
+        return view('course.edit', ['course'=>$course]);
+    }
+    public function update(Request $request)
+    {
+        $id = intval( $request->input('id') );
+        $messages = [
+            'shortname.required' => 'Yêu cầu nhập tên khóa học (rút gọn)',
+            'fullname.required' => 'Yêu cầu nhập tên khóa học.',
+        ];
+        $validator = Validator::make($request->all(), [
+            'shortname' => 'required',
+            'fullname' => 'required',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->action('CourseController@update',["id"=>$id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+
+    }
+
+
 
     public function allResult(Request $request){
         $courseId = intval($request->c);

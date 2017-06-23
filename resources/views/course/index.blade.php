@@ -40,7 +40,7 @@
                 <td> {{$row->visible}} </td>
                 <td> {{$row->enddate}} </td>
                 <td> {{$row->timecreated}} / {{$row->timemodified}} </td>
-                <td> / </td>
+                <td> {{ link_to_action('CourseController@edit', $title = "edit", $parameters = ['id'=>$row->id], $attributes = []) }} / </td>
             </tr>
         @endforeach
         </tbody>
