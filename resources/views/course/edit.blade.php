@@ -1,0 +1,38 @@
+@extends('layout')
+
+@section('page-title')
+    Update User
+@stop
+
+@section('content')
+    <div class="text-center title">Cập nhật thông tin Người sử dụng</div>
+
+    {!! Form::open(array('route' => 'course-update', 'class' => 'form')) !!}
+    {{ Form::hidden('id', $course->id, array('id' => 'courseid')) }}
+    <div class="form-group">
+        <label>Tên khóa học (rút gọn): <span class="required">(*)</span></label>
+        {!! Form::text('shortname', $course->shortname,
+            array('class'=>'form-control',
+                  'placeholder'=>'Tên khóa học rút gọn')) !!}
+    </div>
+    <div class="form-group">
+        <label>Tên khóa học: <span class="required">(*)</span></label>
+        {!! Form::text('fullname', $course->fullname,
+            array('class'=>'form-control',
+                  'placeholder'=>'Tên khóa học ')) !!}
+    </div>
+    <div class="form-group">
+        <label>Tóm tắt: <span class="required">(*)</span></label>
+        {!! Form::textarea('summary', $course->summary,
+            array('class'=>'form-control',
+                  'placeholder'=>'Tóm tắt nội dung')) !!}
+    </div>
+
+    <div class="form-group">
+        {!! Form::submit('Cập nhật',
+          array('class'=>'btn btn-primary')) !!}
+    </div>
+    {!! Form::close() !!}
+
+
+@stop
