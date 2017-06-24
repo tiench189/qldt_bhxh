@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-    <div class="text-center title">Cập nhật thông tin Người sử dụng</div>
+    <div class="page-title">Cập nhật khóa đào tạo</div>
 
     {!! Form::open(array('route' => 'course-update', 'class' => 'form')) !!}
     {{ Form::hidden('id', $course->id, array('id' => 'courseid')) }}
@@ -22,7 +22,7 @@
                   'placeholder'=>'Tên khóa học ')) !!}
     </div>
     <div class="form-group">
-        <label>Tóm tắt: <span class="required">(*)</span></label>
+        <label>Mô tả: <span class="required">(*)</span></label>
         {!! Form::textarea('summary', $course->summary,
             array('class'=>'form-control',
                   'placeholder'=>'Tóm tắt nội dung')) !!}

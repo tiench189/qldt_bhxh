@@ -5,13 +5,11 @@
 @stop
 
 @section('content')
-    <div class="col-lg-12">
-    <h1>Danh sách Khóa Học</h1>
-
-
+    <div class="page-title">Danh sách Khóa đào tạo</div>
     <table id="table" class="table table-bordered table-hover">
         <thead>
         <tr>
+
             <th width="20">#
             </th>
             <th width="15%">Tên khóa học
@@ -37,13 +35,16 @@
                 <td> {{$row->shortname}} </td>
                 <td> {{$row->fullname}} </td>
                 <td> {!! $row->summary !!} </td>
-                <td> {{$row->visible}} </td>
                 <td> {{\App\Utils::toTimeFormat($row->enddate)}} </td>
-                <td> {{\App\Utils::toTimeFormat($row->timecreated)}} <br /> {{\App\Utils::toTimeFormat($row->timemodified)}} </td>
-                <td> {{ link_to_action('CourseController@edit', $title = "edit", $parameters = ['id'=>$row->id], $attributes = ['class'=>'btn btn-sm btn-primary']) }} </td>
+                <td>  {{\App\Utils::toTimeFormat($row->timecreated)}}
+                    <br/> {{\App\Utils::toTimeFormat($row->timemodified)}} </td>
+                <td>
+                    <a href="{{env('ALIAS')}}/course/update?id={{$row->id}}" title="Chỉnh sửa khóa đào tạo">
+                        <div class="ico-action edit"></div>
+                    </a>
+                </td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    </div>
 @stop

@@ -11,7 +11,7 @@
         <tr>
             <th class="stt">#</th>
             <th>Khóa học</th>
-            <th>Lop</th>
+            <th>Lớp</th>
             <th>Trạng thái</th>
             <th>Điểm</th>
             <th>Xếp loại</th>

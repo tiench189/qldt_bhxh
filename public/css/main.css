@@ -74,6 +74,9 @@ li.dropdown:hover > .dropdown-menu {
 .ico-action.history{
     background-image: url("../img/ico_history.png");
 }
+.ico-action.edit{
+    background-image: url("../img/ico_edit.png");
+}
 th.action{
     width: 10px;
 }
