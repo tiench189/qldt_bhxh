@@ -9,13 +9,23 @@
     <table id="table" class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th>#</th>
-            <th>Tên khóa học</th>
-            <th>Tên khóa học (đầy đủ)</th>
-            <th>Mô Tả</th>
-            <th>Ngày kết thúc</th>
-            <th>Ngày tạo / Ngày sửa</th>
-            <th></th>
+
+            <th width="20">#
+            </th>
+            <th width="15%">Tên khóa học
+            </th>
+            <th width="15%">Tên khóa học (đầy đủ)
+            </th>
+            <th>Mô Tả
+            </th>
+            <th>Hiển thị
+            </th>
+            <th width="10%">Ngày kết thúc
+            </th>
+            <th width="10%">Ngày tạo / Ngày sửa
+            </th>
+            <th width="10%">
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -24,11 +34,10 @@
                 <td> {{$row->id}} </td>
                 <td> {{$row->shortname}} </td>
                 <td> {{$row->fullname}} </td>
-                <td> {{$row->summary}} </td>
+                <td> {!! $row->summary !!} </td>
                 <td> {{\App\Utils::toTimeFormat($row->enddate)}} </td>
                 <td>  {{\App\Utils::toTimeFormat($row->timecreated)}}
                     <br/> {{\App\Utils::toTimeFormat($row->timemodified)}} </td>
-                {{--                    <td> {{ link_to_action('CourseController@edit', $title = "edit", $parameters = ['id'=>$row->id], $attributes = []) }}</td>--}}
                 <td>
                     <a href="{{env('ALIAS')}}/course/update?id={{$row->id}}" title="Chỉnh sửa khóa đào tạo">
                         <div class="ico-action edit"></div>
