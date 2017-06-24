@@ -32,9 +32,14 @@
         @foreach ($course as $row)
             <tr>
                 <td> {{$row->id}} </td>
-                <td> {{$row->shortname}} </td>
+                <td> <strong>{{$row->shortname}}</strong> </td>
                 <td> {{$row->fullname}} </td>
                 <td> {!! $row->summary !!} </td>
+                <td> @if ($row->visible === 1)
+                        <span class="label label-success">Hiện</span>
+                    @else
+                        <span class="label label-success">Ẩn</span>
+                    @endif </td>
                 <td> {{\App\Utils::toTimeFormat($row->enddate)}} </td>
                 <td>  {{\App\Utils::toTimeFormat($row->timecreated)}}
                     <br/> {{\App\Utils::toTimeFormat($row->timemodified)}} </td>
