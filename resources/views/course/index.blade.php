@@ -3,7 +3,6 @@
 @section('page-title')
     Quản lý Khóa Học
 @stop
-
 @section('content')
     <div class="page-title">Danh sách Khóa đào tạo</div>
     <table id="table" class="table table-bordered table-hover">
