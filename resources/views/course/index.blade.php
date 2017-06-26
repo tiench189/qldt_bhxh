@@ -4,6 +4,9 @@
     Quản lý Khóa Học
 @stop
 @section('content')
+    @if (Session::has('message'))
+        <div class="alert alert-info">{!!  Session::get('message') !!}</div>
+    @endif
     <div class="page-title">Danh sách Khóa đào tạo</div>
     <table id="table" class="table table-bordered table-hover">
         <thead>
@@ -45,6 +48,9 @@
                 <td>
                     <a href="{{env('ALIAS')}}/course/update?id={{$row->id}}" title="Chỉnh sửa khóa đào tạo">
                         <div class="ico-action edit"></div>
+                    </a>
+                    <a href="{{env('ALIAS')}}/course/class?c={{$row->id}}" class="btn btn-xs btn-success" title="Khóa học">
+                        Lớp học
                     </a>
                 </td>
             </tr>
