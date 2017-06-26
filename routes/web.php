@@ -19,7 +19,7 @@ Route::group(['prefix' => 'course'], function () {
     Route::get('/result', 'CourseController@allResult');
     Route::get('/update', 'CourseController@edit')->name('course-update');
     Route::post('/update', 'CourseController@update')->name('course-update');
-    Route::get( 'dshocvien','CourseController@dshocvien' )->name('type-dshocvien');
+    Route::get( 'dshocvien','CourseController@dshocvien' )->name('course-dshocvien');
 });
 Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/', 'StudentController@index');
@@ -27,6 +27,8 @@ Route::group(['prefix' => 'hocvien'], function () {
 });
 
 Route::group(['prefix' => 'teacher'], function () {
-    Route::get( '/','TeacherController@index' )->name('type-index');
-    Route::get( 'danhsach','TeacherController@danhsach' )->name('type-danhsach');
+    Route::get( '/','TeacherController@index' )->name('teacher-index');
+    Route::get( 'danhsach','TeacherController@danhsach' )->name('teacher-danhsach');
+    Route::get('/update', 'TeacherController@edit')->name('teacher-update');
+    Route::post('/update', 'TeacherController@update')->name('teacher-update');
 });

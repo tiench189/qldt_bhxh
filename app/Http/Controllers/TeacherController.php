@@ -9,12 +9,69 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class TeacherController extends Controller
 {
     public function index(Request $request){
-
+        $teachers = array();
+        $objects = DB::table('role_assignments')->where('roleid', '=', 4)->select('userid')->get();
+        if(!empty($objects)){
+            foreach ($objects as $item){
+                $ids[] = $item->userid;
+            }
+            $teachers = DB::table('user')
+                ->whereIn('id', $ids)
+                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
+                ->get();
+        }
+        return view('teacher.index',['teachers' => $teachers]);
     }
+
+    public function edit(Request $request){
+        $teacherId = intval($request->id);
+        $teacher = DB::table('user')->where('id', $teacherId)->first();
+        return view('teacher.edit', ['teacher'=>$teacher]);
+    }
+
+    public function update(Request $request)
+    {
+        $id = intval( $request->input('id') );
+        $messages = [
+            'username.required' => 'Yêu cầu nhập tên giáo viên',
+            'username.unique' => 'Tên đăng nhập đã tồn tại.',
+        ];
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|unique:user,username,' . $id,
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->action('TeacherController@update',["id"=>$id])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $result = DB::table('user')
+            ->where('id', $id)
+            ->update([
+                'username'=>$request->input('username'),
+                'firstname'=>$request->input('firstname'),
+                'lastname'=>$request->input('lastname'),
+                'description'=>$request->input('description'),
+                'timemodified'=>time(),
+            ]);
+        if($result) {
+            $request->session()->flash('message', "Cập nhật thành công.");
+        } else {
+            $request->session()->flash('message', "Cập nhật không thành công.");
+        }
+
+        return redirect()->action(
+            'TeacherController@index', ['update' => $result]
+        );
+    }
+
+
 
     public function danhsach(Request $request){
         define('CONTEXT_COURSE', 50);
@@ -74,10 +131,6 @@ class TeacherController extends Controller
         }
 
         return view('teacher.danhsach',['teachers' => $teachers]);
-    }
-
-    public function create(){
-
     }
 
 }
