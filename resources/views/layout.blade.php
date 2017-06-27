@@ -8,8 +8,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script src="{{env('ALIAS')}}/js/bootstrap.min.js"></script>
+    <script src="{{env('ALIAS')}}/js/select2.js"></script>
+    <script src="{{$_ENV['ALIAS']}}/js/bootstrap-datepicker.js"></script>
+
     <link href="{{env('ALIAS')}}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="{{env('ALIAS')}}/css/main.css" rel="stylesheet" type="text/css">
+    <link href="{{env('ALIAS')}}/css/select2.css" rel="stylesheet" type="text/css">
+    <link href="{{$_ENV['ALIAS']}}/css/datepicker.css" rel="stylesheet">
 
     <!-- Datatable -->
     <link rel="stylesheet" type="text/css"
@@ -107,6 +112,21 @@
             },
         });
         //End Datatable
+
+        //Select2
+        $(".js-example-basic-single").select2();
+        //End select2
+
+        //Datepicker
+        $('.datepicker').datepicker({
+            format: " yyyy", // Notice the Extra space at the beginning
+            viewMode: "years",
+            minViewMode: "years"
+        });
+        $('.datepicker').on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+        //End datepicker
     });
 </script>
 </html>
