@@ -24,3 +24,6 @@ Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/', 'StudentController@index');
     Route::get('/histories', 'StudentController@histories');
 });
+Route::group(['prefix' => 'tracuu'], function () {
+    Route::get('/', 'TraCuuController@index');
+});

@@ -52,21 +52,11 @@ class StudentController extends Controller
             ->get();
         $lop = \App\Utils::row2Array($datalop);
 
-        //Lấy kết quả
-        $dataketqua = DB::table('ketqua')
-            ->where('user_id', $uid)
-            ->get();
-        $ketqua = array();
-        foreach ($dataketqua as $row){
-            $ketqua[$row->course_id] = $row;
-        }
-        //lay thong tin xeploai
         //Lay thong tin xep loai
         $dataXeploai = DB::table('xeploai')->get();
         $xeploai = \App\Utils::row2Array($dataXeploai);
 
-        $output = ['user' => $user, 'histories' => $histories, 'lop' => $lop,
-            'ketqua' => $ketqua, 'xeploai' => $xeploai];
+        $output = ['user' => $user, 'histories' => $histories, 'lop' => $lop, 'xeploai' => $xeploai];
 //        return response()->json($output);
         return view('student.histories', $output);
     }
