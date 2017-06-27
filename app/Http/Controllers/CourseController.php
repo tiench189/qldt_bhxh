@@ -12,6 +12,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
+
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Border;
+use PHPExcel_Settings;
+
+
 class CourseController extends Controller
 {
     public function index(Request $request){
@@ -103,7 +110,10 @@ class CourseController extends Controller
         return view('course.result', $output);
     }
 
+    public function export(Request $request)
+    {
 
+    }
     // Danh sach lop
 
     public function classindex(Request $request){
@@ -114,7 +124,19 @@ class CourseController extends Controller
             $course = DB::table('course')->where('id', $courseId)->first();
             // lay thong tin lop
             $class = DB::table('lop')->where('course_id', $courseId)->get();
-            return view('course.classindex', ['class'=>$class,'course' => $course]);
+
+            $lophocvien = DB::table('lop_hocvien')
+                ->select('lop_id', DB::raw('count(user_id) as hoc_vien'))
+                ->groupBy('lop_id')
+                ->get();
+
+            $hocvien = [];
+            foreach ($lophocvien as $r) {
+                $hocvien[$r->lop_id] = $r->hoc_vien;
+            }
+
+            return view('course.classindex', ['class'=>$class,'course' => $course,'hocvien'=>$hocvien]);
+
         } else {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");
             return redirect()->action('CourseController@index');
