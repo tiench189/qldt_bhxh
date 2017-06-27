@@ -7,6 +7,12 @@
 @section('content')
     <div class="page-title">Cập nhật khóa đào tạo</div>
 
+    @if ( $errors->count() > 0 )
+        @foreach( $errors->all() as $message )
+            <p  class="alert alert-danger">{{ $message }}</p>
+        @endforeach
+    @endif
+
     {!! Form::open(array('route' => 'course-update', 'class' => 'form')) !!}
     {{ Form::hidden('id', $course->id, array('id' => 'courseid')) }}
     <div class="form-group">
