@@ -28,7 +28,14 @@
                 <td> {{\App\Utils::toTimeFormat($row->time_start)}} </td>
                 <td> {{\App\Utils::toTimeFormat($row->time_end)}} </td>
                 <td> {{$row->doi_tuong}}  </td>
-                <td> 0 </td>
+                <td>
+                    @isset($hocvien[$row->id])
+                        {{ $hocvien[$row->id] }}
+                    @endisset
+                    @empty($hocvien[$row->id])
+                        0
+                    @endempty
+                </td>
                 <td>
                     <a href="{{env('ALIAS')}}/course/class?c={{$row->id}}" class="btn btn-xs btn-info" title="Khóa học">
                         DS Giáo Viên
