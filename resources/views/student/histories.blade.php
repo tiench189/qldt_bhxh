@@ -25,9 +25,9 @@
                 <td>{{$lop[$row->lop_id]->course_name}}</td>
                 <td>{{$lop[$row->lop_id]->ten_lop}}</td>
                 <td>{{\app\Utils::getStatus($row->status)}}</td>
-                <td>{{$ketqua[$lop[$row->lop_id]->course_id]->grade}}</td>
-                <td>{{$xeploai[$ketqua[$lop[$row->lop_id]->course_id]->xeploai]->name}}</td>
-                <td>{{\app\Utils::formatTimestamp($ketqua[$lop[$row->lop_id]->course_id]->complete_at)}}</td>
+                <td>{{$row->grade}}</td>
+                <td>{{$xeploai[$row->xeploai]->name}}</td>
+                <td>{{\app\Utils::formatTimestamp($row->complete_at)}}</td>
             </tr>
         @endforeach
         </tbody>
