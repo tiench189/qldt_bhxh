@@ -17,6 +17,7 @@ Route::group(['prefix' => 'course'], function () {
     Route::get('/', 'CourseController@index');
     Route::get('/result', 'CourseController@allResult');
     Route::get('/class', 'CourseController@classindex');
+    Route::get('/export', 'CourseController@export');
     Route::get('/update', 'CourseController@edit')->name('course-update');
     Route::post('/update', 'CourseController@update')->name('course-update');
 });
