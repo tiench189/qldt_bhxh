@@ -35,3 +35,9 @@ Route::group(['prefix' => 'teacher'], function () {
     Route::get('/update', 'TeacherController@edit')->name('teacher-update');
     Route::post('/update', 'TeacherController@update')->name('teacher-update');
 });
+
+Route::group(['prefix' => 'class'], function () {
+    Route::get( '/','ClassController@index' )->name('class-index');
+    Route::get('/xeploaihv', 'ClassController@xeploaihv')->name('class-xeploaihv');
+    Route::post('/capnhathocvien', 'ClassController@capnhathocvien')->name('class-capnhathocvien');
+});
