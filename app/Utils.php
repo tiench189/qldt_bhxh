@@ -47,4 +47,14 @@ class Utils extends Model
         if (! array_key_exists($status, $dict)) return '';
         return $dict[$status];
     }
+
+    public static function parseSessID($xml){
+        $openTag = '<samlp:SessionIndex>';
+        $closeTag = '</samlp:SessionIndex>';
+
+        $start = strpos($xml, $openTag);
+        $end = strpos($xml, $closeTag);
+        $sessID = substr($xml, $start + strlen($openTag), $end - $start - strlen($openTag));
+        return $sessID;
+    }
 }

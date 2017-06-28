@@ -76,19 +76,17 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-                <ul class="nav navbar-nav navbar-right hidden">
-                    <li><a href="#">Link</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
+                    <ul class="nav navbar-nav my-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{env('ALIAS')}}/cas/logout">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                @endif
             </div>
         </div>
     </nav>
