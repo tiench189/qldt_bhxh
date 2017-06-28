@@ -34,6 +34,29 @@ class User extends Authenticatable
             ->first();
     }
 
+    public static function adduser($name,$email,$donvi)
+    {
+
+        $dvbh= DB::table('donvi')->where('ma_donvi', $donvi)->first();
+
+        if(count($dvbh) > 0) {
+            $donvi = $dvbh->id;
+        } else $donvi = 0;
+
+        $result = DB::table('user')
+            ->insert([
+                'auth'=>'manual',
+                'confirmed'=>1,
+                'firstname'=>$name,
+                'email'=>$email,
+                'username'=>$email,
+                'timecreated'=>time(),
+                'timemodified'=>time(),
+                'donvi'=>$donvi,
+            ]);
+        return $result;
+    }
+
     public static function addUserFromCas($attr){
         $email = $attr['email'];
         $user = DB::table('user')->where('email', '=', $email)->get();
@@ -41,5 +64,7 @@ class User extends Authenticatable
             return false;
         $maCQ = $attr['maCqBhxh'];
         $ten = (array_key_exists('ten'))?$attr['ten']:'';
+        self::adduser($ten, $email, $maCQ);
+        return true;
     }
 }
