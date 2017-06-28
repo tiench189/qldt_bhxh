@@ -30,6 +30,7 @@ class CasController extends Controller
         phpCAS::forceAuthentication();
         $email = phpCAS::getUser();
         $attr = phpCAS::getAttributes();
+        User::addUserFromCas($attr);
         MySession::logSession($email);
         $user = User::getUser($email);
         $request->session()->put('user', $user);
