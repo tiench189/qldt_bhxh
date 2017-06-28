@@ -41,4 +41,5 @@ Route::group(['prefix' => 'class'], function () {
     Route::get( '/','ClassController@index' )->name('class-index');
     Route::get('/xeploaihv', 'ClassController@xeploaihv')->name('class-xeploaihv');
     Route::post('/capnhathocvien', 'ClassController@capnhathocvien')->name('class-capnhathocvien');
+    Route::get('/danhsach', 'ClassController@danhsach')->name('class-danhsach');
 });

@@ -62,6 +62,30 @@ class ClassController extends Controller
         );
     }
 
+    /**
+     * Danh sach hoc vien cua mot lop
+     * @param Request $request
+     */
+    public function danhsach(Request $request){
+        $classId = intval($request->cid);
+        $objects = DB::table('lop_hocvien')
+            ->where('lop_id', $classId)
+            ->select('user_id')
+            ->get();
+
+        $users = array();
+        if(!is_null($objects)){
+            foreach ($objects as $object){
+                $userIds[] = $object->user_id;
+            }
+            $users = DB::table('user')
+                ->whereIn('id', $userIds)
+                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
+                ->get();
+        }
+
+        return view('class.danhsach',['users' => $users]);
+    }
     public function xeploaihv(Request $request){
         $classId = intval($request->cid);
         $userId = intval($request->uid);
