@@ -113,9 +113,11 @@ class CourseController extends Controller
     public function export(Request $request)
     {
         $course = DB::table('lop')
-            ->select("COURSE_ID",DB::raw('count("COURSE_ID") as so_lop'),DB::raw('EXTRACT(YEAR FROM "TIME_START") as NAM'))
-            ->groupBy('course_id',DB::raw('EXTRACT(YEAR FROM "TIME_START")'))
+            ->select("COURSE_ID",DB::raw('count("COURSE_ID") as so_lop'),"doi_tuong",DB::raw('EXTRACT(YEAR FROM "TIME_START") as NAM'))
+            ->groupBy('course_id','doi_tuong',DB::raw('EXTRACT(YEAR FROM "TIME_START")'))
             ->get();
+
+
 
         $courseinfo = DB::table('course')
             ->select("ID","SHORTNAME","FULLNAME")->get();
@@ -127,7 +129,8 @@ class CourseController extends Controller
         $rs = [];
 
         foreach ($course as $row) {
-            $rs[$row->nam][$row->course_id] = $row->so_lop;
+            $rs[$row->nam][$row->course_id]["so_lop"] = $row->so_lop;
+            $rs[$row->nam][$row->course_id]["doi_tuong"] = $row->doi_tuong;
         }
 
         return view('course.report', ['coursearray'=>$coursearray,'rs' => $rs]);
