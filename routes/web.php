@@ -12,6 +12,9 @@
 */
 
 Route::get('/', 'CourseController@index');
+Route::get('/cas', 'CasController@login');
+Route::get('/logout', 'CasController@logout');
+Route::post('/caslogout', 'CasController@caslogout');
 
 Route::group(['prefix' => 'course'], function () {
     Route::get('/', 'CourseController@index');
@@ -24,6 +27,9 @@ Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/', 'StudentController@index');
     Route::get('/histories', 'StudentController@histories');
 });
-Route::group(['prefix' => 'tracuu'], function () {
-    Route::get('/', 'TraCuuController@index');
+
+Route::group(['middleware' => 'cas_auth'], function () {
+    Route::group(['prefix' => 'tracuu'], function () {
+        Route::get('/', 'TraCuuController@index');
+    });
 });

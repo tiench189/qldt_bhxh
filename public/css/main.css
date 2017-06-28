@@ -80,3 +80,6 @@ li.dropdown:hover > .dropdown-menu {
 th.action{
     width: 10px;
 }
+.my-nav.navbar-right{
+    margin-right: 0px !important;
+}

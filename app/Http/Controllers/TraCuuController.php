@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 class TraCuuController extends Controller
 {
     public function index(Request $request){
-
         $courses = DB::table('course')
             ->select('id', 'fullname')
             ->get();
