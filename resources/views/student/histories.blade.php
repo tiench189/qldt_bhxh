@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('page-title')
-    Lịch sử đào tạo
+    Lịch sử đào tạo {{$user->firstname}} {{$user->lastname}} ({{$user->email}})
 @stop
 
 @section('content')
     <div class="page-title">Lịch sử đào tạo: <strong>{{$user->firstname}} {{$user->lastname}} ({{$user->email}})</strong></div>
-    <table class="table table-bordered" id="table">
+    <table class="table table-bordered" id="table" data-export="[0,1,2,3,4,5,6]">
         <thead>
         <tr>
             <th class="stt">#</th>
