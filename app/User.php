@@ -60,10 +60,10 @@ class User extends Authenticatable
     public static function addUserFromCas($attr){
         $email = $attr['email'];
         $user = DB::table('user')->where('email', '=', $email)->get();
-        if (count($user) == 0)
+        if (count($user) > 0)
             return false;
         $maCQ = $attr['maCqBhxh'];
-        $ten = (array_key_exists('ten'))?$attr['ten']:'';
+        $ten = (array_key_exists('ten', $attr))?$attr['ten']:'';
         self::adduser($ten, $email, $maCQ);
         return true;
     }
