@@ -16,6 +16,10 @@ Route::get('/cas', 'CasController@login');
 Route::get('/logout', 'CasController@logout');
 Route::post('/caslogout', 'CasController@caslogout');
 
+Route::get('/errpermission', function () {
+    return view('errpermission');
+});
+
 Route::group(['prefix' => 'course'], function () {
     Route::get('/', 'CourseController@index');
     Route::get('/result', 'CourseController@allResult');
@@ -28,8 +32,8 @@ Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/histories', 'StudentController@histories');
 });
 
-Route::group(['middleware' => 'cas_auth'], function () {
+Route::group(['middleware' => 'check_role'], function () {
     Route::group(['prefix' => 'tracuu'], function () {
-        Route::get('/', 'TraCuuController@index');
+        Route::get('/', 'TraCuuController@index')->name('tracuu');
     });
 });
