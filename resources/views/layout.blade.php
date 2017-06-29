@@ -99,7 +99,7 @@
                                 {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{env('ALIAS')}}/cas/logout">Đăng xuất</a></li>
+                                <li><a href="{{env('ALIAS')}}/logout">Đăng xuất</a></li>
                             </ul>
                         </li>
                     </ul>
