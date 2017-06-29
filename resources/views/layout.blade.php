@@ -9,20 +9,36 @@
 
     <script src="{{env('ALIAS')}}/js/bootstrap.min.js"></script>
     <script src="{{env('ALIAS')}}/js/select2.js"></script>
-    <script src="{{$_ENV['ALIAS']}}/js/bootstrap-datepicker.js"></script>
+    <script src="{{env('ALIAS')}}/js/bootstrap-datepicker.js"></script>
 
     <link href="{{env('ALIAS')}}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="{{env('ALIAS')}}/css/main.css" rel="stylesheet" type="text/css">
     <link href="{{env('ALIAS')}}/css/select2.css" rel="stylesheet" type="text/css">
-    <link href="{{$_ENV['ALIAS']}}/css/datepicker.css" rel="stylesheet">
+    <link href="{{env('ALIAS')}}/css/datepicker.css" rel="stylesheet">
 
     <!-- Datatable -->
     <link rel="stylesheet" type="text/css"
           href="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/css/dataTables.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/css/buttons.bootstrap.min.css"/>
+
+    <script type="text/javascript" src="{{env('ALIAS')}}/js/datatables/JSZip-2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="{{env('ALIAS')}}/js/datatables/pdfmake-0.1.18/build/pdfmake.min.js"></script>
+    <script type="text/javascript" src="{{env('ALIAS')}}/js/datatables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
     <script type="text/javascript"
             src="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript"
             src="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.flash.min.js"></script>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.html5.min.js"></script>
+    <script type="text/javascript"
+            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.print.min.js"></script>
     <title>@section('page-title')
         @show</title>
 </head>
@@ -60,7 +76,7 @@
                                 @if($idx > 0)
                                     <li class="divider"></li>
                                 @endif
-                                <li><a href="#">{{$cate->name}}</a></li>
+                                <li><a href="{{env('ALIAS')}}/course?c={{$cate->id}}">{{$cate->name}}</a></li>
                             @endforeach
                         </ul>
                     </li>
@@ -80,7 +96,8 @@
                     <ul class="nav navbar-nav my-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}} <b class="caret"></b></a>
+                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
+                                <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{env('ALIAS')}}/cas/logout">Đăng xuất</a></li>
                             </ul>
@@ -97,18 +114,59 @@
 </div>
 </body>
 <script>
+    function formatExport(data) {
+        return data.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g, '').replace(/&amp;/g, ' & ').replace(/&nbsp;/g, ' ');
+    }
     $(document).ready(function () {
 
         //Datatables
-        table = $('#table').DataTable({
-            autoWidth: false,
-            bSort: false,
-            bLengthChange: false,
-            "pageLength": 20,
-            "language": {
-                "url": "{{$_ENV['ALIAS']}}/js/datatables/Vietnamese.json"
-            },
-        });
+        var colExport = $("#table").data('export');
+        console.log(colExport);
+        if (colExport == undefined) {
+            table = $('#table').DataTable({
+                autoWidth: false,
+                bSort: false,
+                bLengthChange: false,
+                "pageLength": 20,
+                "language": {
+                    "url": "{{env('ALIAS')}}/js/datatables/Vietnamese.json"
+                },
+            });
+        } else {
+            table = $('#table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Xuất ra Excel',
+                        stripHtml: true,
+                        decodeEntities: true,
+                        columns: ':visible',
+                        modifier: {
+                            selected: true
+                        },
+                        exportOptions: {
+                            columns: colExport,
+                            format: {
+                                header: function (data, row, column, node) {
+                                    return formatExport(data);
+                                },
+                                body: function (data, row, column, node) {
+                                    return formatExport(data);
+                                }
+                            }
+                        }
+                    }
+                ],
+                autoWidth: false,
+                bSort: false,
+                bLengthChange: false,
+                "pageLength": 20,
+                "language": {
+                    "url": "{{env('ALIAS')}}/js/datatables/Vietnamese.json"
+                },
+            });
+        }
         //End Datatable
 
         //Select2

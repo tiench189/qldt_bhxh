@@ -22,8 +22,15 @@ use PHPExcel_Settings;
 class CourseController extends Controller
 {
     public function index(Request $request){
-        $course = DB::table('course')->get();
-        return view('course.index', ['course'=>$course]);
+        $cate = $request->c;
+        if (isset($cate)){
+            $course = DB::table('course')->where('category', '=', $cate)->get();
+            $catename = DB::table('course_categories')->where('id', $cate)->first()->name;
+        }else {
+            $course = DB::table('course')->get();
+            $catename = "";
+        }
+        return view('course.index', ['course' => $course, 'category' => $catename]);
     }
 
     public function edit(Request $request){
@@ -97,7 +104,7 @@ class CourseController extends Controller
         }
         $dataUser = DB::table('user')
             ->whereIn('id', $uid)
-            ->select('id', 'username', 'email', 'firstname', 'lastname')
+            ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
         $users = \App\Utils::row2Array($dataUser);
 
@@ -105,7 +112,12 @@ class CourseController extends Controller
         $dataXeploai = DB::table('xeploai')->get();
         $xeploai = \App\Utils::row2Array($dataXeploai);
 
-        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai];
+        //Lay thong tin don vi
+        $datadonvi = DB::table('donvi')
+            ->get();
+        $donvi = \App\Utils::row2Array($datadonvi);
+
+        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai, 'donvi' => $donvi];
 //        return response()->json($output);
         return view('course.result', $output);
     }
@@ -134,8 +146,9 @@ class CourseController extends Controller
             foreach ($lophocvien as $r) {
                 $hocvien[$r->lop_id] = $r->hoc_vien;
             }
-
-            return view('course.classindex', ['class'=>$class,'course' => $course,'hocvien'=>$hocvien]);
+            $output = ['class'=>$class,'course' => $course,'hocvien'=>$hocvien];
+//            dd($output);
+            return view('course.classindex', $output);
 
         } else {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");

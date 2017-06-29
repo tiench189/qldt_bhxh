@@ -83,3 +83,10 @@ th.action{
 .my-nav.navbar-right{
     margin-right: 0px !important;
 }
+
+.m-top-10{
+    margin-top: 10px;
+}
+.dt-buttons{
+    position: absolute !important;
+}
