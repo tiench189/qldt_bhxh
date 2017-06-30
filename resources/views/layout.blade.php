@@ -46,7 +46,7 @@
 <div id="wrapper" class="container no-padding">
     <header id="page-header" class="clearfix">
         <div class="container-fluid">
-            <a class="logo" href="/">
+            <a class="logo" href="{{env('ALIAS')}}">
                 <img src="{{env('ALIAS')}}/img/logo.png" class="logo">
             </a>
             <span class="logo-title">HỆ THỐNG QUẢN LÝ ĐÀO TẠO BHXH</span>
@@ -99,7 +99,7 @@
                                 {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{env('ALIAS')}}/cas/logout">Đăng xuất</a></li>
+                                <li><a href="{{env('ALIAS')}}/logout">Đăng xuất</a></li>
                             </ul>
                         </li>
                     </ul>
