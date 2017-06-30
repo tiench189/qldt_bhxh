@@ -88,6 +88,12 @@ class TraCuuController extends Controller
 
                 return view('tracuu.index', ['courses' => $courses, 'donvi' => $donvi, 'cid'=>$cid, 'year'=>$year, 'status'=>$status]);
             }
+            if($status == 0){
+                // chua dao tao
+                $donvi = DB::table('donvi')
+                    ->select("*")
+                    ->get();
+            }
 
             return view('tracuu.index', ['courses' => $courses, 'donvi' => $donvi, 'cid'=>$cid, 'year'=>$year, 'status'=>$status]);
         }else{

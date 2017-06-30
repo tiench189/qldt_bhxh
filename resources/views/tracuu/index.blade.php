@@ -55,9 +55,7 @@
                 <td> {{$row->ma_donvi}} </td>
                 <td> {{$row->ma_truc_thuoc}} </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/teacher/update?id={{$row->id}}" title="Chỉnh sửa khóa đào tạo">
-                        <div class="ico-action edit"></div>
-                    </a>
+
                 </td>
             </tr>
         @endforeach
