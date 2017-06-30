@@ -35,9 +35,10 @@ Route::group(['prefix' => 'hocvien'], function () {
 });
 Route::group(['middleware' => 'cas_auth'], function () {
     Route::group(['middleware' => 'check_role'], function () {
-        Route::group(['prefix' => 'tracuu'], function () {
-            Route::get('/', 'TraCuuController@index')->name('tracuu');
-        });
+      Route::group(['prefix' => 'tracuu'], function () {
+          Route::get('/', 'TraCuuController@index');
+          Route::post('/', 'TraCuuController@index')->name('tracuu-index');
+      });
     });
 });
 
