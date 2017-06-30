@@ -29,11 +29,12 @@ Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/', 'StudentController@index');
     Route::get('/histories', 'StudentController@histories');
 });
-
+Route::group(['prefix' => 'tracuu'], function () {
+    Route::get('/', 'TraCuuController@index');
+    Route::post('/', 'TraCuuController@index')->name('tracuu-index');
+});
 Route::group(['middleware' => 'cas_auth'], function () {
-    Route::group(['prefix' => 'tracuu'], function () {
-        Route::get('/', 'TraCuuController@index');
-    });
+
 });
 
 Route::group(['prefix' => 'teacher'], function () {
