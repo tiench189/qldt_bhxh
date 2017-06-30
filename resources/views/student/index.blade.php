@@ -29,7 +29,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><a href="{{env('ALIAS')}}/hocvien/histories?u={{$row->id}}" class="btn btn-xs btn-info">
+                <td><a href="{{route('hocvien-histories', ['u' => $row->id])}}" class="btn btn-xs btn-info">
                         Lịch sử đào tạo</a>
                 </td>
             </tr>

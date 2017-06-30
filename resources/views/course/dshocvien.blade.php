@@ -28,8 +28,8 @@
                 <td>  {{$row->email}} </td>
                 <td> {{$row->description}} </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/user/update?id={{$row->id}}" title="Chỉnh sửa">
-                        <div class="ico-action edit"></div>
+                    <a href="{{route('class-capnhathocvien')}}" title="Chỉnh sửa" class="btn btn-xs btn-info">
+                        Cập nhật
                     </a>
                 </td>
             </tr>

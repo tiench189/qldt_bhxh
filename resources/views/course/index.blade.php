@@ -27,17 +27,17 @@
                 <td><strong> {{$row->fullname}} </strong></td>
                 <td> {!! $row->summary !!} </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/course/update?id={{$row->id}}" class="btn btn-xs btn-info">
+                    <a href="{{route('course-update', ['id' => $row->id])}}" class="btn btn-xs btn-info">
                         Cập nhật
                     </a>
                 </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/course/class?c={{$row->id}}" class="btn btn-xs btn-info">
+                    <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-info">
                         DS Lớp học
                     </a>
                 </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/course/result?c={{$row->id}}" class="btn btn-xs btn-info">
+                    <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-info">
                         DS Học viên
                     </a>
                 </td>

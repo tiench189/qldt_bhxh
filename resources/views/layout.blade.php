@@ -3,42 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{env('ALIAS')}}/img/favicon.ico">
-    <script src="{{env('ALIAS')}}/js/jquery-3.1.1.min.js"></script>
+    <link rel="shortcut icon" href="{{route('index')}}/img/favicon.ico">
+    <script src="{{route('index')}}/js/jquery-3.1.1.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <script src="{{env('ALIAS')}}/js/bootstrap.min.js"></script>
-    <script src="{{env('ALIAS')}}/js/select2.js"></script>
-    <script src="{{env('ALIAS')}}/js/bootstrap-datepicker.js"></script>
+    <script src="{{route('index')}}/js/bootstrap.min.js"></script>
+    <script src="{{route('index')}}/js/select2.js"></script>
+    <script src="{{route('index')}}/js/bootstrap-datepicker.js"></script>
 
-    <link href="{{env('ALIAS')}}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="{{env('ALIAS')}}/css/main.css" rel="stylesheet" type="text/css">
-    <link href="{{env('ALIAS')}}/css/select2.css" rel="stylesheet" type="text/css">
-    <link href="{{env('ALIAS')}}/css/datepicker.css" rel="stylesheet">
+    <link href="{{route('index')}}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="{{route('index')}}/css/main.css" rel="stylesheet" type="text/css">
+    <link href="{{route('index')}}/css/select2.css" rel="stylesheet" type="text/css">
+    <link href="{{route('index')}}/css/datepicker.css" rel="stylesheet">
 
     <!-- Datatable -->
     <link rel="stylesheet" type="text/css"
-          href="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/css/dataTables.bootstrap.min.css"/>
+          href="{{route('index')}}/js/datatables/DataTables-1.10.13/css/dataTables.bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css"
-          href="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/css/buttons.bootstrap.min.css"/>
+          href="{{route('index')}}/js/datatables/Buttons-1.2.4/css/buttons.bootstrap.min.css"/>
 
-    <script type="text/javascript" src="{{env('ALIAS')}}/js/datatables/JSZip-2.5.0/jszip.min.js"></script>
-    <script type="text/javascript" src="{{env('ALIAS')}}/js/datatables/pdfmake-0.1.18/build/pdfmake.min.js"></script>
-    <script type="text/javascript" src="{{env('ALIAS')}}/js/datatables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
+    <script type="text/javascript" src="{{route('index')}}/js/datatables/JSZip-2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="{{route('index')}}/js/datatables/pdfmake-0.1.18/build/pdfmake.min.js"></script>
+    <script type="text/javascript" src="{{route('index')}}/js/datatables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/js/jquery.dataTables.min.js"></script>
+            src="{{route('index')}}/js/datatables/DataTables-1.10.13/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/DataTables-1.10.13/js/dataTables.bootstrap.min.js"></script>
+            src="{{route('index')}}/js/datatables/DataTables-1.10.13/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/dataTables.buttons.min.js"></script>
+            src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.bootstrap.min.js"></script>
+            src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/buttons.bootstrap.min.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.flash.min.js"></script>
+            src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/buttons.flash.min.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.html5.min.js"></script>
+            src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/buttons.html5.min.js"></script>
     <script type="text/javascript"
-            src="{{env('ALIAS')}}/js/datatables/Buttons-1.2.4/js/buttons.print.min.js"></script>
+            src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/buttons.print.min.js"></script>
     <title>@section('page-title')
         @show</title>
 </head>
@@ -46,8 +46,8 @@
 <div id="wrapper" class="container no-padding">
     <header id="page-header" class="clearfix">
         <div class="container-fluid">
-            <a class="logo" href="{{env('ALIAS')}}">
-                <img src="{{env('ALIAS')}}/img/logo.png" class="logo">
+            <a class="logo" href="{{route('index')}}">
+                <img src="{{route('index')}}/img/logo.png" class="logo">
             </a>
             <span class="logo-title">HỆ THỐNG QUẢN LÝ ĐÀO TẠO BHXH</span>
         </div>
@@ -68,7 +68,7 @@
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav my-nav">
                     <li class="dropdown active">
-                        <a href="{{env('ALIAS')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b
+                        <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b
                                     class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <?php $categories = \App\Utils::listCategories()?>
@@ -76,13 +76,13 @@
                                 @if($idx > 0)
                                     <li class="divider"></li>
                                 @endif
-                                <li><a href="{{env('ALIAS')}}/course?c={{$cate->id}}">{{$cate->name}}</a></li>
+                                <li><a href="{{route('course-index', ['c' => $cate->id])}}">{{$cate->name}}</a></li>
                             @endforeach
                         </ul>
                     </li>
-                    <li><a href="{{env('ALIAS')}}/teacher">Giảng viên</a></li>
-                    <li><a href="{{env('ALIAS')}}/hocvien">Học viên</a></li>
-                    <li><a href="#">Tra cứu</a></li>
+                    <li><a href="{{route('teacher-index')}}">Giảng viên</a></li>
+                    <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
+                    <li><a href="{{route('tracuu')}}">Tra cứu</a></li>
                     <li><a href="#">Báo cáo</a></li>
                     <li><a href="#">Phiếu khảo sát</a></li>
                 </ul>
@@ -99,7 +99,7 @@
                                 {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
                                 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{env('ALIAS')}}/logout">Đăng xuất</a></li>
+                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -129,7 +129,7 @@
                 bLengthChange: false,
                 "pageLength": 20,
                 "language": {
-                    "url": "{{env('ALIAS')}}/js/datatables/Vietnamese.json"
+                    "url": "{{route('index')}}/js/datatables/Vietnamese.json"
                 },
             });
         } else {
@@ -163,7 +163,7 @@
                 bLengthChange: false,
                 "pageLength": 20,
                 "language": {
-                    "url": "{{env('ALIAS')}}/js/datatables/Vietnamese.json"
+                    "url": "{{route('index')}}/js/datatables/Vietnamese.json"
                 },
             });
         }

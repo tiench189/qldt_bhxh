@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-    {!! Form::open(array('route' => 'tracuu-index', 'class' => 'form')) !!}
+    {!! Form::open(array('route' => 'tracuu', 'class' => 'form')) !!}
     <div class="page-title">Tra cứu</div>
         <div class="form-group form-inline">
             <label>Khóa đào tạo:</label>
