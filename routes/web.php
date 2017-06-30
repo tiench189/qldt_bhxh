@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', 'CourseController@index');
-Route::get('/cas', 'CasController@login');
-Route::get('/logout', 'CasController@logout');
+Route::get('/', 'CourseController@index')->name('index');
+Route::get('/cas', 'CasController@login')->name('login');
+Route::get('/logout', 'CasController@logout')->name('logout');
 Route::post('/caslogout', 'CasController@caslogout');
 
 Route::get('/errpermission', function () {
@@ -21,23 +21,23 @@ Route::get('/errpermission', function () {
 });
 
 Route::group(['prefix' => 'course'], function () {
-    Route::get('/', 'CourseController@index');
-    Route::get('/result', 'CourseController@allResult');
-    Route::get('/class', 'CourseController@classindex');
+    Route::get('/', 'CourseController@index')->name('course-index');
+    Route::get('/result', 'CourseController@allResult')->name('course-result');
+    Route::get('/class', 'CourseController@classindex')->name('course-classes');
     Route::get('/export', 'CourseController@export');
     Route::get('/update', 'CourseController@edit')->name('course-update');
     Route::post('/update', 'CourseController@update')->name('course-update');
     Route::get( 'dshocvien','CourseController@dshocvien' )->name('course-dshocvien');
 });
 Route::group(['prefix' => 'hocvien'], function () {
-    Route::get('/', 'StudentController@index');
-    Route::get('/histories', 'StudentController@histories');
+    Route::get('/', 'StudentController@index')->name('hocvien-index');
+    Route::get('/histories', 'StudentController@histories')->name('hocvien-histories');
 });
 Route::group(['middleware' => 'cas_auth'], function () {
     Route::group(['middleware' => 'check_role'], function () {
       Route::group(['prefix' => 'tracuu'], function () {
-          Route::get('/', 'TraCuuController@index');
-          Route::post('/', 'TraCuuController@index')->name('tracuu-index');
+          Route::get('/', 'TraCuuController@index')->name('tracuu');
+          Route::post('/', 'TraCuuController@index')->name('tracuu');
       });
     });
 });

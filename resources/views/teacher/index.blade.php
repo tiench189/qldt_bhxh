@@ -25,11 +25,11 @@
                 <td> {{$row->id}} </td>
                 <td> <strong>{{$row->username}}</strong> </td>
                 <td> {{$row->lastname}} {{$row->firstname}} </td>
-                <td> {{$row->description}} </td>
+                <td> {!! $row->description !!}</td>
                 <td>  {{$row->email}} </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/teacher/update?id={{$row->id}}" title="Chỉnh sửa khóa đào tạo">
-                        <div class="ico-action edit"></div>
+                    <a href="{{route('teacher-update', ['id' => $row->id])}}" title="Chỉnh sửa khóa đào tạo" class="btn btn-xs btn-info">
+                        Cập nhật
                     </a>
                 </td>
             </tr>
