@@ -36,8 +36,8 @@ class Utils extends Model
 
     public static function toTimeFormat($time){
         if ($time == null || $time == 0) return '';
-        return date('d/m/Y', $time);
-      
+//        return date('d/m/Y', $time);
+        return (new \DateTime($time))->format('d/m/Y');
     }
   
   
