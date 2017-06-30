@@ -46,7 +46,7 @@
 <div id="wrapper" class="container no-padding">
     <header id="page-header" class="clearfix">
         <div class="container-fluid">
-            <a class="logo" href="/">
+            <a class="logo" href="{{env('ALIAS')}}">
                 <img src="{{env('ALIAS')}}/img/logo.png" class="logo">
             </a>
             <span class="logo-title">HỆ THỐNG QUẢN LÝ ĐÀO TẠO BHXH</span>
