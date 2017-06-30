@@ -38,7 +38,7 @@
                     <a href="{{env('ALIAS')}}/course/class?c={{$row->id}}" class="btn btn-xs btn-info">
                         DS Giáo Viên
                     </a>
-                    <a href="{{env('ALIAS')}}/course/class?c={{$row->id}}" class="btn btn-xs btn-info">
+                    <a href="{{route('class-danhsach', ['cid' => $row->id])}}" class="btn btn-xs btn-info">
                         DS Học Viên
                     </a> </td>
             </tr>
