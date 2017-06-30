@@ -80,7 +80,7 @@
                             @endforeach
                         </ul>
                     </li>
-                    <li><a href="#">Giảng viên</a></li>
+                    <li><a href="{{env('ALIAS')}}/teacher">Giảng viên</a></li>
                     <li><a href="{{env('ALIAS')}}/hocvien">Học viên</a></li>
                     <li><a href="#">Tra cứu</a></li>
                     <li><a href="#">Báo cáo</a></li>

@@ -62,4 +62,83 @@ class ClassController extends Controller
         );
     }
 
+    /**
+     * Danh sach hoc vien cua mot lop
+     * @param Request $request
+     */
+    public function danhsach(Request $request){
+        $classId = intval($request->cid);
+        $objects = DB::table('lop_hocvien')
+            ->where('lop_id', $classId)
+            ->select('user_id')
+            ->get();
+
+        $users = array();
+        if(!is_null($objects)){
+            foreach ($objects as $object){
+                $userIds[] = $object->user_id;
+            }
+            $users = DB::table('user')
+                ->whereIn('id', $userIds)
+                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
+                ->get();
+        }
+
+        return view('class.danhsach',['users' => $users]);
+    }
+    public function xeploaihv(Request $request){
+        $classId = intval($request->cid);
+        $userId = intval($request->uid);
+        $lhv = DB::table('lop_hocvien')->where('lop_id', $classId)->where('user_id', $userId)->first();
+        $xeploai = DB::table('xeploai')->get();
+
+        if(!is_null($lhv)) {
+            $lhv = DB::table('lop_hocvien')->where('lop_id', $classId)->where('user_id', $userId)->first();
+            $xeploai = DB::table('xeploai')->get();
+
+            return view('class.capnhathocvien', ['lhv'=>$lhv, 'xeploai'=>$xeploai]);
+        } else {
+            $request->session()->flash('message', "Lớp học hoặc học viên không tồn tại");
+            return redirect()->action('CourseController@index');
+        }
+    }
+
+    public function capnhathocvien(Request $request){
+        $cid = intval($request->cid);
+        $uid = intval($request->uid);
+
+        $messages = [
+            'grade.numeric' => 'Điểm phải là số',
+        ];
+        $validator = Validator::make($request->all(), [
+            'grade' => 'numeric',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->action('ClassController@xeploaihv',["cid"=>$cid, 'uid'=>$uid])
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $result = DB::table('lop_hocvien')
+            ->where('lop_id', $cid)
+            ->where('user_id', $uid)
+            ->update([
+                'grade'=>$request->input('grade'),
+                'status'=>$request->input('status'),
+                'xeploai'=>$request->input('xeploai'),
+            ]);
+
+        if($result) {
+            $request->session()->flash('message', "Cập nhật thành công.");
+        } else {
+            $request->session()->flash('message', "Cập nhật không thành công.");
+        }
+
+        return redirect()->action(
+            'ClassController@xeploaihv', ["cid"=>$cid, 'uid'=>$uid]
+        );
+
+    }
+
 }
