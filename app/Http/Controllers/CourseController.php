@@ -95,6 +95,8 @@ class CourseController extends Controller
         $courseId = isset($courseId) ? $courseId : 0;
         $classID = intval($request->class);
         $classID = isset($classID) ? $classID : 0;
+        $ddclass = [];
+        $dduser = [];
         if ($courseId != 0 && $classID == 0) {
             //Lay thong tin khoa hoc
             $course = DB::table('course')->where('id', $courseId)->first();
@@ -105,6 +107,15 @@ class CourseController extends Controller
                 ->select('lop.ten_lop as ten_lop', 'lop_hocvien.*')
                 ->get();
             $class = array();
+
+            // Lấy thông tin toàn bộ lớp học trong khóa
+            $dataClass = DB::table('lop')
+                ->where('course_id', $courseId)
+                ->get();
+            foreach ($dataClass as $c) {
+                $ddclass[$c->id] = $c->ten_lop;
+            }
+
         }else{
             //Lấy thông tin lớp
             $class = DB::table('lop')->where('id', $classID)->first();
@@ -126,7 +137,16 @@ class CourseController extends Controller
             ->whereIn('id', $uid)
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
+
         $users = \App\Utils::row2Array($dataUser);
+
+        // Lấy toàn bộ danh sách học viên
+        $allUser = DB::table('user')
+            ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
+            ->get();
+        foreach ($allUser as $u) {
+            $dduser[$u->id] = $u->firstname . " " . $u->lastname . " (" . $u->username . ")";
+        }
 
         //Lay thong tin xep loai
         $dataXeploai = DB::table('xeploai')->get();
@@ -138,9 +158,47 @@ class CourseController extends Controller
         $donvi = \App\Utils::row2Array($datadonvi);
 
         $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai,
-            'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class];
+            'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class, "dduser"=> $dduser,"ddclass"=>$ddclass];
 //        return response()->json($output);
         return view('course.result', $output);
+    }
+
+
+    public function addstudent(Request $request) {
+
+        $cid = intval($request->input('cid'));
+        $sid = intval($request->input('sid'));
+
+        // Lấy thông tin toàn bộ lớp học trong khóa
+        $check = DB::table('lop_hocvien')
+            ->where([
+                ['lop_id', '=', $cid],
+                ['user_id', '=', $sid],
+            ])
+            ->count();
+        if($check != 0) {
+            $result = DB::table('lop_hocvien')
+                ->insert([
+                    'lop_id' => $cid,
+                    'user_id' => $sid,
+                    'status' => "finished",
+                    'grade' => 1,
+                    'xeploai' => 1,
+                    //'complete_at' => time(),
+                ]);
+
+            if ($result) {
+                $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
+            } else {
+                $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
+            }
+        } else {
+            $request->session()->flash('message', "Học viên đã tồn tại trong lớp này.");
+        }
+
+
+
+            return back()->withInput();;
     }
 
     public function export(Request $request)
@@ -259,5 +317,22 @@ class CourseController extends Controller
         }
 
         return view('course.dshocvien', ['users' => $students]);
+    }
+
+
+    public function removestudent(Request $request)
+    {
+        $sid = $request->input('sid');
+        $cid = $request->input('cid');
+
+        $result = DB::table('lop_hocvien')
+            ->where('lop_id', $cid)
+            ->where('user_id', $sid)
+            ->delete();
+
+        if($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
+        else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
+
+        return back()->withInput();
     }
 }
