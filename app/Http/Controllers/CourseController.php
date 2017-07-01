@@ -107,6 +107,15 @@ class CourseController extends Controller
                 ->select('lop.ten_lop as ten_lop', 'lop_hocvien.*')
                 ->get();
             $class = array();
+
+            // Lấy thông tin toàn bộ lớp học trong khóa
+            $dataClass = DB::table('lop')
+                ->where('course_id', $courseId)
+                ->get();
+            foreach ($dataClass as $c) {
+                $ddclass[$c->id] = $c->ten_lop;
+            }
+
         }else{
             //Lấy thông tin lớp
             $class = DB::table('lop')->where('id', $classID)->first();
@@ -118,14 +127,6 @@ class CourseController extends Controller
                 ->where('lop.id', '=', $classID)
                 ->select('lop.ten_lop as ten_lop', 'lop.course_id as course_id', 'lop_hocvien.*')
                 ->get();
-
-            // Lấy thông tin toàn bộ lớp học trong khóa
-            $dataClass = DB::table('lop')
-                ->where('course_id', $class->course_id)
-                ->get();
-            foreach ($dataClass as $c) {
-                $ddclass[$c->id] = $c->ten_lop;
-            }
         }
         //Lay thong tin hoc vien
         $uid = array();
@@ -168,6 +169,14 @@ class CourseController extends Controller
         $cid = intval($request->input('cid'));
         $sid = intval($request->input('sid'));
 
+        // Lấy thông tin toàn bộ lớp học trong khóa
+        $check = DB::table('lop_hocvien')
+            ->where([
+                ['lop_id', '=', $cid],
+                ['user_id', '=', $sid],
+            ])
+            ->count();
+        if($check != 0) {
             $result = DB::table('lop_hocvien')
                 ->insert([
                     'lop_id' => $cid,
@@ -183,6 +192,11 @@ class CourseController extends Controller
             } else {
                 $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
             }
+        } else {
+            $request->session()->flash('message', "Học viên đã tồn tại trong lớp này.");
+        }
+
+
 
             return back()->withInput();;
     }
