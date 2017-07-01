@@ -27,6 +27,7 @@ Route::group(['prefix' => 'course'], function () {
     Route::get('/export', 'CourseController@export');
     Route::get('/update', 'CourseController@edit')->name('course-update');
     Route::post('/update', 'CourseController@update')->name('course-update');
+    Route::post('/removestudent', 'CourseController@update')->name('student-remove');
     Route::get( 'dshocvien','CourseController@dshocvien' )->name('course-dshocvien');
 });
 Route::group(['prefix' => 'hocvien'], function () {

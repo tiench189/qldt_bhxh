@@ -9,6 +9,22 @@
 @stop
 
 @section('content')
+    {!! Form::open(array('route' => 'student-remove', 'class' => 'form', 'id' => 'frmstudentremove')) !!}
+    {{ Form::hidden('cid', 0, array('id' => 'classid')) }}
+    {{ Form::hidden('sid', 0, array('id' => 'studentid')) }}
+    {!! Form::close() !!}
+    <script language="javascript">
+        function xoanguoidung(cid,sid) {
+
+            if(confirm("Bạn có muốn xóa?")) {
+                document.getElementById("classid").value = cid;
+                document.getElementById("studentid").value = sid;
+                frmstudentremove.submit();
+            }
+
+
+        }
+    </script>
     <div class="page-title">
         @if($courseID != 0)
             Danh sách học viên: <strong>{{$course->fullname}}</strong>
@@ -32,6 +48,7 @@
         </tr>
         </thead>
         <tbody>
+        {{ dd($allResult) }}
         @foreach($allResult as $idx=>$row)
             <tr>
                 <td>{{$idx + 1}}</td>
@@ -44,7 +61,7 @@
                 <td>{{$xeploai[$row->xeploai]->name}}</td>
                 <td>{{\app\Utils::formatTimestamp($row->complete_at)}}</td>
                 <td>
-                    <a href="#" class="btn btn-xs btn-info">Xóa</a>
+                    <a href="javascript:void(0)" onclick="xoanguoidung({{$row->user_id}},{{$row->user_id}})" class="btn btn-xs btn-info">Xóa</a>
                 </td>
             </tr>
         @endforeach
