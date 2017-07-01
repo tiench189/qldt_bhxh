@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="page-title">Danh sách học viên của một lớp</div>
-    <table id="table" class="table table-bordered table-hover">
+    <table id="table" class="table table-bordered table-hover" data-export="[0,1,2,3]">
         <thead>
         <tr>
 
@@ -26,10 +26,10 @@
                 <td> <strong>{{$row->username}}</strong> </td>
                 <td> {{$row->lastname}} {{$row->firstname}} </td>
                 <td>  {{$row->email}} </td>
-                <td> {{$row->description}} </td>
+                <td> {!! $row->description !!} </td>
                 <td>
-                    <a href="{{env('ALIAS')}}/user/update?id={{$row->id}}" title="Chỉnh sửa">
-                        <div class="ico-action edit"></div>
+                    <a href="#" title="Chỉnh sửa" class="btn btn-xs btn-info">
+                        Xóa
                     </a>
                 </td>
             </tr>

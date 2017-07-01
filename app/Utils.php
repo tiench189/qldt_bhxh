@@ -44,6 +44,7 @@ class Utils extends Model
     public static function getStatus($status){
         $dict = array();
         $dict['finished'] = 'Hoàn thành';
+        $dict['inprogress'] = 'Đang học';
         if (! array_key_exists($status, $dict)) return '';
         return $dict[$status];
     }
