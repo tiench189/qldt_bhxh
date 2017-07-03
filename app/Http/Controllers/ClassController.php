@@ -20,36 +20,57 @@ class ClassController extends Controller
     }
 
     public function edit(Request $request){
-        $courseId = intval($request->id);
-        $course = DB::table('course')->where('id', $courseId)->first();
-        return view('course.edit', ['course'=>$course]);
+        $classId = intval($request->id);
+        $courses = DB::table('course')
+            ->select('id', 'fullname')
+            ->get();
+        if($classId != 0){
+            $class = DB::table('lop')->where('id', $classId)->first();
+            return view('class.edit', ['class'=>$class, 'courses'=>$courses, 'id'=>$classId]);
+        }
+
+        return view('class.edit', ['courses'=>$courses, 'id'=>$classId]);
     }
+
     public function update(Request $request)
     {
         $id = intval( $request->input('id') );
         $messages = [
-            'shortname.required' => 'Yêu cầu nhập tên khóa học (rút gọn)',
-            'fullname.required' => 'Yêu cầu nhập tên khóa học.',
+            'ten_lop.required' => 'Yêu cầu nhập tên khóa học (rút gọn)',
+            'course_id.required' => 'Yêu cầu chọn  khóa học.',
         ];
         $validator = Validator::make($request->all(), [
-            'shortname' => 'required',
-            'fullname' => 'required',
+            'ten_lop' => 'required',
+            'course_id' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
-            return redirect()->action('CourseController@update',["id"=>$id])
+            return redirect()->action('ClassController@edit',["id"=>$id])
                 ->withErrors($validator)
                 ->withInput();
         }
 
-        $result = DB::table('course')
-            ->where('id', $id)
-            ->update([
-                'shortname'=>$request->input('shortname'),
-                'fullname'=>$request->input('fullname'),
-                'summary'=>$request->input('summary'),
-                'timemodified'=>time(),
-            ]);
+        if($id != 0){
+            $result = DB::table('lop')
+                ->where('id', $id)
+                ->update([
+                    'ten_lop'=>$request->input('ten_lop'),
+                    'course_id'=>$request->input('course_id'),
+                    'doi_tuong'=>$request->input('doi_tuong'),
+                    'time_start'=>$request->input('time_start'),
+                    'time_end'=>$request->input('time_end')
+                ]);
+        }else{
+            $result = DB::table('lop')
+                ->insert([
+                    'ten_lop'=>$request->input('ten_lop'),
+                    'course_id'=>$request->input('course_id'),
+                    'doi_tuong'=>$request->input('doi_tuong'),
+                    'time_start'=>$request->input('time_start'),
+                    'time_end'=>$request->input('time_end')
+                ]);
+        }
+
 
         if($result) {
             $request->session()->flash('message', "Cập nhật thành công.");
@@ -58,7 +79,7 @@ class ClassController extends Controller
         }
 
         return redirect()->action(
-            'CourseController@index', ['update' => $result]
+            'ClassController@danhsach', ['cid' => $request->input('course_id')]
         );
     }
 
