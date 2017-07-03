@@ -56,4 +56,6 @@ Route::group(['prefix' => 'class'], function () {
     Route::get('/xeploaihv', 'ClassController@xeploaihv')->name('class-xeploaihv');
     Route::post('/capnhathocvien', 'ClassController@capnhathocvien')->name('class-capnhathocvien');
     Route::get('/danhsach', 'ClassController@danhsach')->name('class-danhsach');
+    Route::get('/edit', 'ClassController@edit')->name('class-edit');
+    Route::post('/update', 'ClassController@update')->name('class-update');
 });
