@@ -62,7 +62,7 @@
                     @if($courseID != 0)
                     <div class="form-group">
                         <label>Lớp: <span class="required">(*)</span></label>
-                        {!! Form::select('cid', $ddclass,
+                        {!! Form::select('cid', $ddclass, '',
                             array('class'=>'form-control','id'=>"classid")) !!}
                     </div>
                     @else
@@ -70,7 +70,7 @@
                     @endif
                     <div class="form-group">
                         <label>Học Viên: <span class="required">(*)</span></label>
-                        {!! Form::select('sid', $dduser,
+                        {!! Form::select('sid', $dduser, '',
                             array('class'=>'form-control')) !!}
                     </div>
                     <div class="form-group">
@@ -80,12 +80,12 @@
                     </div>
                     <div class="form-group">
                         <label>Xếp loại: <span class="required">(*)</span></label>
-                        {!! Form::select('xeploai', $ddlxeploai,
+                        {!! Form::select('xeploai', $ddlxeploai, '',
                             array('class'=>'form-control')) !!}
                     </div>
                     <div class="form-group">
                         <label>Trạng thái: <span class="required">(*)</span></label>
-                        {!! Form::select('status', ['finished'=>'Hoàn Thành','inprogress'=>"Đang học"],
+                        {!! Form::select('status', ['finished'=>'Hoàn Thành','inprogress'=>"Đang học"], '',
                             array('class'=>'form-control')) !!}
                     </div>
 
