@@ -20,23 +20,24 @@ class ClassController extends Controller
     }
 
     public function edit(Request $request){
+        $cid = intval($request->cid);
         $classId = intval($request->id);
         $courses = DB::table('course')
             ->select('id', 'fullname')
             ->get();
         if($classId != 0){
             $class = DB::table('lop')->where('id', $classId)->first();
-            return view('class.edit', ['class'=>$class, 'courses'=>$courses, 'id'=>$classId]);
+            return view('class.edit', ['class'=>$class, 'courses'=>$courses, 'id'=>$classId, 'cid' => $cid]);
         }
 
-        return view('class.edit', ['courses'=>$courses, 'id'=>$classId]);
+        return view('class.edit', ['courses'=>$courses, 'id'=>$classId, 'cid' => $cid]);
     }
 
     public function update(Request $request)
     {
         $id = intval( $request->input('id') );
         $messages = [
-            'ten_lop.required' => 'Yêu cầu nhập tên khóa học (rút gọn)',
+            'ten_lop.required' => 'Yêu cầu nhập tên lớp học',
             'course_id.required' => 'Yêu cầu chọn  khóa học.',
         ];
         $validator = Validator::make($request->all(), [
@@ -79,7 +80,7 @@ class ClassController extends Controller
         }
 
         return redirect()->action(
-            'ClassController@danhsach', ['cid' => $request->input('course_id')]
+            'CourseController@classindex', ['c' => $request->input('course_id')]
         );
     }
 

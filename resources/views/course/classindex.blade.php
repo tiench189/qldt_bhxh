@@ -1,20 +1,23 @@
 @extends('layout')
 
 @section('page-title')
-    {{ $course->shortname }} | Danh sách lớp học
+    Danh sách lớp học | {{ $course->fullname }}
 @stop
 @section('content')
-    <div class="page-title">Danh sách lớp {{ $course->shortname }}</div>
+    <div class="page-title">Danh sách lớp <strong>{{ $course->fullname }}</strong></div>
+    <a class="btn btn-info" href="{{route('class-edit', ['cid' => $course->id])}}" style="margin-bottom: 10px">Thêm
+        mới</a>
     <table id="table" class="table table-bordered table-hover" data-export="[0,1,2,3,4,5]">
         <thead>
         <tr>
-
             <th width="20">#</th>
             <th width="25%">Tên lớp</th>
             <th>Thời Gian Bắt đầu</th>
             <th>Thời Gian Kết Thúc</th>
             <th>Đối tượng</th>
             <th>Số lượng học viên</th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
         </thead>
@@ -38,9 +41,18 @@
                     <a href="{{route('class-danhsach', ['cid' => $row->id])}}" class="btn btn-xs btn-info">
                         DS Giáo Viên
                     </a>
+                </td>
+                <td>
                     <a href="{{route('course-result', ['class' => $row->id])}}" class="btn btn-xs btn-info">
                         DS Học Viên
-                    </a> </td>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{route('class-edit', ['cid' => $course->id, 'id' => $row->id])}}"
+                       class="btn btn-xs btn-info">
+                        Cập nhật
+                    </a>
+                </td>
             </tr>
         @endforeach
         </tbody>
