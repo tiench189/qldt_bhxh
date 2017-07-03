@@ -39,7 +39,12 @@ class CourseController extends Controller
         $courseId = intval($request->id);
         if ($courseId > 0) {
             $course = DB::table('course')->where('id', $courseId)->first();
-            return view('course.edit', ['course' => $course]);
+            $cate = DB::table('course_categories')->orderBy('id', 'asc')->get();
+            $categories = array();
+            foreach ($cate as $row){
+                $categories[$row->id] = $row->name;
+            }
+            return view('course.edit', ['course' => $course, 'categories' => $categories]);
         } else {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");
             return redirect()->action('CourseController@index');
@@ -51,11 +56,9 @@ class CourseController extends Controller
         $id = intval($request->input('id'));
         if ($id > 0) {
             $messages = [
-                'shortname.required' => 'Yêu cầu nhập tên khóa học (rút gọn)',
                 'fullname.required' => 'Yêu cầu nhập tên khóa học.',
             ];
             $validator = Validator::make($request->all(), [
-                'shortname' => 'required',
                 'fullname' => 'required',
             ], $messages);
 
@@ -68,8 +71,8 @@ class CourseController extends Controller
             $result = DB::table('course')
                 ->where('id', $id)
                 ->update([
-                    'shortname' => $request->input('shortname'),
                     'fullname' => $request->input('fullname'),
+                    'category' => $request->input('category'),
                     'summary' => $request->input('summary'),
                     'timemodified' => time(),
                 ]);

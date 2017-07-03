@@ -11,6 +11,8 @@
 |
 */
 
+
+
 Route::get('/', 'CourseController@index')->name('index');
 Route::get('/cas', 'CasController@login')->name('login');
 Route::get('/logout', 'CasController@logout')->name('logout');
@@ -18,6 +20,12 @@ Route::post('/caslogout', 'CasController@caslogout');
 
 Route::get('/errpermission', function () {
     return view('errpermission');
+});
+
+Route::group(['middleware' => 'cas_auth'], function () {
+    Route::group(['middleware' => 'check_role'], function () {
+
+    });
 });
 
 Route::group(['prefix' => 'course'], function () {
@@ -35,13 +43,9 @@ Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/', 'StudentController@index')->name('hocvien-index');
     Route::get('/histories', 'StudentController@histories')->name('hocvien-histories');
 });
-Route::group(['middleware' => 'cas_auth'], function () {
-    Route::group(['middleware' => 'check_role'], function () {
-      Route::group(['prefix' => 'tracuu'], function () {
-          Route::get('/', 'TraCuuController@index')->name('tracuu');
-          Route::post('/', 'TraCuuController@index')->name('tracuu');
-      });
-    });
+Route::group(['prefix' => 'tracuu'], function () {
+    Route::get('/', 'TraCuuController@index')->name('tracuu');
+    Route::post('/', 'TraCuuController@index')->name('tracuu');
 });
 
 Route::group(['prefix' => 'teacher'], function () {

@@ -8,7 +8,7 @@
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
     <div class="page-title">Danh sách Khóa đào tạo</div>
-    <table id="table" class="table table-bordered table-hover">
+    <table id="table" class="table table-bordered table-hover" data-export="[0,1,2]">
         <thead>
         <tr>
 
@@ -21,9 +21,9 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($course as $row)
+        @foreach ($course as $idx => $row)
             <tr>
-                <td> {{$row->id}} </td>
+                <td> {{$idx + 1}} </td>
                 <td><strong> {{$row->fullname}} </strong></td>
                 <td> {!! $row->summary !!} </td>
                 <td>

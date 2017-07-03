@@ -39,6 +39,8 @@
             src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/buttons.html5.min.js"></script>
     <script type="text/javascript"
             src="{{route('index')}}/js/datatables/Buttons-1.2.4/js/buttons.print.min.js"></script>
+    <!-- End Datatables -->
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=wzxwahk80h4vnnkhr82slopri73e74x1r2q5d6llmaj8kvhu"></script>
     <title>@section('page-title')
         @show</title>
 </head>
