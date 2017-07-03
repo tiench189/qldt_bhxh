@@ -73,6 +73,22 @@
                         {!! Form::select('sid', $dduser,
                             array('class'=>'form-control')) !!}
                     </div>
+                    <div class="form-group">
+                        <label>Điểm trung bình: <span class="required">(*)</span></label>
+                        {!! Form::number('grade', "",
+                            array('class'=>'form-control','style'=>"width: 70px")) !!}
+                    </div>
+                    <div class="form-group">
+                        <label>Xếp loại: <span class="required">(*)</span></label>
+                        {!! Form::select('xeploai', $ddlxeploai,
+                            array('class'=>'form-control')) !!}
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái: <span class="required">(*)</span></label>
+                        {!! Form::select('status', ['finished'=>'Hoàn Thành','inprogress'=>"Đang học"],
+                            array('class'=>'form-control')) !!}
+                    </div>
+
 
                     <div class="form-group">
                         {!! Form::submit('Cập nhật',
