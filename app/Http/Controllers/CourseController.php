@@ -151,13 +151,17 @@ class CourseController extends Controller
         //Lay thong tin xep loai
         $dataXeploai = DB::table('xeploai')->get();
         $xeploai = \App\Utils::row2Array($dataXeploai);
+        $ddlxeploai = [];
+        foreach ($dataXeploai as $x) {
+            $ddlxeploai[$x->id] = $x->name;
+        }
 
         //Lay thong tin don vi
         $datadonvi = DB::table('donvi')
             ->get();
         $donvi = \App\Utils::row2Array($datadonvi);
 
-        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai,
+        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai,'ddlxeploai' => $ddlxeploai,
             'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class, "dduser"=> $dduser,"ddclass"=>$ddclass];
 //        return response()->json($output);
         return view('course.result', $output);
@@ -168,6 +172,9 @@ class CourseController extends Controller
 
         $cid = intval($request->input('cid'));
         $sid = intval($request->input('sid'));
+        $xeploai = intval($request->input('xeploai'));
+        $grade = floatval($request->input('grade'));
+        $status = $request->input('status');
 
         // Lấy thông tin toàn bộ lớp học trong khóa
         $check = DB::table('lop_hocvien')
@@ -176,15 +183,15 @@ class CourseController extends Controller
                 ['user_id', '=', $sid],
             ])
             ->count();
-        if($check != 0) {
+        if($check == 0) {
             $result = DB::table('lop_hocvien')
                 ->insert([
                     'lop_id' => $cid,
                     'user_id' => $sid,
-                    'status' => "finished",
-                    'grade' => 1,
-                    'xeploai' => 1,
-                    //'complete_at' => time(),
+                    'status' => $status,
+                    'grade' => $grade,
+                    'xeploai' => $xeploai,
+                    'complete_at' => date('Y-m-d H:i:s'),
                 ]);
 
             if ($result) {
