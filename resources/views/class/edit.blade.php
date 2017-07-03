@@ -26,7 +26,7 @@
         <select name="course_id" class="js-example-basic-single form-control">
             <option value=""></option>
             @foreach($courses as $row)
-                <option value="{{$row->id}}" {{ (isset ($id) && $id == $row->id) ? "selected" : '' }} >{{$row->fullname}}</option>
+                <option value="{{$row->id}}" {{$cid}} {{ (isset ($cid) && $cid == $row->id) ? "selected" : '' }} >{{$row->fullname}}</option>
             @endforeach
         </select>
     </div>

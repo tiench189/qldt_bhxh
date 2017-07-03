@@ -36,7 +36,7 @@
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
     <!-- Trigger the modal with a button -->
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Thêm Học Viên</button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-bottom: 10px">Thêm Học Viên</button>
 
     <!-- Modal -->
     <div id="myModal" class="modal fade" role="dialog">
