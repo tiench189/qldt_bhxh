@@ -63,3 +63,7 @@ Route::group(['prefix' => 'class'], function () {
     Route::get('/edit', 'ClassController@edit')->name('class-edit');
     Route::post('/update', 'ClassController@update')->name('class-update');
 });
+
+Route::group(['prefix' => 'baocao'], function () {
+    Route::get('/tonghop', 'ReportController@tonghop')->name('baocao-tonghop');
+});
