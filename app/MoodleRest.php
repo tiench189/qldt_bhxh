@@ -5,7 +5,7 @@ class MoodleRest
 {
     const METHOD_GET = "GET";
     const METHOD_POST = "POST";
-    const LMS_SERVICE_URL = "http://hoctap.vn/webservice/rest/server.php?wstoken=4a4ff68f618b715f951ec5c7ee49b0f2&wsfunction={wsfunction}&moodlewsrestformat=json";
+    const LMS_SERVICE_URL = "http://lms.teca.vn/webservice/rest/server.php?wstoken=7119e8cc0aba7173768bf7d5208947a1&wsfunction={wsfunction}&moodlewsrestformat=json";
 
     public static function call($method, $wsfunction = null, $params = null, $url = null)
     {
