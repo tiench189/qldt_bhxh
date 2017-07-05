@@ -29,7 +29,6 @@ class ClassController extends Controller
             $class = DB::table('lop')->where('id', $classId)->first();
             return view('class.edit', ['class'=>$class, 'courses'=>$courses, 'id'=>$classId, 'cid' => $cid]);
         }
-
         return view('class.edit', ['courses'=>$courses, 'id'=>$classId, 'cid' => $cid]);
     }
 
