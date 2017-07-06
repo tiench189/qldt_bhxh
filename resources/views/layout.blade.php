@@ -203,6 +203,11 @@
             dayNamesShort: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
             dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
         });
+
+        //Html editor
+        tinymce.init({
+            selector: 'textarea.myTextEditor'
+        });
     });
 </script>
 </html>

@@ -36,6 +36,7 @@ Route::group(['prefix' => 'course'], function () {
     Route::get('/update', 'CourseController@edit')->name('course-update');
     Route::post('/update', 'CourseController@update')->name('course-update');
     Route::post('/removestudent', 'CourseController@removestudent')->name('student-remove');
+    Route::post('/removecourse', 'CourseController@removeCourse')->name('course-remove');
     Route::post('/addstudent', 'CourseController@addstudent')->name('student-add');
     Route::get( 'dshocvien','CourseController@dshocvien' )->name('course-dshocvien');
     Route::get( 'getContents','CourseController@getContents' )->name('course-getContents');

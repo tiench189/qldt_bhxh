@@ -347,6 +347,19 @@ class CourseController extends Controller
 
         return back()->withInput();
     }
+    public function removeCourse(Request $request)
+    {
+        $cid = $request->input('cid');
+
+        $result = DB::table('course')
+            ->where('id', $cid)
+            ->delete();
+
+        if($result) $request->session()->flash('message', "Xóa thành công khóa đào tạo");
+        else $request->session()->flash('message', "Không thể xóa khóa đào tạo");
+
+        return back()->withInput();
+    }
 
     public function getContents (Request $request){
         $cid = $request->input('cid');
@@ -361,22 +374,29 @@ class CourseController extends Controller
         }
 
         else if ($request->isMethod('post')) {
+            $fullname = $request->fullname;
+            $shortname = 'DT' . date('ymdhis');
+            $categoryid = $request->categoryid;
+            $summary = (isset($request->summary))?$request->summary:"";
+            $doituong = (isset($request->doi_tuong))?$request->doi_tuong:"";
+            $thoigian = (isset($request->thoi_gian))?$request->thoi_gian:"";
             $params = array(
-                "courses[0][fullname]" => $request->input('fullname'),
-                "courses[0][shortname]" => $request->input('shortname'),
-                "courses[0][categoryid]" => $request->input('categoryid'),
-                "courses[0][summary]" => $request->input('summary'),
+                "courses[0][fullname]" => $fullname,
+                "courses[0][shortname]" => $shortname,
+                "courses[0][categoryid]" => $categoryid,
+                "courses[0][summary]" => $summary,
                 "courses[0][format]" => "topics",
-                "courses[0][startdate]" => strtotime($request->input('startdate')),
-                "courses[0][enddate]" => strtotime($request->input('enddate')),
             );
-
             $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_create_courses", $params);
             $result = json_decode($rs);
             if (isset($result->errorcode)) {
                 $request->session()->flash('message', "Có lỗi : " . $result->message);
                 return view('course.create', ['cate' => $cate]);
             } else {
+//                dd($result);
+                $id = intval($result[0]->id);
+                DB::table('course')->where('id', $id)
+                    ->update(['doi_tuong' => $doituong, 'thoi_gian' => $thoigian]);
                 $request->session()->flash('message', "Cập nhật thành công.");
             }
 
