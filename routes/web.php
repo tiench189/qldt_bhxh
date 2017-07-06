@@ -66,4 +66,5 @@ Route::group(['prefix' => 'class'], function () {
 
 Route::group(['prefix' => 'baocao'], function () {
     Route::get('/tonghop', 'ReportController@tonghop')->name('baocao-tonghop');
+    Route::get('/download_tonghop', 'ReportController@downloadTonghop')->name('download-tonghop');
 });

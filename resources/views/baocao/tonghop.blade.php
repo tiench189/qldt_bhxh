@@ -14,7 +14,8 @@
                    class="form-control datepicker">
             <input type="submit" class="btn btn-info" value="Tổng hợp">
             @if(count($data) > 0)
-                <a class="btn btn-info" style="float: right" href="#">Xuất ra excel</a>
+                <a class="btn btn-info" style="float: right"
+                   href="{{route('download-tonghop', ['start' => $start, 'end' => $end])}}">Xuất ra excel</a>
             @endif
         </div>
     </form>
@@ -90,7 +91,7 @@
     <script>
         var strdata = '{{json_encode($data)}}';
         strdata = strdata.split("&quot;").join("");
-//        var data = JSON.parse(strdata);
+        //        var data = JSON.parse(strdata);
         console.log(strdata);
     </script>
 @stop
