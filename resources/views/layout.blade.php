@@ -79,7 +79,7 @@
                                 @if($idx > 0)
                                     <li class="divider"></li>
                                 @endif
-                                <li><a href="{{route('course-index', ['c' => $cate->id])}}">{{$cate->name}}</a></li>
+                                <li><a href="{{route('index', ['c' => $cate->id])}}">{{$cate->name}}</a></li>
                             @endforeach
                         </ul>
                     </li>
@@ -93,7 +93,7 @@
                             <li><a href="{{route('baocao-tonghop')}}">Tổng hợp</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Phiếu khảo sát</a></li>
+                    {{--<li><a href="#">Phiếu khảo sát</a></li>--}}
                 </ul>
                 <form class="navbar-form navbar-left hidden" role="search">
                     <div class="form-group">

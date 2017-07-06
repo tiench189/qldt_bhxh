@@ -13,7 +13,7 @@
 
     @if ( $errors->count() > 0 )
         @foreach( $errors->all() as $message )
-            <p  class="alert alert-danger">{{ $message }}</p>
+            <p class="alert alert-danger">{{ $message }}</p>
         @endforeach
     @endif
 
@@ -22,7 +22,7 @@
         <label>Tên khóa học: <span class="required">(*)</span></label>
         {!! Form::text('fullname', '',
             array('class'=>'form-control',
-                  'placeholder'=>'Tên khóa học ')) !!}
+                  'placeholder'=>'Tên khóa đào tạo ')) !!}
     </div>
     <div class="form-group form-inline">
         <label>Đối tượng đào tạo: </label>
@@ -44,7 +44,8 @@
         <label>Mô tả: </label>
         {!! Form::textarea('summary', '',
             array('class'=>'form-control',
-                  'placeholder'=>'Tóm tắt nội dung')) !!}
+                  'placeholder'=>'Tóm tắt nội dung',
+                  'rows'=>5)) !!}
     </div>
 
     <div class="form-group">
