@@ -28,4 +28,12 @@ class ReportController extends Controller
 //        return response()->json($output);
         return view('baocao.tonghop', $output);
     }
+
+    public function downloadTonghop(Request $request){
+        $start = $request->start;
+        $end = $request->end;
+        $dataReport = \App\Utils::getReportTotal($start, $end);
+        $fileDowwnload = \App\Utils::writeReport($dataReport);
+        return redirect($fileDowwnload);
+    }
 }

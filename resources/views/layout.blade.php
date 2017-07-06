@@ -70,7 +70,8 @@
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav my-nav">
                     <li class="dropdown active">
-                        <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo <b
+                        <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo
+                            <b
                                     class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <?php $categories = \App\Utils::listCategories()?>
@@ -85,7 +86,13 @@
                     <li><a href="{{route('teacher-index')}}">Giảng viên</a></li>
                     <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
                     <li><a href="{{route('tracuu')}}">Tra cứu</a></li>
-                    <li><a href="#">Báo cáo</a></li>
+                    <li class="dropdown ">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Báo cáo <b
+                                    class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{route('baocao-tonghop')}}">Tổng hợp</a></li>
+                        </ul>
+                    </li>
                     <li><a href="#">Phiếu khảo sát</a></li>
                 </ul>
                 <form class="navbar-form navbar-left hidden" role="search">

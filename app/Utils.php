@@ -172,7 +172,4 @@ class Utils extends Model
         return $dataReport;
     }
 
-    public function downloadTonghop(Request $request){
-        
-    }
 }
