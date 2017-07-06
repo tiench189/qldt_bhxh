@@ -368,7 +368,7 @@ class CourseController extends Controller
     }
 
     public function createCourse(Request $request){
-        $cate = DB::table('course_categories')->select("id", "name")->get();
+        $cate = DB::table('course_categories')->orderBy('id', 'ASC')->select("id", "name")->get();
         if($request->isMethod('get')){
             return view('course.create', ['cate' => $cate]);
         }

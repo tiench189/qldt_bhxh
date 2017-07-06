@@ -49,7 +49,7 @@ class CasController extends Controller
         phpCAS::setVerbose(true);
         phpCAS::client(CAS_VERSION_2_0, Config::get('conf.cas_host'),
             Config::get('conf.cas_port'), Config::get('conf.cas_context'));
-        phpCAS::logoutWithRedirectService("http://tiench.qldt.vn/cas");
+        phpCAS::logoutWithRedirectService(route('login'));
     }
 
     public function caslogout(Request $request){

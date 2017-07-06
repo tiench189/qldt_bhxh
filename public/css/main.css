@@ -5,88 +5,125 @@ body {
     font-size: 13px;
     font-weight: 400;
     line-height: 25px;
-    text-shadow: none!important;
+    text-shadow: none !important;
     color: #444;
 }
+
 #wrapper {
     background: #fff;
     border-top: 4px solid #3099D2;
     min-height: 100vh;
 }
+
 #page-header {
     padding: 12px 0;
 }
+
 .logo {
     max-height: 70px;
     width: auto;
 }
+
 img.logo {
     max-width: 100%;
 }
+
 .logo-title {
     color: #333;
     font-size: 20px;
     word-break: break-all;
 }
+
 .navbar-default .navbar-nav > li.dropdown:hover > a,
 .navbar-default .navbar-nav > li.dropdown:hover > a:hover,
 .navbar-default .navbar-nav > li.dropdown:hover > a:focus {
     background-color: rgb(231, 231, 231);
     color: rgb(85, 85, 85);
 }
+
 li.dropdown:hover > .dropdown-menu {
     display: block;
 }
 
-.no-padding{
+.no-padding {
     padding: 0px !important;
 }
 
-.navbar-bh{
+.navbar-bh {
     border: none;
     background-color: #323A45;
     border-radius: 0px !important;
 }
-.navbar-bh a{
+
+.navbar-bh a {
     color: white;
 }
-.my-nav>li{
+
+.my-nav > li {
     border-right: solid 1px #555;
 }
-.my-nav>li.active{
+
+.my-nav > li.active {
     background: #3099D2 !important;
 }
-.my-nav>li>a:focus, .my-nav>li>a:hover, .my-nav>li>a:active{
+
+.my-nav > li > a:focus, .my-nav > li > a:hover, .my-nav > li > a:active {
     background: #3099D2 !important;
 }
-.page-title{
+
+.page-title {
     font-size: 1.2em;
 }
-.stt{
+
+.stt {
     width: 40px;
 }
-.ico-action{
+
+.ico-action {
     background-size: 100% 100%;
     width: 24px;
     height: 24px;
     background-repeat: no-repeat;
 }
-.ico-action.history{
+
+.ico-action.history {
     background-image: url("../img/ico_history.png");
 }
-.ico-action.edit{
+
+.ico-action.edit {
     background-image: url("../img/ico_edit.png");
 }
-th.action{
+
+th.action {
     width: 10px;
 }
-.my-nav.navbar-right{
+
+.my-nav.navbar-right {
     margin-right: 0px !important;
 }
 
-.m-top-10{
+.m-top-10 {
     margin-top: 10px;
 }
-.dt-buttons{
+
+.dt-buttons {
     position: absolute !important;
+}
+
+.role-contain {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.role-header {
+    padding: 10px;
+    background-color: #3099D2;
+    color: white;
+    font-size: 1.1em;
+}
+.role-header.child{
+    background-color: #323A45;
+}
+.role-content{
+    padding: 10px;
 }
