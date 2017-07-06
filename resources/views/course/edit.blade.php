@@ -41,9 +41,4 @@
     </div>
     {!! Form::close() !!}
 
-    <script>
-        tinymce.init({
-            selector: 'textarea.myTextEditor'
-        });
-    </script>
 @stop
