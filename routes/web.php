@@ -38,6 +38,9 @@ Route::group(['prefix' => 'course'], function () {
     Route::post('/removestudent', 'CourseController@removestudent')->name('student-remove');
     Route::post('/addstudent', 'CourseController@addstudent')->name('student-add');
     Route::get( 'dshocvien','CourseController@dshocvien' )->name('course-dshocvien');
+    Route::get( 'getContents','CourseController@getContents' )->name('course-getContents');
+    Route::post( 'createCourse','CourseController@createCourse' )->name('course-createCourse');
+    Route::get( 'createCourse','CourseController@createCourse' )->name('course-createCourse');
 });
 Route::group(['prefix' => 'hocvien'], function () {
     Route::get('/', 'StudentController@index')->name('hocvien-index');

@@ -18,6 +18,8 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Border;
 use PHPExcel_Settings;
 
+use App\MoodleRest;
+
 
 class CourseController extends Controller
 {
@@ -345,4 +347,43 @@ class CourseController extends Controller
 
         return back()->withInput();
     }
+
+    public function getContents (Request $request){
+        $cid = $request->input('cid');
+        $rs = MoodleRest::call(MoodleRest::METHOD_GET, "core_course_get_contents", array("courseid" => $cid));
+        var_dump(json_decode($rs)); die;
+    }
+
+    public function createCourse(Request $request){
+        $cate = DB::table('course_categories')->select("id", "name")->get();
+        if($request->isMethod('get')){
+            return view('course.create', ['cate' => $cate]);
+        }
+
+        else if ($request->isMethod('post')) {
+            $params = array(
+                "courses[0][fullname]" => $request->input('fullname'),
+                "courses[0][shortname]" => $request->input('shortname'),
+                "courses[0][categoryid]" => $request->input('categoryid'),
+                "courses[0][summary]" => $request->input('summary'),
+                "courses[0][format]" => "topics",
+                "courses[0][startdate]" => strtotime($request->input('startdate')),
+                "courses[0][enddate]" => strtotime($request->input('enddate')),
+            );
+
+            $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_create_courses", $params);
+            $result = json_decode($rs);
+            if (isset($result->errorcode)) {
+                $request->session()->flash('message', "Có lỗi : " . $result->message);
+                return view('course.create', ['cate' => $cate]);
+            } else {
+                $request->session()->flash('message', "Cập nhật thành công.");
+            }
+
+            return redirect()->action(
+                'CourseController@index', ['c' => $request->input('categoryid')]
+            );
+        }
+    }
+
 }
