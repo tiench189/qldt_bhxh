@@ -50,9 +50,7 @@
 
     <div class="form-group">
         {!! Form::submit('Cập nhật',
-          array('class'=>'btn btn-primary')) !!}
+          array('class'=>'btn btn-info')) !!}
     </div>
     {!! Form::close() !!}
-
-
 @stop
