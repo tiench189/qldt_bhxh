@@ -12,13 +12,15 @@
     {!! Form::open(array('route' => 'student-remove', 'class' => 'form', 'id' => 'frmstudentremove')) !!}
     {{ Form::hidden('cid', 0, array('id' => 'classid')) }}
     {{ Form::hidden('sid', 0, array('id' => 'studentid')) }}
+    {{ Form::hidden('courseid', 0, array('id' => 'courseid')) }}
     {!! Form::close() !!}
     <script language="javascript">
-        function xoanguoidung(cid,sid) {
+        function xoanguoidung(cid,sid,courseid) {
 
             if(confirm("Bạn có muốn xóa?")) {
                 document.getElementById("classid").value = cid;
                 document.getElementById("studentid").value = sid;
+                document.getElementById("courseid").value = courseid;
                 frmstudentremove.submit();
             }
 
@@ -133,7 +135,7 @@
                 <td>{{$xeploai[$row->xeploai]->name}}</td>
                 <td>{{\app\Utils::formatTimestamp($row->complete_at)}}</td>
                 <td>
-                    <a href="javascript:void(0)" onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}})" class="btn btn-xs btn-info">Xóa</a>
+                    <a href="javascript:void(0)" onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$row->course_id}})" class="btn btn-xs btn-info">Xóa</a>
                 </td>
             </tr>
         @endforeach
