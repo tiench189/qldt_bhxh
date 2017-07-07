@@ -15,9 +15,9 @@
     {{ Form::hidden('courseid', 0, array('id' => 'courseid')) }}
     {!! Form::close() !!}
     <script language="javascript">
-        function xoanguoidung(cid,sid,courseid) {
+        function xoanguoidung(cid, sid, courseid) {
 
-            if(confirm("Bạn có muốn xóa?")) {
+            if (confirm("Bạn có muốn xóa?")) {
                 document.getElementById("classid").value = cid;
                 document.getElementById("studentid").value = sid;
                 document.getElementById("courseid").value = courseid;
@@ -38,7 +38,11 @@
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
     <!-- Trigger the modal with a button -->
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-bottom: 10px">Thêm Học Viên</button>
+    @if(\App\Roles::checkRole('student-add'))
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"
+                style="margin-bottom: 10px">Thêm Học Viên
+        </button>
+    @endif
 
     <!-- Modal -->
     <div id="myModal" class="modal fade" role="dialog">
@@ -50,9 +54,10 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">
                         @if($courseID != 0)
-                           Thêm học viên vào <strong>{{$course->fullname}}</strong>
+                            Thêm học viên vào <strong>{{$course->fullname}}</strong>
                         @else
-                            Thêm học viên vào <strong>{{$class->ten_lop}}</strong> - <strong>{{$course->fullname}}</strong>
+                            Thêm học viên vào <strong>{{$class->ten_lop}}</strong> -
+                            <strong>{{$course->fullname}}</strong>
                         @endif
                     </h4>
                 </div>
@@ -62,11 +67,11 @@
                     {!! Form::open(array('route' => 'student-add', 'class' => 'form')) !!}
                     {{ Form::hidden('id', $course->id, array('id' => 'courseid')) }}
                     @if($courseID != 0)
-                    <div class="form-group">
-                        <label>Lớp: <span class="required">(*)</span></label>
-                        {!! Form::select('cid', $ddclass, '',
-                            array('class'=>'form-control','id'=>"classid")) !!}
-                    </div>
+                        <div class="form-group">
+                            <label>Lớp: <span class="required">(*)</span></label>
+                            {!! Form::select('cid', $ddclass, '',
+                                array('class'=>'form-control','id'=>"classid")) !!}
+                        </div>
                     @else
                         {{ Form::hidden('cid', $class->id, array('id' => 'classid')) }}
                     @endif
@@ -119,7 +124,9 @@
             <th>Điểm</th>
             <th>Xếp loại</th>
             <th>Ngày hoàn thành</th>
-            <th></th>
+            @if(\App\Roles::checkRole('student-remove'))
+                <th></th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -134,9 +141,13 @@
                 <td>{{$row->grade}}</td>
                 <td>{{$xeploai[$row->xeploai]->name}}</td>
                 <td>{{\app\Utils::formatTimestamp($row->complete_at)}}</td>
-                <td>
-                    <a href="javascript:void(0)" onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$row->course_id}})" class="btn btn-xs btn-info">Xóa</a>
-                </td>
+                @if(\App\Roles::checkRole('student-remove'))
+                    <td>
+                        <a href="javascript:void(0)"
+                           onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$row->course_id}})"
+                           class="btn btn-xs btn-info">Xóa</a>
+                    </td>
+                @endif
             </tr>
         @endforeach
         </tbody>

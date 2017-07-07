@@ -9,7 +9,7 @@
     {!! Form::close() !!}
     <script language="javascript">
         function removeCourse(cid) {
-            if(confirm("Bạn có muốn xóa khóa đào tạo này?")) {
+            if (confirm("Bạn có muốn xóa khóa đào tạo này?")) {
                 document.getElementById("courseid").value = cid;
                 frmcourseremove.submit();
             }
@@ -19,7 +19,9 @@
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
     <div class="page-title">Danh sách Khóa đào tạo</div>
-    <a class="btn btn-info" href="{{route('course-createCourse')}}" style="margin-bottom: 10px">Thêm mới</a>
+    @if(\App\Roles::checkRole('course-createCourse'))
+        <a class="btn btn-info" href="{{route('course-createCourse')}}" style="margin-bottom: 10px">Thêm mới</a>
+    @endif
     <table id="table" class="table table-bordered table-hover" data-export="[0,1,2]">
         <thead>
         <tr>
@@ -29,10 +31,18 @@
             <th width="120px">Đối tượng đào tạo</th>
             <th width="60px">Thời gian</th>
             <th>Tổng quan</th>
-            <th class="action"></th>
-            <th class="action"></th>
-            <th class="action"></th>
-            <th class="action"></th>
+            @if(\App\Roles::checkRole('course-classes'))
+                <th class="action"></th>
+            @endif
+            @if(\App\Roles::checkRole('course-result'))
+                <th class="action"></th>
+            @endif
+            @if(\App\Roles::checkRole('course-update'))
+                <th class="action"></th>
+            @endif
+            @if(\App\Roles::checkRole('course-remove'))
+                <th class="action"></th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -43,26 +53,34 @@
                 <td>{{$row->doi_tuong}}</td>
                 <td>{{$row->thoi_gian}}</td>
                 <td> {!! $row->summary !!} </td>
-                <td>
-                    <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-info">
-                        DS Lớp học
-                    </a>
-                </td>
-                <td>
-                    <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-info">
-                        DS Học viên
-                    </a>
-                </td>
-                <td>
-                    <a href="{{route('course-update', ['id' => $row->id])}}" class="btn btn-xs btn-info">
-                        Cập nhật
-                    </a>
-                </td>
-                <td>
-                    <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-info">
-                        Xóa
-                    </a>
-                </td>
+                @if(\App\Roles::checkRole('course-classes'))
+                    <td>
+                        <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-info">
+                            DS Lớp học
+                        </a>
+                    </td>
+                @endif
+                @if(\App\Roles::checkRole('course-result'))
+                    <td>
+                        <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-info">
+                            DS Học viên
+                        </a>
+                    </td>
+                @endif
+                @if(\App\Roles::checkRole('course-update'))
+                    <td>
+                        <a href="{{route('course-update', ['id' => $row->id])}}" class="btn btn-xs btn-info">
+                            Cập nhật
+                        </a>
+                    </td>
+                @endif
+                @if(\App\Roles::checkRole('course-remove'))
+                    <td>
+                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-info">
+                            Xóa
+                        </a>
+                    </td>
+                @endif
             </tr>
         @endforeach
         </tbody>
