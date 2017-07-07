@@ -174,7 +174,7 @@ class CourseController extends Controller
 
 
     public function addstudent(Request $request) {
-
+        $id = intval($request->input('id')); // course id
         $cid = intval($request->input('cid'));
         $sid = intval($request->input('sid'));
         $xeploai = intval($request->input('xeploai'));
@@ -189,21 +189,37 @@ class CourseController extends Controller
             ])
             ->count();
         if($check == 0) {
-            $result = DB::table('lop_hocvien')
-                ->insert([
-                    'lop_id' => $cid,
-                    'user_id' => $sid,
-                    'status' => $status,
-                    'grade' => $grade,
-                    'xeploai' => $xeploai,
-                    'complete_at' => date('Y-m-d H:i:s'),
-                ]);
+            //enrol quyền học viên
+            $params = array(
+                "enrolments[0][userid]" => $sid,
+                "enrolments[0][courseid]" => $id,
+                "enrolments[0][roleid]" => 5,
+            );
+            $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_enrol_users", $params);
+            $rs = json_decode($rs);
 
-            if ($result) {
-                $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
-            } else {
+            if(!isset($rs->errorcode)){
+                // them hoc vien vao lop
+                $result = DB::table('lop_hocvien')
+                    ->insert([
+                        'lop_id' => $cid,
+                        'user_id' => $sid,
+                        'status' => $status,
+                        'grade' => $grade,
+                        'xeploai' => $xeploai,
+                        'complete_at' => date('Y-m-d H:i:s'),
+                    ]);
+
+                if ($result){
+                    $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
+                } else {
+                    $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
+                }
+            }else{
                 $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
             }
+
+
         } else {
             $request->session()->flash('message', "Học viên đã tồn tại trong lớp này.");
         }
@@ -334,16 +350,29 @@ class CourseController extends Controller
 
     public function removestudent(Request $request)
     {
+        $courseid = $request->input('courseid');
         $sid = $request->input('sid');
         $cid = $request->input('cid');
 
-        $result = DB::table('lop_hocvien')
-            ->where('lop_id', $cid)
-            ->where('user_id', $sid)
-            ->delete();
+        $params = array(
+            "enrolments[0][userid]" => $sid,
+            "enrolments[0][courseid]" => $courseid,
+            "enrolments[0][roleid]" => 5,
+        );
+        $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_unenrol_users", $params);
+        $rs = json_decode($rs);
 
-        if($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
-        else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
+        if(is_null($rs)){
+            $result = DB::table('lop_hocvien')
+                ->where('lop_id', $cid)
+                ->where('user_id', $sid)
+                ->delete();
+
+            if($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
+            else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
+        }else{
+            $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
+        }
 
         return back()->withInput();
     }
@@ -389,7 +418,8 @@ class CourseController extends Controller
             );
             $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_create_courses", $params);
             $result = json_decode($rs);
-            if (isset($result->errorcode)) {
+
+            if (is_null($result) || isset($result->errorcode)) {
                 $request->session()->flash('message', "Có lỗi : " . $result->message);
                 return view('course.create', ['cate' => $cate]);
             } else {
