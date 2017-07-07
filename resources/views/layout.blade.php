@@ -69,30 +69,44 @@
 
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav my-nav">
-                    <li class="dropdown active">
-                        <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào tạo
-                            <b
-                                    class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <?php $categories = \App\Utils::listCategories()?>
-                            @foreach($categories as $idx=>$cate)
-                                @if($idx > 0)
-                                    <li class="divider"></li>
+                    @if(\App\Roles::checkRole('index'))
+                        <li class="dropdown active">
+                            <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào
+                                tạo
+                                <b
+                                        class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <?php $categories = \App\Utils::listCategories()?>
+                                @foreach($categories as $idx=>$cate)
+                                    @if($idx > 0)
+                                        <li class="divider"></li>
+                                    @endif
+                                    <li><a href="{{route('index', ['c' => $cate->id])}}">{{$cate->name}}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endif
+                    {{--<li><a href="{{route('teacher-index')}}">Giảng viên</a></li>--}}
+                    @if(\App\Roles::checkRole('hocvien-index'))
+                        <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
+                    @endif
+                    @if(\App\Roles::checkRole('tracuu'))
+                        <li><a href="{{route('tracuu')}}">Tra cứu</a></li>
+                    @endif
+                    @if(\App\Roles::checkRole('baocao'))
+                        <li class="dropdown ">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Báo cáo <b
+                                        class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                @if(\App\Roles::checkRole('baocao-tonghop'))
+                                    <li><a href="{{route('baocao-tonghop')}}">Tổng hợp</a></li>
                                 @endif
-                                <li><a href="{{route('index', ['c' => $cate->id])}}">{{$cate->name}}</a></li>
-                            @endforeach
-                        </ul>
-                    </li>
-                    <li><a href="{{route('teacher-index')}}">Giảng viên</a></li>
-                    <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
-                    <li><a href="{{route('tracuu')}}">Tra cứu</a></li>
-                    <li class="dropdown ">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Báo cáo <b
-                                    class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{route('baocao-tonghop')}}">Tổng hợp</a></li>
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
+                    @endif
+                    @if(\App\Roles::checkRole('role-index'))
+                        <li><a href="{{route('role-index')}}">Quản lý quyền</a></li>
+                    @endif
                     {{--<li><a href="#">Phiếu khảo sát</a></li>--}}
                 </ul>
                 <form class="navbar-form navbar-left hidden" role="search">

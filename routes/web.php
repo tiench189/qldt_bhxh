@@ -71,6 +71,9 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::get('/', 'RolesController@index')->name('role-index');
             Route::get('/assign', 'RolesController@assignRole')->name('role-assign');
             Route::post('/assign', 'RolesController@submitRole')->name('role-assign');
+            Route::get('/create', 'RolesController@createRole')->name('role-create');
+            Route::post('/create', 'RolesController@createRole')->name('role-create');
+            Route::post('/delete', 'RolesController@deleteRole')->name('role-delete');
         });
     });
 });
