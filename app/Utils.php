@@ -159,13 +159,14 @@ class Utils extends Model
                 ->select('id', 'fullname', 'doi_tuong', 'thoi_gian')
                 ->get();
             $dictCourse = self::row2Array($dataCourse);
-
+//            return $dictCourse;
             foreach ($dataReport as $year => $rowYear) {
                 foreach ($rowYear['course'] as $course => $rowCourse) {
-                    if (array_key_exists($course, $dictCourse))
+                    if (array_key_exists($course, $dictCourse)) {
                         $dataReport[$year]['course'][$course]['fullname'] = $dictCourse[$course]->fullname;
-                    $dataReport[$year]['course'][$course]['doi_tuong'] = $dictCourse[$course]->doi_tuong;
-                    $dataReport[$year]['course'][$course]['thoi_gian'] = $dictCourse[$course]->thoi_gian;
+                        $dataReport[$year]['course'][$course]['doi_tuong'] = $dictCourse[$course]->doi_tuong;
+                        $dataReport[$year]['course'][$course]['thoi_gian'] = $dictCourse[$course]->thoi_gian;
+                    }
                 }
             }
         }

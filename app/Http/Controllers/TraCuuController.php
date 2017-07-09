@@ -14,14 +14,20 @@ use Illuminate\Support\Facades\DB;
 
 class TraCuuController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
+
+    }
+
+    public function donvi(Request $request)
+    {
         $courses = DB::table('course')
             ->select('id', 'fullname')
             ->get();
 
         $donvi = array();
 
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $cid = $request->input('course');
             $year = $request->input('year');
             $status = $request->input('status');
@@ -31,7 +37,7 @@ class TraCuuController extends Controller
                 ->select('id')
                 ->get();
 
-            if(!$class->isEmpty()){
+            if (!$class->isEmpty()) {
                 $classIds = array();
                 foreach ($class as $item) {
                     $classIds[] = $item->id;
@@ -42,10 +48,10 @@ class TraCuuController extends Controller
                     ->get();
 
                 $userIds = array();
-                foreach ($lhv as $item){
-                    $date  = strtotime( $item->complete_at );
+                foreach ($lhv as $item) {
+                    $date = strtotime($item->complete_at);
                     $itemY = date('Y', $date);
-                    if($itemY == $year){
+                    if ($itemY == $year) {
                         $userIds[] = $item->user_id;
                     }
                 }
@@ -56,8 +62,8 @@ class TraCuuController extends Controller
                     ->get();
 
                 $donviIds = array();
-                if(!$users->isEmpty()){
-                    foreach ($users as $item){
+                if (!$users->isEmpty()) {
+                    foreach ($users as $item) {
                         $donviIds[] = $item->donvi;
                     }
                 }
@@ -68,13 +74,13 @@ class TraCuuController extends Controller
                     ->select("*")
                     ->get();
 
-                if($status == 1){
+                if ($status == 1) {
                     $donvi = $donvidaotao;
-                }else{
+                } else {
                     // Cac don vi chua dao tao
                     $dvdtIds = array();
-                    if(!$donvidaotao->isEmpty()){
-                        foreach ($donvidaotao as $item){
+                    if (!$donvidaotao->isEmpty()) {
+                        foreach ($donvidaotao as $item) {
                             $dvdtIds[] = $item->id;
                         }
                     }
@@ -86,19 +92,19 @@ class TraCuuController extends Controller
                     $donvi = $donvichuadaotao;
                 }
 
-                return view('tracuu.index', ['courses' => $courses, 'donvi' => $donvi, 'cid'=>$cid, 'year'=>$year, 'status'=>$status]);
+                return view('tracuu.donvi', ['courses' => $courses, 'donvi' => $donvi, 'cid' => $cid, 'year' => $year, 'status' => $status]);
             }
-            if($status == 0){
+            if ($status == 0) {
                 // chua dao tao
                 $donvi = DB::table('donvi')
                     ->select("*")
                     ->get();
             }
 
-            return view('tracuu.index', ['courses' => $courses, 'donvi' => $donvi, 'cid'=>$cid, 'year'=>$year, 'status'=>$status]);
-        }else{
+            return view('tracuu.donvi', ['courses' => $courses, 'donvi' => $donvi, 'cid' => $cid, 'year' => $year, 'status' => $status]);
+        } else {
             $output = ['courses' => $courses, 'donvi' => $donvi];
-            return view('tracuu.index', $output);
+            return view('tracuu.donvi', $output);
         }
     }
 

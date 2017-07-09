@@ -43,7 +43,8 @@ Route::group(['middleware' => 'cas_auth'], function () {
         });
         Route::group(['prefix' => 'tracuu'], function () {
             Route::get('/', 'TraCuuController@index')->name('tracuu');
-            Route::post('/', 'TraCuuController@index')->name('tracuu');
+            Route::get('/donvi', 'TraCuuController@donvi')->name('tracuu-donvi');
+            Route::post('/donvi', 'TraCuuController@donvi')->name('tracuu-donvi');
         });
 
         Route::group(['prefix' => 'teacher'], function () {
@@ -55,7 +56,7 @@ Route::group(['middleware' => 'cas_auth'], function () {
 
         Route::group(['prefix' => 'class'], function () {
             Route::get('/', 'ClassController@index')->name('class-index');
-            Route::get('/xeploaihv', 'ClassController@xeploaihv')->name('class-xeploaihv');
+            Route::get('/capnhathocvien', 'ClassController@xeploaihv')->name('class-capnhathocvien');
             Route::post('/capnhathocvien', 'ClassController@capnhathocvien')->name('class-capnhathocvien');
             Route::get('/danhsach', 'ClassController@danhsach')->name('class-danhsach');
             Route::get('/edit', 'ClassController@edit')->name('class-edit');
@@ -67,13 +68,15 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::get('/download_tonghop', 'ReportController@downloadTonghop')->name('download-tonghop');
         });
 
-        Route::group(['prefix' => 'role'], function () {
-            Route::get('/', 'RolesController@index')->name('role-index');
-            Route::get('/assign', 'RolesController@assignRole')->name('role-assign');
-            Route::post('/assign', 'RolesController@submitRole')->name('role-assign');
-            Route::get('/create', 'RolesController@createRole')->name('role-create');
-            Route::post('/create', 'RolesController@createRole')->name('role-create');
-            Route::post('/delete', 'RolesController@deleteRole')->name('role-delete');
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', 'UserController@index')->name('user-index');
+            Route::get('/updaterole', 'UserController@update')->name('user-update-role');
+            Route::get('/role', 'UserController@roles')->name('role-index');
+            Route::get('/assignrole', 'UserController@assignRole')->name('role-assign');
+            Route::post('/assignrole', 'UserController@submitRole')->name('role-assign');
+            Route::get('/createrole', 'UserController@createRole')->name('role-create');
+            Route::post('/createrole', 'UserController@createRole')->name('role-create');
+            Route::post('/deleterole', 'UserController@deleteRole')->name('role-delete');
         });
     });
 });

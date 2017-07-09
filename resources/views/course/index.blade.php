@@ -20,17 +20,17 @@
     @endif
     <div class="page-title">Danh sách Khóa đào tạo</div>
     @if(\App\Roles::checkRole('course-createCourse'))
-        <a class="btn btn-info" href="{{route('course-createCourse')}}" style="margin-bottom: 10px">Thêm mới</a>
+        <a class="btn btn-primary btn-add" href="{{route('course-createCourse')}}">Thêm mới</a>
     @endif
     <table id="table" class="table table-bordered table-hover" data-export="[0,1,2]">
         <thead>
         <tr>
 
             <th class="stt">#</th>
-            <th style="min-width: 300px">Tên khóa đào tạo</th>
-            <th width="120px">Đối tượng đào tạo</th>
-            <th width="60px">Thời gian</th>
-            <th>Tổng quan</th>
+            <th style="min-width: 300px">Tên khóa đào tạo<br><input type="text"></th>
+            <th style="width: 120px">Đối tượng đào tạo<br><input type="text"></th>
+            <th style="width: 60px">Thời gian<br><input type="text"></th>
+            <th>Tổng quan<br><input type="text"></th>
             @if(\App\Roles::checkRole('course-classes'))
                 <th class="action"></th>
             @endif
@@ -55,28 +55,28 @@
                 <td> {!! $row->summary !!} </td>
                 @if(\App\Roles::checkRole('course-classes'))
                     <td>
-                        <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-info">
+                        <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
                             DS Lớp học
                         </a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('course-result'))
                     <td>
-                        <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-info">
+                        <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
                             DS Học viên
                         </a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('course-update'))
                     <td>
-                        <a href="{{route('course-update', ['id' => $row->id])}}" class="btn btn-xs btn-info">
+                        <a href="{{route('course-update', ['id' => $row->id])}}" class="btn btn-xs btn-primary">
                             Cập nhật
                         </a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('course-remove'))
                     <td>
-                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-info">
+                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-primary">
                             Xóa
                         </a>
                     </td>
@@ -85,4 +85,9 @@
         @endforeach
         </tbody>
     </table>
+    <style>
+        #table_filter {
+            display: none;
+        }
+    </style>
 @stop

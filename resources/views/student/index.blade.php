@@ -32,7 +32,7 @@
                 <td></td>
                 <td></td>
                 @if(\App\Roles::checkRole('hocvien-histories'))
-                    <td><a href="{{route('hocvien-histories', ['u' => $row->id])}}" class="btn btn-xs btn-info">
+                    <td><a href="{{route('hocvien-histories', ['u' => $row->id])}}" class="btn btn-xs btn-primary">
                             Lịch sử đào tạo</a>
                     </td>
                 @endif

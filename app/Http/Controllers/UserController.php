@@ -6,12 +6,39 @@ use App\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class RolesController extends Controller
+class UserController extends Controller
 {
-    //
     public function index(Request $request){
+        $users = DB::table('user')
+            ->leftJoin('donvi', 'donvi.id', '=', 'user.donvi')
+            ->leftJoin('group_permission', 'group_permission.id', '=', 'user.group_permission')
+            ->where('user.auth', '=', 'cas')
+            ->select('user.id', 'user.email', 'user.firstname', 'user.lastname', 'donvi.ten_donvi as ten_donvi', 'group_permission.name as group_name')
+            ->get();
         $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
-        return view('roles.index', ['groups' => $groups]);
+//        return response()->json($users);
+        return view('users.index', ['users' => $users, 'groups' => $groups]);
+    }
+
+    public function update(Request $request){
+        $uid = intval($request->uid);
+        if($request->isMethod('get')){
+            $user = DB::table('user')
+                ->where('id', $uid)
+                ->first();
+            $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
+            return view('users.update', ['user' => $user, 'groups' => $groups]);
+        }
+        $group_permission = $request->group_permission;
+        DB::table('user')->where('id', $uid)->update(['group_permission' => $group_permission]);
+        $request->session()->flash('message', 'Cập nhật quyền thành công');
+        return redirect(route('user-index'));
+
+    }
+
+    public function roles(Request $request){
+        $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
+        return view('users.roles', ['groups' => $groups]);
     }
 
     public function assignRole(Request $request){
@@ -24,7 +51,7 @@ class RolesController extends Controller
         $groupRoles = Roles::existRoles($groupid);
 
         $output = ['allRoles' => $allRoles, 'groupRole' => $groupRoles, 'groupid' => $groupid, 'groupname' => $groupname];
-        return view('roles.role', $output);
+        return view('users.assign', $output);
     }
 
     public function submitRole(Request $request){
@@ -62,7 +89,7 @@ class RolesController extends Controller
     public function createRole(Request $request){
         if($request->isMethod('get')){
             $allRoles = Roles::treeRoles();
-            return view('roles.create', ['allRoles' => $allRoles]);
+            return view('users.createrole', ['allRoles' => $allRoles]);
         }
         $roles = $request->roles;
         $groupid = DB::table('group_permission')->insertGetId(['name' => $request->name]);

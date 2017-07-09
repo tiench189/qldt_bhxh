@@ -17,13 +17,13 @@
     {{ Form::hidden('cid', $lhv->lop_id, array('cid' => 'cid')) }}
     {{ Form::hidden('uid', $lhv->user_id, array('uid' => 'uid')) }}
 
-    <div class="form-group">
+    <div class="form-group form-inline">
         <label>Điểm: <span class="required">(*)</span></label>
         {!! Form::text('grade', $lhv->grade,
             array('class'=>'form-control',
                   'placeholder'=>'Điểm')) !!}
     </div>
-    <div class="form-group">
+    <div class="form-group  form-inline">
         <label>Xếp loại: <span class="required">(*)</span></label>
         <select name="xeploai" class="form-control">
             @foreach($xeploai as $x)
@@ -31,11 +31,13 @@
             @endforeach
         </select>
     </div>
-    <div class="form-group">
+    <div class="form-group  form-inline">
         <label>Trạng thái: <span class="required">(*)</span></label>
-        {!! Form::text('status', $lhv->status,
-            array('class'=>'form-control',
-                  'placeholder'=>'Trạng thái')) !!}
+        <select name="status" class="form-control">
+            <option value="inprogress" {{$lhv->status == 'inprogress'?'selected':''}}>Đang học</option>
+            <option value="finished"  {{$lhv->status == 'finished'?'selected':''}}>Hoàn thành</option>
+            <option value="cancel"  {{$lhv->status == 'cancel'?'selected':''}}>Hủy</option>
+        </select>
     </div>
 
 
@@ -45,5 +47,9 @@
     </div>
     {!! Form::close() !!}
 
-
+<style>
+    label{
+        width: 120px;
+    }
+</style>
 @stop

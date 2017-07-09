@@ -12,10 +12,10 @@
             <label> Đến </label>
             <input required style="margin: 0px 10px" type="text" name="end" value="{{ (isset ($end)) ? $end : '' }}"
                    class="form-control datepicker">
-            <input type="submit" class="btn btn-info" value="Tổng hợp">
+            <input type="submit" class="btn btn-primary" value="Tổng hợp">
             @if(\App\Roles::checkRole('download-tonghop'))
                 @if(count($data) > 0)
-                    <a class="btn btn-info" style="float: right"
+                    <a class="btn btn-primary" style="float: right"
                        href="{{route('download-tonghop', ['start' => $start, 'end' => $end])}}">Xuất ra excel</a>
                 @endif
             @endif

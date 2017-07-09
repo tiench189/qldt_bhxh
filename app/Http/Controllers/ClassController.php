@@ -156,9 +156,7 @@ class ClassController extends Controller
             $request->session()->flash('message', "Cập nhật không thành công.");
         }
 
-        return redirect()->action(
-            'ClassController@xeploaihv', ["cid"=>$cid, 'uid'=>$uid]
-        );
+        return redirect(route('course-result', ['class' => $cid]));
 
     }
 

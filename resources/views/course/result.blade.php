@@ -39,7 +39,7 @@
     @endif
     <!-- Trigger the modal with a button -->
     @if(\App\Roles::checkRole('student-add'))
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"
+        <button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#myModal"
                 style="margin-bottom: 10px">Thêm Học Viên
         </button>
     @endif
@@ -116,15 +116,32 @@
         <thead>
         <tr>
             <th class="stt">#</th>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th class="{{$classID == 0?'':'hidden'}}">Lớp</th>
-            <th>Đơn vị</th>
-            <th>Trạng thái</th>
-            <th>Điểm</th>
-            <th>Xếp loại</th>
-            <th>Ngày hoàn thành</th>
+            <th>Họ tên<br><input type="text"></th>
+            <th>Email<br><input type="text"></th>
+            <th class="{{$classID == 0?'':'hidden'}}">Lớp<br><input type="text"></th>
+            <th>Đơn vị<br><input type="text"></th>
+            <th style="width: 70px">Trạng thái<br>
+                <select>
+                    <option value=""></option>
+                    <option value="Hoàn thành">Hoàn thành</option>
+                    <option value="Đang học">Đang học</option>
+                    <option value="Hủy">Hủy</option>
+                </select>
+            </th>
+            <th style="width: 30px">Điểm<br><input type="text"></th>
+            <th style="width: 60px">Xếp loại
+                <select>
+                    <option value=""></option>
+                    @foreach($xeploai as $x)
+                        <option value="{{$x->name}}">{{$x->name}}</option>
+                    @endforeach
+                </select>
+            </th>
+            <th style="width: 110px">Ngày hoàn thành<br><input type="text"></th>
             @if(\App\Roles::checkRole('student-remove'))
+                <th></th>
+            @endif
+            @if(\App\Roles::checkRole('class-capnhathocvien'))
                 <th></th>
             @endif
         </tr>
@@ -144,12 +161,22 @@
                 @if(\App\Roles::checkRole('student-remove'))
                     <td>
                         <a href="javascript:void(0)"
-                           onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$row->course_id}})"
-                           class="btn btn-xs btn-info">Xóa</a>
+                           onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$course->id}})"
+                           class="btn btn-xs btn-primary">Xóa</a>
                     </td>
+                @endif
+                @if(\App\Roles::checkRole('class-capnhathocvien'))
+                    <td><a class="btn btn-primary btn-xs"
+                           href="{{route('class-capnhathocvien', ['uid' => $row->user_id, 'cid' => $row->lop_id])}}">Cập
+                            nhật</a></td>
                 @endif
             </tr>
         @endforeach
         </tbody>
     </table>
+    <style>
+        #table_filter {
+            display: none;
+        }
+    </style>
 @stop

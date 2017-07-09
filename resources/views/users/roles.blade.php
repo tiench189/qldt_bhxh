@@ -22,7 +22,7 @@
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
     @if(\App\Roles::checkRole('role-create'))
-        <a class="btn btn-info" href="{{route('role-create')}}">Thêm mới</a>
+        <a class="btn btn-primary" href="{{route('role-create')}}">Thêm mới</a>
     @endif
     <table id="table" class="table table-bordered">
         <thead>
@@ -39,10 +39,10 @@
                 <td>{{$row->name}}</td>
                 <td class="td-action">
                     @if(\App\Roles::checkRole('role-assign'))
-                        <a class="btn btn-xs btn-info" href="{{route('role-assign', ['gid' => $row->id])}}">Cập nhật</a>
+                        <a class="btn btn-xs btn-primary" href="{{route('role-assign', ['gid' => $row->id])}}">Cập nhật</a>
                     @endif
                     @if(\App\Roles::checkRole('role-delete'))
-                        <a class="btn btn-xs btn-info" href="javascript:removeRole({{$row->id}})">Xóa</a>
+                        <a class="btn btn-xs btn-primary" href="javascript:removeRole({{$row->id}})">Xóa</a>
                     @endif
                 </td>
             </tr>

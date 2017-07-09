@@ -13,7 +13,7 @@
         @endforeach
     @endif
 
-    {!! Form::open(array('route' => 'class-update', 'class' => 'form')) !!}
+    {!! Form::open(array('route' => 'class-edit', 'class' => 'form')) !!}
     {{ Form::hidden('id', ($id != 0) ? $class->id : 0, array('id' => 'id')) }}
     <div class="form-group">
         <label>Tên lớp: <span class="required">(*)</span></label>
