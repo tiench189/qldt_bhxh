@@ -40,6 +40,11 @@ Route::group(['middleware' => 'cas_auth'], function () {
         Route::group(['prefix' => 'hocvien'], function () {
             Route::get('/', 'StudentController@index')->name('hocvien-index');
             Route::get('/histories', 'StudentController@histories')->name('hocvien-histories');
+            Route::get('/add', 'StudentController@add')->name('hocvien-add');
+            Route::post('/add', 'StudentController@add')->name('hocvien-add');
+            Route::get('/update', 'StudentController@update')->name('hocvien-update');
+            Route::post('/update', 'StudentController@update')->name('hocvien-update');
+            Route::post('/remove', 'StudentController@remove')->name('hocvien-remove');
         });
         Route::group(['prefix' => 'tracuu'], function () {
             Route::get('/', 'TraCuuController@index')->name('tracuu');

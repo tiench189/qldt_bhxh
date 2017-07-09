@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Utils;
 use Faker\Provider\cs_CZ\DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +50,8 @@ class TraCuuController extends Controller
 
                 $userIds = array();
                 foreach ($lhv as $item) {
-                    $date = strtotime($item->complete_at);
+//                    $date = strtotime($item->complete_at);
+                    $date = Utils::str2Date($item->complete_at);
                     $itemY = date('Y', $date);
                     if ($itemY == $year) {
                         $userIds[] = $item->user_id;

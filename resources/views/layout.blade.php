@@ -100,7 +100,6 @@
                                 @endif
                             </ul>
                         </li>
-                        <li><a href="{{route('tracuu')}}">Tra cứu</a></li>
                     @endif
                     @if(\App\Roles::checkRole('baocao'))
                         <li class="dropdown ">
@@ -240,8 +239,8 @@
         });
         //End datepicker
         $('.datepicker2').datepicker({
-            format: 'yyyy/mm/dd',
-            dateFormat: 'yyyy/mm/dd',
+            format: 'dd/mm/yyyy',
+            dateFormat: 'dd/mm/yyyy',
             monthNames: ['Tháng Một', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm', 'Tháng Sáu',
                 'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười', 'Th.Mười Một', 'Th.Mười Hai'],
             monthNamesShort: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
