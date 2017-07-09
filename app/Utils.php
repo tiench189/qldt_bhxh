@@ -1,19 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tienc
- * Date: 6/21/2017
- * Time: 2:56 PM
- */
 
-namespace app;
-
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PHPExcel_IOFactory;
-use PHPExcel_Style_Border;
+
 
 class Utils extends Model
 {
@@ -173,4 +164,44 @@ class Utils extends Model
         return $dataReport;
     }
 
+    public static function str2Date($date)
+    {
+        if (preg_match("/^[0-9]{2}-[0-9]{2}-[0-9]{2}$/", $date)) {
+            $date = \DateTime::createFromFormat('d-m-y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}-[0-9]{2}-[0-9]{4}$/", $date)) {
+            $date = \DateTime::createFromFormat('d-m-Y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/", $date)) {
+            $date = \DateTime::createFromFormat('d/m/y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/", $date)) {
+            $date = \DateTime::createFromFormat('d/m/Y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}\/[0-9]{1}\/[0-9]{4}$/", $date)) {
+            $date = \DateTime::createFromFormat('d/n/Y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}\/[0-9]{1}\/[0-9]{2}$/", $date)) {
+            $date = \DateTime::createFromFormat('d/n/y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}-[0-9]{1}-[0-9]{2}$/", $date)) {
+            $date = \DateTime::createFromFormat('d-n-y', $date);
+            return $date;
+        } else if (preg_match("/^[0-9]{2}-[0-9]{1}-[0-9]{4}$/", $date)) {
+            $date = \DateTime::createFromFormat('d-n-Y', $date);
+            return $date;
+        } else {
+            return null;
+        }
+    }
+
+    public static function formatSex($sex){
+        if ($sex == 'male'){
+            return "nam";
+        }else if ($sex == 'female'){
+            return "nữ";
+        }else{
+            return "";
+        }
+    }
 }
