@@ -28,7 +28,7 @@
                 <td> {!! $row->description !!}</td>
                 <td>  {{$row->email}} </td>
                 <td>
-                    <a href="{{route('teacher-update', ['id' => $row->id])}}" title="Chỉnh sửa khóa đào tạo" class="btn btn-xs btn-info">
+                    <a href="{{route('teacher-update', ['id' => $row->id])}}" title="Chỉnh sửa khóa đào tạo" class="btn btn-xs btn-primary">
                         Cập nhật
                     </a>
                 </td>

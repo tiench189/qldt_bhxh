@@ -5,7 +5,9 @@
 @stop
 
 @section('content')
-    <div class="page-title">Cập nhật thông tin khóa đào tạo</div>
+    <div class="page-title">Cập nhật thông tin khóa đào tạo
+        <a href="{{env('APP_URL')}}/course/view.php?id={{$course->id}}&notifyeditingon=1#contentcourse" class="btn btn-primary pull-right">Tạo nội dung khóa đào tạo</a>
+    </div>
 
     @if ( $errors->count() > 0 )
         @foreach( $errors->all() as $message )
@@ -23,11 +25,20 @@
                   'rows' => 4)) !!}
     </div>
     <div class="form-group form-inline">
-        <label>Phân loại<span class="required">(*)</span>: </label>
+        <label>Đối tượng đào tạo: </label>
+        <input type="text" name="doi_tuong" class="form-control" placeholder="VD: CBCC Bảo hiểm"
+               value="{{$course->doi_tuong}}">
+    </div>
+    <div class="form-group form-inline">
+        <label>Thời gian đào tạo: </label>
+        <input type="text" name="thoi_gian" class="form-control" placeholder="VD: 1 tháng"
+               value="{{$course->thoi_gian}}">
+    </div>
+    <div class="form-group form-inline">
+        <label>Danh mục<span class="required">(*)</span>: </label>
         {!! Form::select('category', $categories, $course->category,
                             array('class'=>'form-control')) !!}
     </div>
-
     <div class="form-group">
         <label>Mô tả: </label>
         {!! Form::textarea('summary', $course->summary,

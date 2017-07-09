@@ -91,6 +91,15 @@
                         <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
                     @endif
                     @if(\App\Roles::checkRole('tracuu'))
+                        <li class="dropdown ">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Tra cứu <b
+                                        class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                @if(\App\Roles::checkRole('tracuu-donvi'))
+                                    <li><a href="{{route('tracuu-donvi')}}">Theo đơn vị</a></li>
+                                @endif
+                            </ul>
+                        </li>
                         <li><a href="{{route('tracuu')}}">Tra cứu</a></li>
                     @endif
                     @if(\App\Roles::checkRole('baocao'))
@@ -104,8 +113,18 @@
                             </ul>
                         </li>
                     @endif
-                    @if(\App\Roles::checkRole('role-index'))
-                        <li><a href="{{route('role-index')}}">Quản lý quyền</a></li>
+                    @if(\App\Roles::checkRole('user-index'))
+                        <li class="dropdown ">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Quản lý tài khoản <b
+                                        class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{route('user-index')}}">Tài khoản</a></li>
+                                @if(\App\Roles::checkRole('baocao-tonghop'))
+                                    <li><a href="{{route('role-index')}}">Quản lý quyền</a></li>
+                                @endif
+                            </ul>
+                        </li>
+
                     @endif
                     {{--<li><a href="#">Phiếu khảo sát</a></li>--}}
                 </ul>
@@ -190,6 +209,20 @@
                 },
             });
         }
+        table.columns().every(function () {
+
+            var that = this;
+            $('input', this.header()).on('keyup change changeDate', function () {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
+            $('select', this.header()).on('change', function () {
+                if (that.search() !== this.value) {
+                    that.search(this.value ? '^' + this.value + '$' : '', true, false).draw();
+                }
+            });
+        });
         //End Datatable
 
         //Select2

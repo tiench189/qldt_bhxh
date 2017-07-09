@@ -28,7 +28,7 @@
                 <td>  {{$row->email}} </td>
                 <td> {!! $row->description !!} </td>
                 <td>
-                    <a href="#" title="Chỉnh sửa" class="btn btn-xs btn-info">
+                    <a href="#" title="Chỉnh sửa" class="btn btn-xs btn-primary">
                         Xóa
                     </a>
                 </td>

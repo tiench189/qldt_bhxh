@@ -76,6 +76,8 @@ class CourseController extends Controller
                     'fullname' => $request->input('fullname'),
                     'category' => $request->input('category'),
                     'summary' => $request->input('summary'),
+                    'doi_tuong' => $request->doi_tuong,
+                    'thoi_gian' => $request->thoi_gian,
                     'timemodified' => time(),
                 ]);
 

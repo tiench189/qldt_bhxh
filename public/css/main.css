@@ -108,7 +108,8 @@ th.action {
 }
 
 .dt-buttons {
-    position: absolute !important;
+    float: right;
+    margin-bottom: 10px;
 }
 
 .role-contain {
@@ -127,4 +128,10 @@ th.action {
 }
 .role-content{
     padding: 10px;
+}
+th > input, th > select {
+    width: 100%;
+}
+.btn-add{
+    position: absolute;
 }

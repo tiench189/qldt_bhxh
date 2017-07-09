@@ -16,7 +16,9 @@
             <th>Ngày sinh</th>
             <th>Giới tính</th>
             <th>Chức danh</th>
-            <th class="action"></th>
+            @if(\App\Roles::checkRole('hocvien-histories'))
+                <th class="action"></th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -29,9 +31,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><a href="{{route('hocvien-histories', ['u' => $row->id])}}" class="btn btn-xs btn-info">
-                        Lịch sử đào tạo</a>
-                </td>
+                @if(\App\Roles::checkRole('hocvien-histories'))
+                    <td><a href="{{route('hocvien-histories', ['u' => $row->id])}}" class="btn btn-xs btn-primary">
+                            Lịch sử đào tạo</a>
+                    </td>
+                @endif
             </tr>
         @endforeach
         </tbody>
