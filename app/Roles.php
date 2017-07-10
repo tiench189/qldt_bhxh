@@ -8,18 +8,19 @@ use Illuminate\Support\Facades\Session;
 
 class Roles extends Model
 {
-    public static function checkRole($route)
+    public static function checkRole($route, $refresh = false)
     {
         $user = Session::get('user');
         if (!isset($user)) return false;
-        $userGroup = intval(Session::get('user')->group_permission);
-        $check = DB::table('permission')
-            ->join('roles_group', 'permission.id', '=', 'roles_group.permission')
-            ->where([
-                ['roles_group.group_id', '=', $userGroup],
-                ['permission.route', '=', $route]
-            ])->get();
-        return count($check) > 0;
+        if (!Session::has('role-' . $user->id) || $refresh){
+            $userGroup = intval($user->group_permission);
+            $roles = DB::table('permission')
+                ->join('roles_group', 'permission.id', '=', 'roles_group.permission')
+                ->where('roles_group.group_id', '=', $userGroup)->pluck('permission.route')->toArray();
+            Session::put('role-' . $user->id, $roles);
+        }
+        $roles = Session::get('role-' . $user->id);
+        return in_array($route, $roles);
     }
 
     public static function treeRoles(){
