@@ -42,6 +42,9 @@
             @if(\App\Roles::checkRole('class-edit'))
                 <th></th>
             @endif
+            @if(\App\Roles::checkRole('class-remove'))
+                <th></th>
+            @endif
         </tr>
         </thead>
         <tbody>
