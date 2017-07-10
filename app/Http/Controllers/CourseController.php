@@ -382,12 +382,29 @@ class CourseController extends Controller
     {
         $cid = $request->input('cid');
 
-        $result = DB::table('course')
-            ->where('id', $cid)
-            ->delete();
+        // Xoa cac lop hoc & hoc vien cua course
+        $classObjects = DB::table('lop')->where('course_id', $cid)->select('id')->get();
 
-        if($result) $request->session()->flash('message', "Xóa thành công khóa đào tạo");
-        else $request->session()->flash('message', "Không thể xóa khóa đào tạo");
+        if(count($classObjects) != 0){
+            foreach ($classObjects as $object){
+                $classIds[] = $object->id;
+            }
+            // Xoa cac hoc vien trong cac lop
+            DB::table('lop_hocvien')->whereIn('lop_id', $classIds)->delete();
+            // Xoa lop
+            DB::table('lop')->whereIn('id', $classIds)->delete();
+        }
+
+        // Xoa course
+        $params = array('courseids[0]' => $cid);
+        $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_delete_courses", $params);
+        $result = json_decode($rs);
+
+        if(!is_null($result) && empty($result->warnings)){
+            $request->session()->flash('message', "Xóa thành công khóa đào tạo");
+        }else{
+            $request->session()->flash('message', "Không thể xóa khóa đào tạo");
+        }
 
         return back()->withInput();
     }
