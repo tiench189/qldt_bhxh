@@ -160,4 +160,15 @@ class ClassController extends Controller
 
     }
 
+    public function remove(Request $request){
+        $classId = intval($request->id);
+        $courseId = intval($request->courseId);
+
+        DB::table('lop')->where('id', $classId)->delete();
+        DB::table('lop_hocvien')->where('lop_id', $classId)->delete();
+
+        $request->session()->flash('message', 'Xóa lớp học thành công');
+        return redirect(route('course-classes', ['c' => $courseId] ));
+    }
+
 }

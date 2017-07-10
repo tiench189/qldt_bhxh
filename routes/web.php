@@ -65,7 +65,8 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::post('/capnhathocvien', 'ClassController@capnhathocvien')->name('class-capnhathocvien');
             Route::get('/danhsach', 'ClassController@danhsach')->name('class-danhsach');
             Route::get('/edit', 'ClassController@edit')->name('class-edit');
-            Route::post('/edit', 'ClassController@update')->name('class-edit');
+            Route::post('/edit', 'ClassController@update')->name('class-update');
+            Route::post('/remove', 'ClassController@remove')->name('class-remove');
         });
 
         Route::group(['prefix' => 'baocao'], function () {
