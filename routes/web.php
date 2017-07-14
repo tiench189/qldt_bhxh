@@ -84,5 +84,13 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::post('/createrole', 'UserController@createRole')->name('role-create');
             Route::post('/deleterole', 'UserController@deleteRole')->name('role-delete');
         });
+        Route::group(['prefix' => 'donvi'], function () {
+            Route::get('/', 'DonviController@index')->name('donvi-index');
+            Route::get('/update', 'DonviController@update')->name('donvi-update');
+            Route::post('/update', 'DonviController@update')->name('donvi-update');
+            Route::get('/add', 'DonviController@add')->name('donvi-add');
+            Route::post('/add', 'DonviController@add')->name('donvi-add');
+            Route::post('/remove', 'DonviController@remove')->name('donvi-remove');
+        });
     });
 });
