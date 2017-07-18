@@ -11,7 +11,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
         "phpoffice/phpexcel": "^1.8",
-        "yajra/laravel-oci8": "5.4.*"
+        "yajra/laravel-oci8": "5.4.*",
+        "barryvdh/laravel-ide-helper": "^2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

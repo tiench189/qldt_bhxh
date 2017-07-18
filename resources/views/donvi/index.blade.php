@@ -30,10 +30,10 @@
         <thead>
         <tr>
             <th class="stt">STT</th>
-            <th>Cấp đơn vị</th>
             <th>Tên đơn vị</th>
+            <th>Cấp đơn vị</th>
             <th>Mã đơn vị</th>
-            <th>Mã trực thuộc</th>
+            <th>Đơn vị trực thuộc</th>
             @if(\App\Roles::checkRole('donvi-update'))
                 <th class="action"></th>
             @endif
@@ -46,17 +46,22 @@
         @foreach ($donvi as $idx=>$row)
             <tr>
                 <td>{{$idx + 1}}</td>
-                <td> {{$row->cap_donvi}} </td>
                 <td> {{$row->ten_donvi}} </td>
+                <td> {{$row->capDonVi->ten_cap}} </td>
                 <td> {{$row->ma_donvi}} </td>
-                <td> {{$row->ma_truc_thuoc}} </td>
+                <td> {{$row->trucThuoc['ten_donvi']}} </td>
+                @if(\App\Roles::checkRole('hocvien-index'))
+                    <td><a href="{{route('hocvien-index', ['donvi' => $row->id])}}" class="btn btn-xs btn-primary">
+                            Danh sách học viên</a>
+                    </td>
+                @endif
                 @if(\App\Roles::checkRole('donvi-update'))
-                    <td><a href="{{route('donvi-update', ['id' => $row->id])}}">
+                    <td><a href="{{route('donvi-update', ['id' => $row->id])}}" class="btn btn-xs btn-primary">
                             Cập nhật</a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('hocvien-remove'))
-                    <td><a href="javascript:remove({{$row->id}})">
+                    <td><a href="javascript:remove({{$row->id}})" class="btn btn-xs btn-primary">
                             Xóa</a>
                     </td>
                 @endif
