@@ -33,36 +33,30 @@ class TraCuuController extends Controller
             $year = $request->input('year');
             $status = $request->input('status');
 
-            $class = DB::table('lop')
-                ->where('course_id', $cid)
-                ->select('id')
-                ->get();
-
-            if (!$class->isEmpty()) {
+//            $class = DB::table('lop')
+//                ->where('course_id', $cid)
+//                ->select('id', 'to_char(time_start, \'yyyy\')')
+//                ->get();
+            $class = DB::select("select ID, TO_CHAR(TIME_START, 'YYYY') AS START_YEAR from M_LOP where COURSE_ID = ?", [$cid]);
+            if (count($class) > 0) {
                 $classIds = array();
                 foreach ($class as $item) {
-                    $classIds[] = $item->id;
+                    if (!isset($year) || $year == $item->start_year)
+                        $classIds[] = $item->id;
                 }
                 $lhv = DB::table('lop_hocvien')
                     ->whereIn('lop_id', $classIds)
                     ->select('*')
                     ->get();
-
                 $userIds = array();
                 foreach ($lhv as $item) {
-//                    $date = strtotime($item->complete_at);
-                    $date = Utils::str2Date($item->complete_at);
-                    $itemY = date('Y', $date);
-                    if ($itemY == $year) {
-                        $userIds[] = $item->user_id;
-                    }
+                    $userIds[] = $item->user_id;
                 }
 
                 $users = DB::table('user')
                     ->whereIn('id', $userIds)
                     ->select('id', 'donvi')
                     ->get();
-
                 $donviIds = array();
                 if (!$users->isEmpty()) {
                     foreach ($users as $item) {
