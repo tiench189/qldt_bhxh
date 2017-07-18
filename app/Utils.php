@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Border;
 
 
 class Utils extends Model
@@ -195,13 +197,32 @@ class Utils extends Model
         }
     }
 
-    public static function formatSex($sex){
-        if ($sex == 'male'){
+    public static function formatSex($sex)
+    {
+        if ($sex == 'male') {
             return "nam";
-        }else if ($sex == 'female'){
+        } else if ($sex == 'female') {
             return "nữ";
-        }else{
+        } else {
             return "";
+        }
+    }
+
+    public static function formatCapDV($cap)
+    {
+        switch ($cap) {
+            case 1:
+                return 'Trung ương';
+                break;
+            case 2:
+                return 'Tỉnh';
+                break;
+            case 3:
+                return 'Huyện';
+                break;
+            default:
+                return '';
+                break;
         }
     }
 }

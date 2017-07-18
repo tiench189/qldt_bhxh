@@ -65,7 +65,7 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::post('/capnhathocvien', 'ClassController@capnhathocvien')->name('class-capnhathocvien');
             Route::get('/danhsach', 'ClassController@danhsach')->name('class-danhsach');
             Route::get('/edit', 'ClassController@edit')->name('class-edit');
-            Route::post('/edit', 'ClassController@update')->name('class-update');
+            Route::post('/edit', 'ClassController@update')->name('class-edit');
             Route::post('/remove', 'ClassController@remove')->name('class-remove');
         });
 
@@ -77,6 +77,7 @@ Route::group(['middleware' => 'cas_auth'], function () {
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', 'UserController@index')->name('user-index');
             Route::get('/updaterole', 'UserController@update')->name('user-update-role');
+            Route::post('/updaterole', 'UserController@update')->name('user-update-role');
             Route::get('/role', 'UserController@roles')->name('role-index');
             Route::get('/assignrole', 'UserController@assignRole')->name('role-assign');
             Route::post('/assignrole', 'UserController@submitRole')->name('role-assign');

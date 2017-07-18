@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -57,8 +58,8 @@ class ClassController extends Controller
                     'ten_lop'=>$request->input('ten_lop'),
                     'course_id'=>$request->input('course_id'),
                     'doi_tuong'=>$request->input('doi_tuong'),
-                    'time_start'=>$request->input('time_start'),
-                    'time_end'=>$request->input('time_end')
+                    'time_start'=>Utils::str2Date($request->input('time_start')),
+                    'time_end'=>Utils::str2Date($request->input('time_end'))
                 ]);
         }else{
             $result = DB::table('lop')
@@ -66,8 +67,8 @@ class ClassController extends Controller
                     'ten_lop'=>$request->input('ten_lop'),
                     'course_id'=>$request->input('course_id'),
                     'doi_tuong'=>$request->input('doi_tuong'),
-                    'time_start'=>$request->input('time_start'),
-                    'time_end'=>$request->input('time_end')
+                    'time_start'=>Utils::str2Date($request->input('time_start')),
+                    'time_end'=>Utils::str2Date($request->input('time_end'))
                 ]);
         }
 

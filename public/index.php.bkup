@@ -1,0 +1,8 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: tienc
+ * Date: 7/16/2017
+ * Time: 5:51 PM
+ */
+echo phpinfo();

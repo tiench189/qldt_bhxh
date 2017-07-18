@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('page-title')
-    Update Class
+    Cập nhật thông tin lớp học
 @stop
 
 @section('content')
-    <div class="page-title">{{($id==0)? "Thêm mới lớp học" : "Sửa lớp học"}}</div>
+    <div class="page-title">{{($id==0)? "Thêm mới lớp học" : "Cập nhật thông tin lớp học"}}</div>
 
     @if ( $errors->count() > 0 )
         @foreach( $errors->all() as $message )
@@ -38,11 +38,11 @@
     </div>
     <div class="form-group form-inline">
         <label>Thời gian bắt đầu:</label>
-        <input type="text" name="time_start" value="{{($id != 0) ? $class->time_start : ''}}" class="form-control datepicker2">
+        <input type="text" name="time_start" value="{{($id != 0) ? \App\Utils::toTimeFormat($class->time_start) : ''}}" class="form-control datepicker2">
     </div>
     <div class="form-group form-inline">
         <label>Thời gian kết thúc:</label>
-        <input type="text" name="time_end" value="{{($id != 0) ? $class->time_end : ''}}" class="form-control datepicker2">
+        <input type="text" name="time_end" value="{{($id != 0) ? \App\Utils::toTimeFormat($class->time_end) : ''}}" class="form-control datepicker2">
     </div>
 
     <div class="form-group">

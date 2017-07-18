@@ -155,7 +155,10 @@
 </div>
 </body>
 <script>
-    function formatExport(data) {
+    function formatExport(data, header) {
+        if (header){
+            data = data.split("<br>")[0];
+        }
         return data.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g, '').replace(/&amp;/g, ' & ').replace(/&nbsp;/g, ' ');
     }
     $(document).ready(function () {
