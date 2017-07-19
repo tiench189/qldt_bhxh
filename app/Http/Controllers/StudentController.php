@@ -47,9 +47,10 @@ class StudentController extends Controller
             ->where('user_id', $uid)
             ->get();
         //Lay thong tin hoc vien
-        $user = DB::table('user')
-            ->where('id', $uid)
-            ->first();
+//        $user = DB::table('user')
+//            ->where('id', $uid)
+//            ->first();
+        $user = User::where('id', $uid)->first();
 
         //Lay thong tin lop va khoa hoc
         $lid = array();

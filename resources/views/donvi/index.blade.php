@@ -34,6 +34,9 @@
             <th>Cấp đơn vị</th>
             <th>Mã đơn vị</th>
             <th>Đơn vị trực thuộc</th>
+            @if(\App\Roles::checkRole('hocvien-index'))
+                <th class="action"></th>
+            @endif
             @if(\App\Roles::checkRole('donvi-update'))
                 <th class="action"></th>
             @endif

@@ -2,11 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 
-class User extends Authenticatable
+class User extends Model
 {
     use Notifiable;
 
@@ -27,6 +28,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $table = 'user';
+
+    public function getDonvi()
+    {
+        return $this->belongsTo('App\Donvi', 'donvi');
+    }
 
     public static function getUser($email)
     {
