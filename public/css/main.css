@@ -135,3 +135,22 @@ th > input, th > select {
 .btn-add{
     position: absolute;
 }
+
+.segment-header {
+    margin: 10px 0;
+    left: 0;
+    height: 30px;
+}
+
+.segment-header span {
+    color: #3099D2;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+    border-bottom: 3px solid #3099D2;
+}
+
+.user-info {
+    width: 50%;
+    margin: auto;
+}

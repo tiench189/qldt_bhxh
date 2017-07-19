@@ -35,6 +35,7 @@
             <th>Ngày sinh</th>
             <th>Giới tính</th>
             <th>Chức danh</th>
+            <th>Chức vụ</th>
             @if(\App\Roles::checkRole('hocvien-histories'))
                 <th class="action"></th>
             @endif
@@ -56,6 +57,7 @@
                 <td>{{\App\Utils::toTimeFormat($row->birthday)}}</td>
                 <td>{{\App\Utils::formatSex($row->sex)}}</td>
                 <td>{{$row->chucdanh}}</td>
+                <td>{{$row->chucvu}}</td>
                 @if(\App\Roles::checkRole('hocvien-histories'))
                     <td><a href="{{route('hocvien-histories', ['u' => $row->id])}}" class="btn btn-xs btn-primary">
                             Lịch sử đào tạo</a>
