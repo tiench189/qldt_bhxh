@@ -36,6 +36,7 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::get('getContents', 'CourseController@getContents')->name('course-getContents');
             Route::post('createCourse', 'CourseController@createCourse')->name('course-createCourse');
             Route::get('createCourse', 'CourseController@createCourse')->name('course-createCourse');
+            Route::post('checkStudentCategory', 'CourseController@checkStudentCategory')->name('course-checkStudentCategory');
         });
         Route::group(['prefix' => 'hocvien'], function () {
             Route::get('/', 'StudentController@index')->name('hocvien-index');

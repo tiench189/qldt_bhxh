@@ -174,8 +174,45 @@ class CourseController extends Controller
         return view('course.result', $output);
     }
 
+    // Kiem tra hoc vien va khoa dao tao
+
+    public function checkStudentCategory(Request $request) {
+        $student_id = isset($request->s) ? intval($request->s) : 0;
+        $course_id = isset($request->c) ? intval($request->c) : 0;
+
+        $allResult = ['code' => -1];
+
+        if($student_id > 0 || $course_id > 0) {
+            // Lấy category
+            $course = DB::table('course')
+                ->select('*')
+                ->where('course.id', '=', $course_id)
+                ->get()->first();
+
+            if($course) {
+                $allResult_data = DB::table('lop_hocvien')
+                    ->join('lop', 'lop.id', '=', 'lop_hocvien.lop_id')
+                    ->join('course', 'course.id', '=', 'lop.course_id')
+                    ->where([
+                        ['course.category', '=', $course->category],
+                        ['user_id', '=', $student_id],
+                    ])
+                    ->select('course.id as course_id','course.fullname as course_name','lop.ten_lop as ten_lop', 'lop_hocvien.*')
+                    ->get();
+
+                if($allResult_data->count() == 0) { // Nếu có dữ liệu
+                    $allResult["code"] = 0;
+                } else { // nếu có dữ liệu
+                    $allResult["code"] = 1;
+                    $allResult["data"] = \App\Utils::row2Array($allResult_data);
+                }
+            } else {} // Không có dữ liệu Course
+        } else {} // Id Course, Student truyền vào không hợp lệ
+        return response()->json($allResult);
+    }
 
     public function addstudent(Request $request) {
+
         $id = intval($request->input('id')); // course id
         $cid = intval($request->input('cid'));
         $sid = intval($request->input('sid'));
@@ -183,13 +220,14 @@ class CourseController extends Controller
         $grade = floatval($request->input('grade'));
         $status = $request->input('status');
 
-        // Lấy thông tin toàn bộ lớp học trong khóa
+        // Kiểm tra học viên đã học trong lớp này chưa
         $check = DB::table('lop_hocvien')
             ->where([
                 ['lop_id', '=', $cid],
                 ['user_id', '=', $sid],
             ])
             ->count();
+        // Nếu học viên đã học trong lớp này rồi thì từ chối
         if($check == 0) {
             //enrol quyền học viên
             $params = array(
@@ -211,7 +249,6 @@ class CourseController extends Controller
                         'xeploai' => $xeploai,
                         'complete_at' => date('Y-m-d H:i:s'),
                     ]);
-
                 if ($result){
                     $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
                 } else {
