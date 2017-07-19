@@ -24,8 +24,50 @@
                 frmstudentremove.submit();
             }
 
-
         }
+
+
+        $( document ).ready(function() {
+            $( "#frmaddstudent" ).on("submit", function (event) {
+
+                var $this = $(event.target);
+
+                if ($this.data('passed')) {
+                    return true;
+                } else {
+                    event.preventDefault();
+                }
+
+                course_id = $("#addcourseid").val();
+                student_id = $("#addstdid").val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://duy.qldt.vn/course/checkStudentCategory',
+                    data: { "_token": "{{ csrf_token() }}",c: course_id, s: student_id },
+                    success: function (data) {
+
+                        if(data["code"] == 1) {
+                            var khoahoc = "";
+                            for(var row in data["data"]) {
+                                khoahoc += "    - " + data["data"][row]["lop_id"] + ". " + data["data"][row]["ten_lop"] + "\n";
+                            }
+
+                            if(confirm("Học viên đã học các lớp dưới đây trong nội dung đào tạo này:\n\n" + khoahoc + "\nĐồng ý thêm?")) {
+                                $this
+                                    .data('passed', true)
+                                    .trigger('submit');
+                            }
+                        } else if(data["code"] == -1 || data["code"] == 0) {
+                            $this
+                                .data('passed', true)
+                                .trigger('submit');
+                        }
+                    }
+                });
+                event.preventDefault();
+            });
+        });
     </script>
     <div class="page-title">
         @if($courseID != 0)
@@ -64,21 +106,21 @@
                 <div class="modal-body">
 
 
-                    {!! Form::open(array('route' => 'student-add', 'class' => 'form')) !!}
-                    {{ Form::hidden('id', $course->id, array('id' => 'courseid')) }}
+                    {!! Form::open(array('route' => 'student-add', 'class' => 'form','id' => 'frmaddstudent')) !!}
+                    {{ Form::hidden('id', $course->id, array('id' => 'addcourseid')) }}
                     @if($courseID != 0)
                         <div class="form-group">
                             <label>Lớp: <span class="required">(*)</span></label>
                             {!! Form::select('cid', $ddclass, '',
-                                array('class'=>'form-control','id'=>"classid")) !!}
+                                array('class'=>'form-control','id'=>"addclassid")) !!}
                         </div>
                     @else
-                        {{ Form::hidden('cid', $class->id, array('id' => 'classid')) }}
+                        {{ Form::hidden('cid', $class->id, array('id' => 'addclassid')) }}
                     @endif
                     <div class="form-group">
                         <label>Học Viên: <span class="required">(*)</span></label>
                         {!! Form::select('sid', $dduser, '',
-                            array('class'=>'form-control')) !!}
+                            array('class'=>'form-control','id'=>"addstdid")) !!}
                     </div>
                     <div class="form-group">
                         <label>Điểm trung bình: <span class="required">(*)</span></label>
