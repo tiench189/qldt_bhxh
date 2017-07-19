@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Donvi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -25,16 +26,17 @@ class DonviController extends Controller
 {
     public function index(Request $request)
     {
-        $donvi = DB::table('donvi')->get();
+        $donvi = Donvi::all();
         return view('donvi.index', ['donvi' => $donvi]);
     }
 
-    public function add(Request $request){
+    public function add(Request $request)
+    {
         if ($request->isMethod('get')) {
             $listdonvi = DB::table('donvi')->orderBy('id')->get();
             return view('donvi.add', ['listdonvi' => $listdonvi]);
         }
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $data = array();
             $data['cap_donvi'] = $request->cap_donvi;
             $data['ten_donvi'] = $request->ten_donvi;
@@ -63,7 +65,7 @@ class DonviController extends Controller
             if ($result) {
                 $request->session()->flash('message', 'Thêm đơn vị thành công');
                 return redirect(route('donvi-index'));
-            }else{
+            } else {
                 $request->session()->flash('message', 'Thêm đơn vị thất bại: ');
                 return redirect(route('donvi-add'));
             }
@@ -79,7 +81,7 @@ class DonviController extends Controller
             $course = DB::table('course')->where('id', $courseId)->first();
             $cate = DB::table('course_categories')->orderBy('id', 'asc')->get();
             $categories = array();
-            foreach ($cate as $row){
+            foreach ($cate as $row) {
                 $categories[$row->id] = $row->name;
             }
             return view('course.edit', ['course' => $course, 'categories' => $categories]);
@@ -91,7 +93,7 @@ class DonviController extends Controller
 
     public function update(Request $request)
     {
-        if($request->isMethod('get')){
+        if ($request->isMethod('get')) {
             $id = intval($request->id);
             if ($id > 0) {
                 $donvi = DB::table('donvi')->where('id', $id)->first();
@@ -102,7 +104,7 @@ class DonviController extends Controller
                 $request->session()->flash('message', "ID Khóa học không hợp lệ.");
                 return redirect()->action('DonviController@index');
             }
-        }else{
+        } else {
             $id = intval($request->input('id'));
             if ($id > 0) {
                 $messages = [

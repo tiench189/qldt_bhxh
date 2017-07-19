@@ -19,7 +19,13 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $users = DB::table('user')->get();
+        $query = [];
+        if ($request->has('donvi')) {
+            $donvi = (int) $request->get('donvi');
+            $query['donvi'] = $donvi;
+        }
+
+        $users = DB::table('user')->where($query)->get();
 
         //Lay thong tin don vi
         $iddv = array();
@@ -41,9 +47,10 @@ class StudentController extends Controller
             ->where('user_id', $uid)
             ->get();
         //Lay thong tin hoc vien
-        $user = DB::table('user')
-            ->where('id', $uid)
-            ->first();
+//        $user = DB::table('user')
+//            ->where('id', $uid)
+//            ->first();
+        $user = User::where('id', $uid)->first();
 
         //Lay thong tin lop va khoa hoc
         $lid = array();

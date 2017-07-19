@@ -18,16 +18,17 @@ class CasAuth
      */
     public function handle($request, Closure $next)
     {
-/*        $sessID = $request->session()->get('st');
-        $isAuth = MySession::isAuthen($sessID);
-        if (!($isAuth == Config::get('ctx.is_login'))) {
-            $request->session()->put('next_request', $request->url());
-            if ($isAuth == Config::get('ctx.logout')){
-                return redirect('/logout');
-            }else{
-                return redirect('/cas');
-            }
-        }*/
+
+//        $sessID = $request->session()->get('st');
+//        $isAuth = MySession::isAuthen($sessID);
+//        if (!($isAuth == Config::get('ctx.is_login'))) {
+//            $request->session()->put('next_request', $request->url());
+//            if ($isAuth == Config::get('ctx.logout')){
+//                return redirect('/logout');
+//            }else{
+//                return redirect('/cas');
+//            }
+//        }
         return $next($request);
     }
 }
