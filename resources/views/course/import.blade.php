@@ -130,6 +130,12 @@
 <div class="form-group">
     {!! Form::submit('Nhập dữ liệu',
       array('class'=>'btn btn-primary')) !!}
+    @if ($importtype == "course")
+        {{ link_to_action('CourseController@allResult','Quay về',['c'=>$course->id],['class'=>'btn btn-danger']) }}
+    @else
+        {{ link_to_action('CourseController@allResult','Quay về',['class'=>$class->id],['class'=>'btn btn-danger']) }}
+    @endif
+
 </div>
 {!! Form::close() !!}
 

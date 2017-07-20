@@ -226,7 +226,7 @@ class CourseController extends Controller
         $importtype = intval($request->input('importtype')); // class id
         $fileimport = $request->file('dshv'); // class id
 
-        if ($request->hasFile('dshv')) {
+        if ($request->hasFile('dshv') && ($fileimport->extension() == "xls" || $fileimport->extension() == "xlsx" )) {
 
             // Lấy toàn bộ danh sách học viên
             $allUser = DB::table('user')
