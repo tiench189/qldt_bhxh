@@ -84,6 +84,9 @@
         <button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#myModal"
                 style="margin-bottom: 10px">Thêm Học Viên
         </button>
+        <button type="button" class="btn btn-warning btn-import" data-toggle="modal" data-target="#modalImport"
+                style="margin-bottom: 10px">Import Học Viên (excel)
+        </button>
     @endif
 
     <!-- Modal -->
@@ -154,6 +157,61 @@
 
         </div>
     </div>
+    <!-- Modal Import -->
+    <div id="modalImport" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">
+                        @if($courseID != 0)
+                            Nhập học viên vào <strong>{{$course->fullname}}</strong>
+                        @else
+                            Nhập học viên vào <strong>{{$class->ten_lop}}</strong> -
+                            <strong>{{$course->fullname}}</strong>
+                        @endif
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+
+                    {!! Form::open(array('route' => 'student-import', 'files' => true, 'class' => 'form','id' => 'frmimportstudent')) !!}
+                    {{ Form::hidden('id', $course->id, array('id' => 'addcourseid')) }}
+                    @if($courseID != 0)
+                        {{ Form::hidden('importtype', "course") }}
+                        <div class="form-group">
+                            <label>Lớp: <span class="required">(*)</span></label>
+                            {!! Form::select('cid', $ddclass, '',
+                                array('class'=>'form-control','id'=>"addclassid")) !!}
+                        </div>
+                    @else
+                        {{ Form::hidden('importtype', "class") }}
+                        {{ Form::hidden('cid', $class->id, array('id' => 'addclassid')) }}
+                    @endif
+                    <div class="form-group">
+                        <label>Tệp mẫu: <span class="required">(*)</span></label>
+                        {!! Form::file('dshv',
+                            array('class'=>'form-control','id'=>"importstdfile")) !!}
+                    </div>
+
+                    <div class="form-group">
+                        {!! Form::submit('Nhập',
+                          array('class'=>'btn btn-primary')) !!}
+                    </div>
+                    {!! Form::close() !!}
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <table class="table table-bordered" id="table" data-export="[0,1,2,3,4,5,6,7,8]">
         <thead>
         <tr>

@@ -32,6 +32,8 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::post('/removestudent', 'CourseController@removestudent')->name('student-remove');
             Route::post('/removecourse', 'CourseController@removeCourse')->name('course-remove');
             Route::post('/addstudent', 'CourseController@addstudent')->name('student-add');
+            Route::post('/importstudentsubmit', 'CourseController@importstudentsubmit')->name('student-import-submit');
+            Route::post('/importstudent', 'CourseController@importstudent')->name('student-import');
             Route::get('dshocvien', 'CourseController@dshocvien')->name('course-dshocvien');
             Route::get('getContents', 'CourseController@getContents')->name('course-getContents');
             Route::post('createCourse', 'CourseController@createCourse')->name('course-createCourse');
