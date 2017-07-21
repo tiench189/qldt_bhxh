@@ -5,7 +5,7 @@
 @stop
 @section('content')
     {!! Form::open(array('route' => 'category-remove', 'class' => 'form', 'id' => 'frmcateremove')) !!}
-    {{ Form::hidden('cid', 0, array('id' => 'cateid')) }}
+    {{ Form::hidden('id', 0, array('id' => 'cateid')) }}
     {!! Form::close() !!}
     <script language="javascript">
         function removeCourse(cid) {

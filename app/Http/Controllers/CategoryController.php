@@ -89,4 +89,22 @@ class CategoryController extends Controller
         }
     }
 
+    public function remove(Request $request){
+
+        $params = array(
+            'categories[0][id]' => $request->id,
+            'categories[0][recursive]' => 1 // delete all contents inside this category
+        );
+        $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_delete_categories", $params);
+        $result = json_decode($rs);
+
+        if(!is_null($result) && !empty($result->warnings)){
+            $request->session()->flash('message', "Không thể xóa danh mục đào tạo");
+        }else{
+            $request->session()->flash('message', "Xóa thành công danh mục đào tạo");
+        }
+
+        return back()->withInput();
+    }
+
 }
