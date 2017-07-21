@@ -31,6 +31,7 @@
             <th style="width: 120px">Đối tượng đào tạo<br><input type="text"></th>
             <th style="width: 60px">Thời gian<br><input type="text"></th>
             <th>Tổng quan<br><input type="text"></th>
+            <th style="width: 60px">File<br><input type="text"></th>
             @if(\App\Roles::checkRole('course-classes'))
                 <th class="action"></th>
             @endif
@@ -53,6 +54,9 @@
                 <td>{{$row->doi_tuong}}</td>
                 <td>{{$row->thoi_gian}}</td>
                 <td> {!! $row->summary !!} </td>
+                <td> @if($row->overviewfile != '')
+                        <a href="{{$_ENV['ALIAS']}}/uploads/docs/{{$row->overviewfile}}" download>Tải về</a>
+                    @endif </td>
                 @if(\App\Roles::checkRole('course-classes'))
                     <td>
                         <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-primary">

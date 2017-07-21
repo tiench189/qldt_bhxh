@@ -17,7 +17,7 @@
         @endforeach
     @endif
 
-    {!! Form::open(array('route' => 'course-createCourse', 'class' => 'form')) !!}
+    {!! Form::open(array('route' => 'course-createCourse', 'class' => 'form', 'files'=>'true')) !!}
     <div class="form-group">
         <label>Tên khóa học: <span class="required">(*)</span></label>
         {!! Form::text('fullname', '',
@@ -47,7 +47,15 @@
                   'placeholder'=>'Tóm tắt nội dung',
                   'rows'=>5)) !!}
     </div>
+    <div class="form-group form-inline">
+        <label style="float: left">File đính kèm:</label>
+        {!! Form::file('docs', array('class'=>'')) !!}
+    </div>
 
+    {{--<div class="form-group">--}}
+        {{--<label>File đính kèm: </label>--}}
+        {{--<input type="file" name="file" id="file">--}}
+    {{--</div>--}}
     <div class="form-group">
         {!! Form::submit('Cập nhật',
           array('class'=>'btn btn-primary')) !!}

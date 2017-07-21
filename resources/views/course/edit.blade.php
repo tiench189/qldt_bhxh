@@ -15,7 +15,7 @@
         @endforeach
     @endif
 
-    {!! Form::open(array('route' => 'course-update', 'class' => 'form')) !!}
+    {!! Form::open(array('route' => 'course-update', 'class' => 'form', 'files'=>"true" )) !!}
     {{ Form::hidden('id', $course->id, array('id' => 'courseid')) }}
     <div class="form-group">
         <label>Tên khóa học<span class="required">(*)</span>: </label>
@@ -39,11 +39,17 @@
         {!! Form::select('category', $categories, $course->category,
                             array('class'=>'form-control')) !!}
     </div>
+
     <div class="form-group">
         <label>Mô tả: </label>
         {!! Form::textarea('summary', $course->summary,
             array('class'=>'form-control myTextEditor',
                   'placeholder'=>'Tóm tắt nội dung')) !!}
+    </div>
+
+    <div class="form-group">
+        <label>Tài liệu đính kèm: </label>
+        {!! Form::file('docs', array('class'=>'')) !!}
     </div>
 
     <div class="form-group">
