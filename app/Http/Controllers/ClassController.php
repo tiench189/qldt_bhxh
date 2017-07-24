@@ -50,7 +50,6 @@ class ClassController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
         if($id != 0){
             $result = DB::table('lop')
                 ->where('id', $id)
@@ -62,6 +61,7 @@ class ClassController extends Controller
                     'time_end'=>Utils::str2Date($request->input('time_end'))
                 ]);
         }else{
+//            dd(Utils::str2Date($request->input('time_start')));
             $result = DB::table('lop')
                 ->insert([
                     'ten_lop'=>$request->input('ten_lop'),
