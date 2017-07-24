@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function Psy\debug;
 use Validator;
 
 use PHPExcel;
@@ -174,11 +175,8 @@ class CourseController extends Controller
         return view('course.result', $output);
     }
 
-    // Kiem tra hoc vien va khoa dao tao
 
-    public function checkStudentCategory(Request $request) {
-        $student_id = isset($request->s) ? intval($request->s) : 0;
-        $course_id = isset($request->c) ? intval($request->c) : 0;
+    private function studentcat($student_id,$course_id) {
 
         $allResult = ['code' => -1];
 
@@ -200,7 +198,7 @@ class CourseController extends Controller
                     ->select('course.id as course_id','course.fullname as course_name','lop.ten_lop as ten_lop', 'lop_hocvien.*')
                     ->get();
 
-                if($allResult_data->count() == 0) { // Nếu có dữ liệu
+                if($allResult_data->count() == 0) { // Nếu không có dữ liệu
                     $allResult["code"] = 0;
                 } else { // nếu có dữ liệu
                     $allResult["code"] = 1;
@@ -208,14 +206,172 @@ class CourseController extends Controller
                 }
             } else {} // Không có dữ liệu Course
         } else {} // Id Course, Student truyền vào không hợp lệ
+        return $allResult;
+    }
+
+    // Kiem tra hoc vien va khoa dao tao
+
+    public function checkStudentCategory(Request $request) {
+        $student_id = isset($request->s) ? intval($request->s) : 0;
+        $course_id = isset($request->c) ? intval($request->c) : 0;
+        $allResult = $this->studentcat($student_id,$course_id);
         return response()->json($allResult);
     }
 
+
+
+    public function importstudent(Request $request) {
+        $id = intval($request->input('id')); // course id
+        $cid = intval($request->input('cid')); // class id
+        $importtype = intval($request->input('importtype')); // class id
+        $fileimport = $request->file('dshv'); // class id
+
+        if ($request->hasFile('dshv') && ($fileimport->extension() == "xls" || $fileimport->extension() == "xlsx" )) {
+
+            // Lấy toàn bộ danh sách học viên
+            $allUser = DB::table('user')
+                ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
+                ->get()->toArray();
+            foreach ($allUser as $u) {
+                $dduser[$u->email] = $u;//\App\Utils::row2Array($u);
+            }
+
+            // Lấy thông tin toàn bộ lớp học trong khóa
+            $dataClass = DB::table('lop')
+                ->where('id', $cid)
+                ->get()->first();
+
+            // Lấy thông tin toàn bộ lớp học trong khóa
+            $dataCourse = DB::table('course')
+                ->where('id', $id)
+                ->get()->first();
+
+            //Lay thong tin xep loai
+            $dataXeploai = DB::table('xeploai')->get();
+            $xeploai = \App\Utils::row2Array($dataXeploai);
+            $ddlxeploai = [];
+            foreach ($dataXeploai as $x) {
+                $ddlxeploai[$x->id] = $x->name;
+            }
+
+            $inputFileName = $fileimport->getRealPath();
+
+            try {
+                $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                $objPHPExcel = $objReader->load($inputFileName);
+            } catch(Exception $e) {
+                die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+            }
+            $sheet = $objPHPExcel->getSheet(0);
+            $highestRow = $sheet->getHighestRow();
+            $highestColumn = $sheet->getHighestColumn();
+
+            $userimport = [];
+
+            //  Loop through each row of the worksheet in turn
+            for ($row = 1; $row <= $highestRow; $row++){
+                //  Read a row of data into an array
+                $user_email = $sheet->getCell('A' . $row)->getValue();
+                $user_diemtb = $sheet->getCell('B' . $row)->getValue();
+                $user_xeploai = $sheet->getCell('C' . $row)->getValue();
+                $user_trangthai = $sheet->getCell('D' . $row)->getValue();
+
+                // Kiểm tra User này tồn tại hay không?
+                if(isset($dduser[$user_email])) {
+
+                    // Kiểm tra học viên đã học trong lớp này chưa
+                    $check = DB::table('lop_hocvien')
+                        ->where([
+                            ['lop_id', '=', $cid],
+                            ['user_id', '=', $dduser[$user_email]->id],
+                        ])
+                        ->count();
+
+
+                    $checkcat = $this->studentcat($dduser[$user_email]->id,$id);
+
+                    $userimport[$user_email]["uar"] = $dduser[$user_email];
+                    $userimport[$user_email]["avg"] = $user_diemtb;
+                    $userimport[$user_email]["rnk"] = $user_xeploai;
+                    $userimport[$user_email]["stt"] = $user_trangthai;
+                    $userimport[$user_email]["cli"] = $cid;
+                    $userimport[$user_email]["cln"] = $dataClass->ten_lop;
+                    $userimport[$user_email]["cou"] = $id;
+                    $userimport[$user_email]["chk"] = $check;
+                    $userimport[$user_email]["chkcat"] = $checkcat;
+
+                } else {
+                    $userimport[$user_email]["uar"] = $user_email;
+                    $userimport[$user_email]["avg"] = 0;
+                    $userimport[$user_email]["rnk"] = 0;
+                    $userimport[$user_email]["stt"] = 0;
+                    $userimport[$user_email]["cli"] = $cid;
+                    $userimport[$user_email]["cln"] = $dataClass->ten_lop;
+                    $userimport[$user_email]["cou"] = $id;
+                    $userimport[$user_email]["chk"] = -1;
+                    $userimport[$user_email]["chkcat"] = -1;
+                }
+            }
+            $request->session()->put('rsimport', $userimport);
+
+            return view('course.import', ['rs' => $userimport,'class' => $dataClass,'course' => $dataCourse,'xeploai' => $ddlxeploai,'importtype' => $importtype]);
+        } else {
+            $request->session()->flash('message', "File upload không hợp lệ.");
+            return back()->withInput();
+        }
+    }
+
+    public function importstudentsubmit(Request $request) {
+        $class_id = $request->input('cid'); // array email
+        $course_id = $request->input('id'); // array email
+        $importtype = $request->input('importtype'); // array email
+        $allow = $request->input('chkallow'); // array email
+        $rs = $request->session()->get('rsimport');
+        $msg = [];
+        $countrs = ['ok'=>0,'fail'=>0];
+
+        if(is_array($allow)) {
+            foreach ($allow as $email) {
+                if(isset($rs[$email])) {
+                    $result = DB::table('lop_hocvien')
+                        ->insert([
+                            'lop_id' => $rs[$email]["cli"],
+                            'user_id' => $rs[$email]["uar"]->id,
+                            'status' => ($rs[$email]["stt"] == "finished") ? 'finished' : 'inprogress',
+                            'grade' => $rs[$email]["avg"],
+                            'xeploai' => $rs[$email]["rnk"],
+                            'complete_at' => date('Y-m-d H:i:s'),
+                        ]);
+                    if ($result){
+                        $countrs["ok"]++;
+                        $msg[$email]['rs'] = $result;
+                        $msg[$email]['note'] = "Thêm học viên vào lớp thành công.";
+                    } else {
+                        $countrs["fail"]++;
+                        $msg[$email]['rs'] = $result;
+                        $msg[$email]['note'] = "Thêm học viên không thành công.";
+                    }
+                }
+            }
+        }
+
+        $request->session()->forget('rsimport');
+        $request->session()->flush();
+        $request->session()->flash('message', "Đã import thành công " . $countrs["ok"] . " học viên. Thất bại " . $countrs["fail"] . " học viên.");
+        $request->session()->flash('messagedetail', $msg);
+        if($importtype == "course") {
+            return redirect()->action('CourseController@allResult',['c'=>$course_id]);
+        } else {
+            return redirect()->action('CourseController@allResult',['class'=>$class_id]);
+        }
+
+    }
     public function addstudent(Request $request) {
 
         $id = intval($request->input('id')); // course id
-        $cid = intval($request->input('cid'));
-        $sid = intval($request->input('sid'));
+        $cid = intval($request->input('cid')); // class id
+        $sid = intval($request->input('sid')); // student id
         $xeploai = intval($request->input('xeploai'));
         $grade = floatval($request->input('grade'));
         $status = $request->input('status');

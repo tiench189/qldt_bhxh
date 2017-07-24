@@ -136,6 +136,11 @@ th > input, th > select {
     position: absolute;
 }
 
+.btn-import{
+    position: absolute;
+    margin-left: 130px;
+}
+
 .segment-header {
     margin: 10px 0;
     left: 0;
