@@ -58,6 +58,12 @@ class CourseController extends Controller
     {
         $id = intval($request->input('id'));
         if ($id > 0) {
+            $file = $request->file('docs');
+            if (isset($file)) {
+                $file_attach =  $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $file_attach = str_replace("/", "-", $file_attach);
+            }
+
             $messages = [
                 'fullname.required' => 'Yêu cầu nhập tên khóa học.',
             ];
@@ -80,10 +86,15 @@ class CourseController extends Controller
                     'doi_tuong' => $request->doi_tuong,
                     'thoi_gian' => $request->thoi_gian,
                     'timemodified' => time(),
+                    'overviewfile' => isset($file_attach)? $file_attach : '',
                 ]);
 
             if ($result) {
                 $request->session()->flash('message', "Cập nhật thành công.");
+                if (isset($file)) {
+                    $destinationPath = 'uploads/docs';
+                    $file->move($destinationPath, $file_attach);
+                }
             } else {
                 $request->session()->flash('message', "Cập nhật không thành công.");
             }
@@ -602,19 +613,21 @@ class CourseController extends Controller
         return back()->withInput();
     }
 
-    public function getContents (Request $request){
-        $cid = $request->input('cid');
-        $rs = MoodleRest::call(MoodleRest::METHOD_GET, "core_course_get_contents", array("courseid" => $cid));
-        var_dump(json_decode($rs)); die;
-    }
-
     public function createCourse(Request $request){
-        $cate = DB::table('course_categories')->orderBy('id', 'ASC')->select("id", "name")->get();
+        $cate = DB::table('course_categories')
+            ->where('parent', '=', 1)
+            ->orderBy('id', 'ASC')->select("id", "name")->get();
         if($request->isMethod('get')){
             return view('course.create', ['cate' => $cate]);
         }
 
         else if ($request->isMethod('post')) {
+            $file = $request->file('docs');
+            if (isset($file)) {
+                $file_attach =  $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $file_attach = str_replace("/", "-", $file_attach);
+            }
+
             $fullname = $request->fullname;
             $shortname = 'DT' . date('ymdhis');
             $categoryid = $request->categoryid;
@@ -628,6 +641,7 @@ class CourseController extends Controller
                 "courses[0][summary]" => $summary,
                 "courses[0][format]" => "topics",
             );
+
             $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_create_courses", $params);
             $result = json_decode($rs);
 
@@ -635,8 +649,16 @@ class CourseController extends Controller
                 $request->session()->flash('message', "Có lỗi : " . $result->message);
                 return view('course.create', ['cate' => $cate]);
             } else {
-//                dd($result);
                 $id = intval($result[0]->id);
+                if (isset($file)) {
+                    $destinationPath = 'uploads/docs';
+                    $file->move($destinationPath, $file_attach);
+                    $result = DB::table('course')
+                        ->where('id', $id)
+                        ->update([
+                            'overviewfile' => $file_attach,
+                        ]);
+                }
                 DB::table('course')->where('id', $id)
                     ->update(['doi_tuong' => $doituong, 'thoi_gian' => $thoigian]);
                 $request->session()->flash('message', "Cập nhật thành công.");
@@ -647,5 +669,6 @@ class CourseController extends Controller
             );
         }
     }
+
 
 }
