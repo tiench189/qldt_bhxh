@@ -25,21 +25,33 @@ class CategoryController extends Controller
 {
 
     public function index(Request $request){
+        $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
+        $parents = array();
+        $pids = array();
+        foreach ($select_parrent as $row){
+            $parents[$row->id] = $row;
+            $pids[] = $row->id;
+        }
 
-        $category =  DB::table('course_categories')->where('parent', '=', 1)->get();
-        return view('category.index', ['category' => $category]);
+        $category =  DB::table('course_categories')->whereIn('parent', $pids)->get();
+        $output = ['category' => $category, 'parents' => $parents];
+//        return response()->json($output);
+        return view('category.index', $output);
     }
 
     public function create(Request $request){
         if($request->isMethod('get')){
-            return view('category.create');
+            $parents = DB::table('course_categories')->where('parent', '=', 1)->get();
+            return view('category.create', ['parents' => $parents]);
         }
 
         if($request->isMethod('post')){
+            $description = $request->description;
+            if(!isset($description)) $description = $request->name;
             $params = array(
                 "categories[0][name]" => $request->name,
-                "categories[0][description]" => $request->description,
-                "categories[0][parent]" => 1
+                "categories[0][description]" => $description,
+                "categories[0][parent]" => $request->parent
             );
 
             $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_create_categories", $params);
@@ -67,7 +79,8 @@ class CategoryController extends Controller
         }
 
         if($request->isMethod('get')){
-            return view('category.create', ['category' => $category]);
+            $parents = DB::table('course_categories')->where('parent', '=', 1)->get();
+            return view('category.update', ['category' => $category, 'parents' => $parents]);
         }else{
             $params = array(
                 "categories[0][id]" => $id,

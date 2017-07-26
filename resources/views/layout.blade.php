@@ -71,7 +71,7 @@
                 <ul class="nav navbar-nav my-nav">
                     @if(\App\Roles::checkRole('index'))
                         <li class="dropdown active">
-                            <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Khóa đào
+                            <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Nội dung đào
                                 tạo
                                 <b
                                         class="caret"></b></a>

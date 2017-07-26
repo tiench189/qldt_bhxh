@@ -117,6 +117,8 @@ class StudentController extends Controller
             $data['sex'] = $request->sex;
         if (isset($request->chucdanh))
             $data['chucdanh'] = $request->chucdanh;
+        if (isset($request->chucvu))
+            $data['chucvu'] = $request->chucvu;
 //        dd($data);
         DB::table('user')->where('id', $uid)->update($data);
         $request->session()->flash('message', 'Cập nhật thông tin học viên thành công');

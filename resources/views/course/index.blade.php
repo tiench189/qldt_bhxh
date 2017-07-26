@@ -18,7 +18,7 @@
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
-    <div class="page-title">Danh sách Khóa đào tạo</div>
+    <div class="page-title">Danh sách Khóa đào tạo {{$category == ''?'':': '. $category}}</div>
     @if(\App\Roles::checkRole('course-createCourse'))
         <a class="btn btn-primary btn-add" href="{{route('course-createCourse')}}">Thêm mới</a>
     @endif
@@ -27,11 +27,20 @@
         <tr>
 
             <th class="stt">#</th>
-            <th style="min-width: 300px">Tên khóa đào tạo<br><input type="text"></th>
+            <th style="min-width: 200px">Tên khóa đào tạo<br><input type="text"></th>
+            <th>Nội dung đào tạo<br>
+                {{--<select>--}}
+                    {{--<option value=""></option>--}}
+                    {{--@foreach($categories as $row)--}}
+                        {{--<option value="{{$row->name}}">{{$row->name}}</option>--}}
+                    {{--@endforeach--}}
+                {{--</select>--}}
+                <input type="text">
+            </th>
             <th style="width: 120px">Đối tượng đào tạo<br><input type="text"></th>
             <th style="width: 60px">Thời gian<br><input type="text"></th>
             <th>Tổng quan<br><input type="text"></th>
-            <th style="width: 60px">File<br><input type="text"></th>
+            <th style="width: 60px">File</th>
             @if(\App\Roles::checkRole('course-classes'))
                 <th class="action"></th>
             @endif
@@ -51,6 +60,7 @@
             <tr>
                 <td> {{$idx + 1}} </td>
                 <td><strong> {{$row->fullname}} </strong></td>
+                <td>{{isset($row->category, $categories)?$categories[$row->category]->name:''}}</td>
                 <td>{{$row->doi_tuong}}</td>
                 <td>{{$row->thoi_gian}}</td>
                 <td> {!! $row->summary !!} </td>

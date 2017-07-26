@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('page-title')
-    Danh mục
+    Nội dung đào tạo
 @stop
 @section('content')
     {!! Form::open(array('route' => 'category-remove', 'class' => 'form', 'id' => 'frmcateremove')) !!}
@@ -9,7 +9,7 @@
     {!! Form::close() !!}
     <script language="javascript">
         function removeCourse(cid) {
-            if (confirm("Bạn có muốn xóa danh mục đào tạo này?")) {
+            if (confirm("Bạn có muốn xóa nội dung đào tạo này?")) {
                 document.getElementById("cateid").value = cid;
                 frmcateremove.submit();
             }
@@ -18,7 +18,7 @@
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
-    <div class="page-title">Danh sách category</div>
+    <div class="page-title">Nội dung đào tạo</div>
     @if(\App\Roles::checkRole('category-create'))
         <a class="btn btn-primary btn-add" href="{{route('category-create')}}">Thêm mới</a>
     @endif
@@ -28,14 +28,22 @@
 
             <th class="stt">#</th>
             <th style="min-width: 50px">Tên danh mục đào tạo<br><input type="text"></th>
+            <th>Danh mục<br>
+                <select>
+                    <option value=""></option>
+                    @foreach($parents as $row)
+                    <option value="{{$row->name}}">{{$row->name}}</option>
+                    @endforeach
+                </select>
+            </th>
             <th style="width: 300px">Mô tả<br><input type="text"></th>
-            @if(\App\Roles::checkRole('index'))
+            @if(\App\Roles::checkRole('course-index'))
                 <th class="action"></th>
             @endif
-            @if(\App\Roles::checkRole('course-update'))
+            @if(\App\Roles::checkRole('category-update'))
                 <th class="action"></th>
             @endif
-            @if(\App\Roles::checkRole('course-remove'))
+            @if(\App\Roles::checkRole('category-remove'))
                 <th class="action"></th>
             @endif
         </tr>
@@ -45,11 +53,11 @@
             <tr>
                 <td> {{$idx + 1}} </td>
                 <td><strong> {{$row->name}} </strong></td>
+                <td>{{array_key_exists($row->parent, $parents)?$parents[$row->parent]->name:''}}</td>
                 <td>{{$row->description}}</td>
-
-                @if(\App\Roles::checkRole('index'))
+                @if(\App\Roles::checkRole('course-index'))
                     <td>
-                        <a href="{{route('index', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
+                        <a href="{{route('course-index', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
                             Danh sách khóa
                         </a>
                     </td>

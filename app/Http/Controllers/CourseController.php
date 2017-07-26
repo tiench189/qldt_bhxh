@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Psy\debug;
@@ -34,7 +35,9 @@ class CourseController extends Controller
             $course = DB::table('course')->get();
             $catename = "";
         }
-        return view('course.index', ['course' => $course, 'category' => $catename]);
+        $select_category = DB::table('course_categories')->get();
+        $categories = Utils::row2Array($select_category);
+        return view('course.index', ['course' => $course, 'category' => $catename, 'categories' => $categories]);
     }
 
     public function edit(Request $request)
@@ -42,11 +45,13 @@ class CourseController extends Controller
         $courseId = intval($request->id);
         if ($courseId > 0) {
             $course = DB::table('course')->where('id', $courseId)->first();
-            $cate = DB::table('course_categories')->orderBy('id', 'asc')->get();
-            $categories = array();
-            foreach ($cate as $row){
-                $categories[$row->id] = $row->name;
+            $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
+            $pids = array();
+            foreach ($select_parrent as $row) {
+                $pids[] = $row->id;
             }
+            $cate = DB::table('course_categories')->whereIn('parent', $pids)->get();
+            $categories = Utils::row2Array($cate);
             return view('course.edit', ['course' => $course, 'categories' => $categories]);
         } else {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");
@@ -60,7 +65,7 @@ class CourseController extends Controller
         if ($id > 0) {
             $file = $request->file('docs');
             if (isset($file)) {
-                $file_attach =  $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $file_attach = $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
                 $file_attach = str_replace("/", "-", $file_attach);
             }
 
@@ -86,7 +91,7 @@ class CourseController extends Controller
                     'doi_tuong' => $request->doi_tuong,
                     'thoi_gian' => $request->thoi_gian,
                     'timemodified' => time(),
-                    'overviewfile' => isset($file_attach)? $file_attach : '',
+                    'overviewfile' => isset($file_attach) ? $file_attach : '',
                 ]);
 
             if ($result) {
@@ -100,7 +105,7 @@ class CourseController extends Controller
             }
 
             return redirect()->action(
-                'CourseController@index', ['update' => $result]
+                'CourseController@index', ['c' => $request->input('category')]
             );
         } else {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");
@@ -135,11 +140,11 @@ class CourseController extends Controller
                 $ddclass[$c->id] = $c->ten_lop;
             }
 
-        }else{
+        } else {
             //Lấy thông tin lớp
             $class = DB::table('lop')->where('id', $classID)->first();
             //Lay thong tin khoa hoc
-            $course = $course = DB::table('course')->where('id', $class->course_id)->first();
+            $course = DB::table('course')->where('id', $class->course_id)->first();
             //Lay danh sach ket qua
             $allResult = DB::table('lop_hocvien')
                 ->join('lop', 'lop.id', '=', 'lop_hocvien.lop_id')
@@ -180,25 +185,26 @@ class CourseController extends Controller
             ->get();
         $donvi = \App\Utils::row2Array($datadonvi);
 
-        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai,'ddlxeploai' => $ddlxeploai,
-            'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class, "dduser"=> $dduser,"ddclass"=>$ddclass];
+        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai, 'ddlxeploai' => $ddlxeploai,
+            'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class, "dduser" => $dduser, "ddclass" => $ddclass];
 //        return response()->json($output);
         return view('course.result', $output);
     }
 
 
-    private function studentcat($student_id,$course_id) {
+    private function studentcat($student_id, $course_id)
+    {
 
         $allResult = ['code' => -1];
 
-        if($student_id > 0 || $course_id > 0) {
+        if ($student_id > 0 || $course_id > 0) {
             // Lấy category
             $course = DB::table('course')
                 ->select('*')
                 ->where('course.id', '=', $course_id)
                 ->get()->first();
 
-            if($course) {
+            if ($course) {
                 $allResult_data = DB::table('lop_hocvien')
                     ->join('lop', 'lop.id', '=', 'lop_hocvien.lop_id')
                     ->join('course', 'course.id', '=', 'lop.course_id')
@@ -206,38 +212,41 @@ class CourseController extends Controller
                         ['course.category', '=', $course->category],
                         ['user_id', '=', $student_id],
                     ])
-                    ->select('course.id as course_id','course.fullname as course_name','lop.ten_lop as ten_lop', 'lop_hocvien.*')
+                    ->select('course.id as course_id', 'course.fullname as course_name', 'lop.ten_lop as ten_lop', 'lop_hocvien.*')
                     ->get();
 
-                if($allResult_data->count() == 0) { // Nếu không có dữ liệu
+                if ($allResult_data->count() == 0) { // Nếu không có dữ liệu
                     $allResult["code"] = 0;
                 } else { // nếu có dữ liệu
                     $allResult["code"] = 1;
                     $allResult["data"] = \App\Utils::row2Array($allResult_data);
                 }
-            } else {} // Không có dữ liệu Course
-        } else {} // Id Course, Student truyền vào không hợp lệ
+            } else {
+            } // Không có dữ liệu Course
+        } else {
+        } // Id Course, Student truyền vào không hợp lệ
         return $allResult;
     }
 
     // Kiem tra hoc vien va khoa dao tao
 
-    public function checkStudentCategory(Request $request) {
+    public function checkStudentCategory(Request $request)
+    {
         $student_id = isset($request->s) ? intval($request->s) : 0;
         $course_id = isset($request->c) ? intval($request->c) : 0;
-        $allResult = $this->studentcat($student_id,$course_id);
+        $allResult = $this->studentcat($student_id, $course_id);
         return response()->json($allResult);
     }
 
 
-
-    public function importstudent(Request $request) {
+    public function importstudent(Request $request)
+    {
         $id = intval($request->input('id')); // course id
         $cid = intval($request->input('cid')); // class id
         $importtype = intval($request->input('importtype')); // class id
         $fileimport = $request->file('dshv'); // class id
 
-        if ($request->hasFile('dshv') && ($fileimport->extension() == "xls" || $fileimport->extension() == "xlsx" )) {
+        if ($request->hasFile('dshv') && ($fileimport->extension() == "xls" || $fileimport->extension() == "xlsx")) {
 
             // Lấy toàn bộ danh sách học viên
             $allUser = DB::table('user')
@@ -271,8 +280,8 @@ class CourseController extends Controller
                 $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
                 $objReader = PHPExcel_IOFactory::createReader($inputFileType);
                 $objPHPExcel = $objReader->load($inputFileName);
-            } catch(Exception $e) {
-                die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+            } catch (Exception $e) {
+                die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . $e->getMessage());
             }
             $sheet = $objPHPExcel->getSheet(0);
             $highestRow = $sheet->getHighestRow();
@@ -281,7 +290,7 @@ class CourseController extends Controller
             $userimport = [];
 
             //  Loop through each row of the worksheet in turn
-            for ($row = 1; $row <= $highestRow; $row++){
+            for ($row = 2; $row <= $highestRow; $row++) {
                 //  Read a row of data into an array
                 $user_email = $sheet->getCell('A' . $row)->getValue();
                 $user_diemtb = $sheet->getCell('B' . $row)->getValue();
@@ -289,7 +298,7 @@ class CourseController extends Controller
                 $user_trangthai = $sheet->getCell('D' . $row)->getValue();
 
                 // Kiểm tra User này tồn tại hay không?
-                if(isset($dduser[$user_email])) {
+                if (isset($dduser[$user_email])) {
 
                     // Kiểm tra học viên đã học trong lớp này chưa
                     $check = DB::table('lop_hocvien')
@@ -300,7 +309,7 @@ class CourseController extends Controller
                         ->count();
 
 
-                    $checkcat = $this->studentcat($dduser[$user_email]->id,$id);
+                    $checkcat = $this->studentcat($dduser[$user_email]->id, $id);
 
                     $userimport[$user_email]["uar"] = $dduser[$user_email];
                     $userimport[$user_email]["avg"] = $user_diemtb;
@@ -326,25 +335,26 @@ class CourseController extends Controller
             }
             $request->session()->put('rsimport', $userimport);
 
-            return view('course.import', ['rs' => $userimport,'class' => $dataClass,'course' => $dataCourse,'xeploai' => $ddlxeploai,'importtype' => $importtype]);
+            return view('course.import', ['rs' => $userimport, 'class' => $dataClass, 'course' => $dataCourse, 'xeploai' => $ddlxeploai, 'importtype' => $importtype]);
         } else {
             $request->session()->flash('message', "File upload không hợp lệ.");
             return back()->withInput();
         }
     }
 
-    public function importstudentsubmit(Request $request) {
+    public function importstudentsubmit(Request $request)
+    {
         $class_id = $request->input('cid'); // array email
         $course_id = $request->input('id'); // array email
         $importtype = $request->input('importtype'); // array email
         $allow = $request->input('chkallow'); // array email
         $rs = $request->session()->get('rsimport');
         $msg = [];
-        $countrs = ['ok'=>0,'fail'=>0];
+        $countrs = ['ok' => 0, 'fail' => 0];
 
-        if(is_array($allow)) {
+        if (is_array($allow)) {
             foreach ($allow as $email) {
-                if(isset($rs[$email])) {
+                if (isset($rs[$email])) {
                     $result = DB::table('lop_hocvien')
                         ->insert([
                             'lop_id' => $rs[$email]["cli"],
@@ -354,7 +364,7 @@ class CourseController extends Controller
                             'xeploai' => $rs[$email]["rnk"],
                             'complete_at' => date('Y-m-d H:i:s'),
                         ]);
-                    if ($result){
+                    if ($result) {
                         $countrs["ok"]++;
                         $msg[$email]['rs'] = $result;
                         $msg[$email]['note'] = "Thêm học viên vào lớp thành công.";
@@ -366,19 +376,19 @@ class CourseController extends Controller
                 }
             }
         }
-
         $request->session()->forget('rsimport');
+        if ($importtype == "course") {
+            return redirect(route('course-result', ['c' => $course_id]));
+        } else {
+            return redirect()->route('course-result', ['class' => 44]);
+        }
         $request->session()->flush();
         $request->session()->flash('message', "Đã import thành công " . $countrs["ok"] . " học viên. Thất bại " . $countrs["fail"] . " học viên.");
         $request->session()->flash('messagedetail', $msg);
-        if($importtype == "course") {
-            return redirect()->action('CourseController@allResult',['c'=>$course_id]);
-        } else {
-            return redirect()->action('CourseController@allResult',['class'=>$class_id]);
-        }
-
     }
-    public function addstudent(Request $request) {
+
+    public function addstudent(Request $request)
+    {
 
         $id = intval($request->input('id')); // course id
         $cid = intval($request->input('cid')); // class id
@@ -395,7 +405,7 @@ class CourseController extends Controller
             ])
             ->count();
         // Nếu học viên đã học trong lớp này rồi thì từ chối
-        if($check == 0) {
+        if ($check == 0) {
             //enrol quyền học viên
             $params = array(
                 "enrolments[0][userid]" => $sid,
@@ -405,7 +415,7 @@ class CourseController extends Controller
             $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_enrol_users", $params);
             $rs = json_decode($rs);
 
-            if(!isset($rs->errorcode)){
+            if (!isset($rs->errorcode)) {
                 // them hoc vien vao lop
                 $result = DB::table('lop_hocvien')
                     ->insert([
@@ -416,12 +426,12 @@ class CourseController extends Controller
                         'xeploai' => $xeploai,
                         'complete_at' => date('Y-m-d H:i:s'),
                     ]);
-                if ($result){
+                if ($result) {
                     $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
                 } else {
                     $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
                 }
-            }else{
+            } else {
                 $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
             }
 
@@ -431,8 +441,7 @@ class CourseController extends Controller
         }
 
 
-
-            return back()->withInput();;
+        return back()->withInput();;
     }
 
     public function export(Request $request)
@@ -568,20 +577,21 @@ class CourseController extends Controller
         $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_unenrol_users", $params);
         $rs = json_decode($rs);
 
-        if(is_null($rs)){
+        if (is_null($rs)) {
             $result = DB::table('lop_hocvien')
                 ->where('lop_id', $cid)
                 ->where('user_id', $sid)
                 ->delete();
 
-            if($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
+            if ($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
             else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
-        }else{
+        } else {
             $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
         }
 
         return back()->withInput();
     }
+
     public function removeCourse(Request $request)
     {
         $cid = $request->input('cid');
@@ -589,8 +599,8 @@ class CourseController extends Controller
         // Xoa cac lop hoc & hoc vien cua course
         $classObjects = DB::table('lop')->where('course_id', $cid)->select('id')->get();
 
-        if(count($classObjects) != 0){
-            foreach ($classObjects as $object){
+        if (count($classObjects) != 0) {
+            foreach ($classObjects as $object) {
                 $classIds[] = $object->id;
             }
             // Xoa cac hoc vien trong cac lop
@@ -604,36 +614,39 @@ class CourseController extends Controller
         $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_delete_courses", $params);
         $result = json_decode($rs);
 
-        if(!is_null($result) && empty($result->warnings)){
+        if (!is_null($result) && empty($result->warnings)) {
             $request->session()->flash('message', "Xóa thành công khóa đào tạo");
-        }else{
+        } else {
             $request->session()->flash('message', "Không thể xóa khóa đào tạo");
         }
 
         return back()->withInput();
     }
 
-    public function createCourse(Request $request){
-        $cate = DB::table('course_categories')
-            ->where('parent', '=', 1)
-            ->orderBy('id', 'ASC')->select("id", "name")->get();
-        if($request->isMethod('get')){
-            return view('course.create', ['cate' => $cate]);
+    public function createCourse(Request $request)
+    {
+        $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
+        $pids = array();
+        foreach ($select_parrent as $row) {
+            $pids[] = $row->id;
         }
+        $cate = DB::table('course_categories')->whereIn('parent', $pids)->get();
+        if ($request->isMethod('get')) {
 
-        else if ($request->isMethod('post')) {
+            return view('course.create', ['cate' => $cate]);
+        } else if ($request->isMethod('post')) {
             $file = $request->file('docs');
             if (isset($file)) {
-                $file_attach =  $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $file_attach = $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
                 $file_attach = str_replace("/", "-", $file_attach);
             }
 
             $fullname = $request->fullname;
             $shortname = 'DT' . date('ymdhis');
             $categoryid = $request->categoryid;
-            $summary = (isset($request->summary))?$request->summary:"";
-            $doituong = (isset($request->doi_tuong))?$request->doi_tuong:"";
-            $thoigian = (isset($request->thoi_gian))?$request->thoi_gian:"";
+            $summary = (isset($request->summary)) ? $request->summary : "";
+            $doituong = (isset($request->doi_tuong)) ? $request->doi_tuong : "";
+            $thoigian = (isset($request->thoi_gian)) ? $request->thoi_gian : "";
             $params = array(
                 "courses[0][fullname]" => $fullname,
                 "courses[0][shortname]" => $shortname,
