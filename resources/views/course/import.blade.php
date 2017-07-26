@@ -66,7 +66,7 @@
             </tr>
         @elseif ($row["chk"] == 0)
             <tr>
-                <td> {{ Form::checkbox('chkallow[]', $row["uar"]->email) }}  </td>
+                <td> {{ Form::checkbox('chkallow[]', $row["uar"]->email, array("checked")) }}  </td>
                 <td><strong> {{$row["uar"]->username}} </strong></td>
                 <td><strong> {{$row["uar"]->email}} </strong></td>
                 <td> {{$row["uar"]->firstname}} </td>

@@ -38,6 +38,10 @@
         <label>Chức danh :</label>
         <input type="text" name="chucdanh" class="form-control" value="{{$user->chucdanh}}">
     </div>
+    <div class="form-group form-inline">
+        <label>Vị trí công tác :</label>
+        <input type="text" name="chucvu" class="form-control" value="{{$user->chucvu}}">
+    </div>
     <div class="form-group">
         {!! Form::submit('Hoàn tất',
           array('class'=>'btn btn-primary')) !!}

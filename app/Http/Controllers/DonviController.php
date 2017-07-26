@@ -26,7 +26,7 @@ class DonviController extends Controller
 {
     public function index(Request $request)
     {
-        $donvi = Donvi::all();
+        $donvi = DB::table('donvi')->get();
         return view('donvi.index', ['donvi' => $donvi]);
     }
 

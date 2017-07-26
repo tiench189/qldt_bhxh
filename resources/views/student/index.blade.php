@@ -35,7 +35,7 @@
             <th>Ngày sinh</th>
             <th>Giới tính</th>
             <th>Chức danh</th>
-            <th>Chức vụ</th>
+            <th>Vị trí công tác</th>
             @if(\App\Roles::checkRole('hocvien-histories'))
                 <th class="action"></th>
             @endif

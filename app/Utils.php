@@ -13,6 +13,7 @@ class Utils extends Model
     public static function listCategories()
     {
         return DB::table('course_categories')
+            ->where('parent', 1)
             ->orderBy('sortorder', 'asc')
             ->get();
     }

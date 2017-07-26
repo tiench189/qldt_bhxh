@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Roles;
 use Closure;
+use Illuminate\Support\Facades\Session;
 
 class CheckRole
 {
@@ -16,9 +17,10 @@ class CheckRole
      */
     public function handle($request, Closure $next)
     {
-//        if (!Roles::checkRole($request->route()->getName(), true)) {
-//            return redirect('/errpermission');
-//        }
+        if (!Roles::checkRole($request->route()->getName(), true)) {
+            return redirect('/errpermission');
+        }
+//        return response()->json(Session::get('role-' . Session::get('user')->id));
         return $next($request);
     }
 }

@@ -21,9 +21,17 @@ Route::get('/errpermission', function () {
 });
 
 Route::group(['middleware' => 'cas_auth'], function () {
+    Route::group(['prefix' => 'course'], function () {
+        Route::get('getContents', 'CourseController@getContents')->name('course-getContents');
+        Route::post('checkStudentCategory', 'CourseController@checkStudentCategory')->name('course-checkStudentCategory');
+        Route::post('/importstudentsubmit', 'CourseController@importstudentsubmit')->name('student-import-submit');
+        Route::post('/importstudent', 'CourseController@importstudent')->name('student-import');
+
+    });
     Route::group(['middleware' => 'check_role'], function () {
-        Route::get('/', 'CourseController@index')->name('index');
+        Route::get('/', 'CategoryController@index')->name('index');
         Route::group(['prefix' => 'course'], function () {
+            Route::get('/', 'CourseController@index')->name('course-index');
             Route::get('/result', 'CourseController@allResult')->name('course-result');
             Route::get('/class', 'CourseController@classindex')->name('course-classes');
             Route::get('/export', 'CourseController@export');
@@ -32,8 +40,6 @@ Route::group(['middleware' => 'cas_auth'], function () {
             Route::post('/removestudent', 'CourseController@removestudent')->name('student-remove');
             Route::post('/removecourse', 'CourseController@removeCourse')->name('course-remove');
             Route::post('/addstudent', 'CourseController@addstudent')->name('student-add');
-            Route::post('/importstudentsubmit', 'CourseController@importstudentsubmit')->name('student-import-submit');
-            Route::post('/importstudent', 'CourseController@importstudent')->name('student-import');
             Route::get('dshocvien', 'CourseController@dshocvien')->name('course-dshocvien');
             Route::get('getContents', 'CourseController@getContents')->name('course-getContents');
             Route::post('createCourse', 'CourseController@createCourse')->name('course-createCourse');
@@ -42,7 +48,6 @@ Route::group(['middleware' => 'cas_auth'], function () {
 
         });
         Route::group(['prefix' => 'category'], function () {
-            Route::get('/', 'CategoryController@index')->name('category-index');
             Route::post('create', 'CategoryController@create')->name('category-create');
             Route::get('create', 'CategoryController@create')->name('category-create');
             Route::post('/remove', 'CategoryController@remove')->name('category-remove');
