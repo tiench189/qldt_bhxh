@@ -37,9 +37,6 @@
                 </select>
             </th>
             <th style="width: 300px">Mô tả<br><input type="text"></th>
-            @if(\App\Roles::checkRole('course-index'))
-                <th class="action"></th>
-            @endif
             @if(\App\Roles::checkRole('category-update'))
                 <th class="action"></th>
             @endif
@@ -52,16 +49,15 @@
         @foreach ($category as $idx => $row)
             <tr>
                 <td> {{$idx + 1}} </td>
-                <td><strong> {{$row->name}} </strong></td>
+                <td>
+                    @if(\App\Roles::checkRole('course-index'))
+                        <a href="{{route('course-index', ['c' => $row->id])}}" title="Danh sách khóa: {{$row->name}}"><strong> {{$row->name}} </strong></a>
+                    @else
+                        <strong> {{$row->name}} </strong>
+                    @endif
+                </td>
                 <td>{{array_key_exists($row->parent, $parents)?$parents[$row->parent]->name:''}}</td>
                 <td>{{$row->description}}</td>
-                @if(\App\Roles::checkRole('course-index'))
-                    <td>
-                        <a href="{{route('course-index', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
-                            Danh sách khóa
-                        </a>
-                    </td>
-                @endif
                 @if(\App\Roles::checkRole('category-update'))
                     <td>
                         <a href="{{route('category-update', ['id' => $row->id])}}" class="btn btn-xs btn-primary">
@@ -71,7 +67,7 @@
                 @endif
                 @if(\App\Roles::checkRole('category-remove'))
                     <td>
-                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-primary">
+                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-danger">
                             Xóa
                         </a>
                     </td>
