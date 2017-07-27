@@ -18,7 +18,10 @@
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
-    <div class="page-title">Nội dung đào tạo</div>
+    <div class="breadcrumbs">
+    {!! Breadcrumbs::render('index',$catinfo) !!}
+    </div>
+
     @if(\App\Roles::checkRole('category-create'))
         <a class="btn btn-primary btn-add" href="{{route('category-create')}}">Thêm mới</a>
     @endif

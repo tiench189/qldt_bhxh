@@ -15,10 +15,19 @@
             }
         }
     </script>
+
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('course',$parentcat,$category) !!}
+    </div>
+
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
-    <div class="page-title">Danh sách Khóa đào tạo {{$category == ''?'':': '. $category}}</div>
+    <div class="page-title">Danh sách Khóa đào tạo
+        @if($category)
+            {{$category->name}}
+        @endif
+    </div>
     @if(\App\Roles::checkRole('course-createCourse'))
         <a class="btn btn-primary btn-add" href="{{route('course-createCourse')}}">Thêm mới</a>
     @endif

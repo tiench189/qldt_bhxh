@@ -6,6 +6,7 @@
 
 @section('content')
     <div class="page-title">Kết quả đào tạo: <strong>{{$course->fullname}}</strong></div>
+
     <table class="table table-bordered">
         <thead>
         <tr>

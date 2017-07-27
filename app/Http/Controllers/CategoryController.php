@@ -25,6 +25,9 @@ class CategoryController extends Controller
 {
 
     public function index(Request $request){
+
+        $pcat = intval($request->c);
+
         $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
         $parents = array();
         $pids = array();
@@ -33,8 +36,16 @@ class CategoryController extends Controller
             $pids[] = $row->id;
         }
 
-        $category =  DB::table('course_categories')->whereIn('parent', $pids)->get();
-        $output = ['category' => $category, 'parents' => $parents];
+        if($pcat > 0) {
+            $category =  DB::table('course_categories')->where('parent', '=', $pcat)->get();
+            $catinfo = DB::table('course_categories')->where('id', $pcat)->first();
+
+        } else {
+            $category =  DB::table('course_categories')->whereIn('parent', $pids)->get();
+            $catinfo = [];
+        }
+
+        $output = ['category' => $category, 'parents' => $parents,'catinfo' => $catinfo];
 //        return response()->json($output);
         return view('category.index', $output);
     }
