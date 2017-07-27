@@ -30,14 +30,16 @@ class CourseController extends Controller
         $cate = $request->c;
         if (isset($cate)) {
             $course = DB::table('course')->where('category', '=', $cate)->get();
-            $catename = DB::table('course_categories')->where('id', $cate)->first()->name;
+            $cat = DB::table('course_categories')->where('id', $cate)->first();
+            $parentcat = DB::table('course_categories')->where('id', $cat->parent)->first();
         } else {
             $course = DB::table('course')->get();
-            $catename = "";
+            $cat = null;
+            $parentcat = null;
         }
         $select_category = DB::table('course_categories')->get();
         $categories = Utils::row2Array($select_category);
-        return view('course.index', ['course' => $course, 'category' => $catename, 'categories' => $categories]);
+        return view('course.index', ['course' => $course, 'category' => $cat, 'parentcat' => $parentcat, 'categories' => $categories]);
     }
 
     public function edit(Request $request)

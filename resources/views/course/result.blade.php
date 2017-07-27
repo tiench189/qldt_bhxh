@@ -76,6 +76,9 @@
             Danh sách học viên: <strong>{{$class->ten_lop}}</strong> - <strong>{{$course->fullname}}</strong>
         @endif
     </div>
+    <div class="breadcrumbs">
+    {!! Breadcrumbs::render('course') !!}
+    </div>
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
