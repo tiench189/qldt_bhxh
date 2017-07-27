@@ -78,8 +78,8 @@
         @foreach($histories as $idx=>$row)
             <tr>
                 <td>{{$idx + 1}}</td>
-                <td>{{$lop[$row->lop_id]->course_name}}</td>
-                <td>{{$lop[$row->lop_id]->ten_lop}}</td>
+                <td>@if(!empty($lop[$row->lop_id])) {{$lop[$row->lop_id]->course_name}} @endif</td>
+                <td>@if(!empty($lop[$row->lop_id])) {{$lop[$row->lop_id]->ten_lop}} @endif</td>
                 <td>{{\app\Utils::getStatus($row->status)}}</td>
                 <td>{{$row->grade}}</td>
                 <td>{{$xeploai[$row->xeploai]->name}}</td>

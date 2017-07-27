@@ -18,6 +18,10 @@ class CasAuth
      */
     public function handle($request, Closure $next)
     {
+        $env = Config::get('app.env');
+        if ($env == 'local') {
+            return $next($request);
+        }
         $sessID = $request->session()->get('st');
         $isAuth = MySession::isAuthen($sessID);
         if (!($isAuth == Config::get('ctx.is_login'))) {
