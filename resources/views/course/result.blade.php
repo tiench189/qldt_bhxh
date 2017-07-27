@@ -69,16 +69,14 @@
             });
         });
     </script>
-    <div class="page-title">
+    <div class="breadcrumbs">
         @if($courseID != 0)
-            Danh sách học viên: <strong>{{$course->fullname}}</strong>
+            {!! Breadcrumbs::render('course-result',$category,$course) !!}
         @else
-            Danh sách học viên: <strong>{{$class->ten_lop}}</strong> - <strong>{{$course->fullname}}</strong>
+            {!! Breadcrumbs::render('course-result',$category,$course,$class) !!}
         @endif
     </div>
-    <div class="breadcrumbs">
-    {!! Breadcrumbs::render('course') !!}
-    </div>
+
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif

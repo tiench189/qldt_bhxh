@@ -126,6 +126,9 @@ class CourseController extends Controller
         if ($courseId != 0 && $classID == 0) {
             //Lay thong tin khoa hoc
             $course = DB::table('course')->where('id', $courseId)->first();
+
+            $category = DB::table('course_categories')->where('id', $course->category)->first();
+
             //Lay danh sach ket qua
             $allResult = DB::table('lop_hocvien')
                 ->join('lop', 'lop.id', '=', 'lop_hocvien.lop_id')
@@ -147,6 +150,10 @@ class CourseController extends Controller
             $class = DB::table('lop')->where('id', $classID)->first();
             //Lay thong tin khoa hoc
             $course = DB::table('course')->where('id', $class->course_id)->first();
+
+            // Lay category
+            $category = DB::table('course_categories')->where('id', $course->category)->first();
+
             //Lay danh sach ket qua
             $allResult = DB::table('lop_hocvien')
                 ->join('lop', 'lop.id', '=', 'lop_hocvien.lop_id')
@@ -187,7 +194,7 @@ class CourseController extends Controller
             ->get();
         $donvi = \App\Utils::row2Array($datadonvi);
 
-        $output = ['course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai, 'ddlxeploai' => $ddlxeploai,
+        $output = ['category' => $category,'course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai, 'ddlxeploai' => $ddlxeploai,
             'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class, "dduser" => $dduser, "ddclass" => $ddclass];
 //        return response()->json($output);
         return view('course.result', $output);
@@ -478,10 +485,15 @@ class CourseController extends Controller
         $courseId = intval($request->c);
 
         if ($courseId > 0) {
+
             //Lay thong tin khoa hoc
             $course = DB::table('course')->where('id', $courseId)->first();
             // lay thong tin lop
             $class = DB::table('lop')->where('course_id', $courseId)->get();
+
+            // Lay thong tin Category
+            $category = DB::table('course_categories')->where('id', $course->category)->get()->first();
+
 
             $lophocvien = DB::table('lop_hocvien')
                 ->select('lop_id', DB::raw('count(user_id) as hoc_vien'))
@@ -492,7 +504,7 @@ class CourseController extends Controller
             foreach ($lophocvien as $r) {
                 $hocvien[$r->lop_id] = $r->hoc_vien;
             }
-            $output = ['class' => $class, 'course' => $course, 'hocvien' => $hocvien];
+            $output = ["category"=>$category,'class' => $class, 'course' => $course, 'hocvien' => $hocvien];
 //            dd($output);
             return view('course.classindex', $output);
 

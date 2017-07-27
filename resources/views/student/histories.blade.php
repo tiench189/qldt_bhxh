@@ -5,6 +5,11 @@
 @stop
 
 @section('content')
+
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('hocvien',"Thông tin",$user) !!}
+    </div>
+
     <div class="segment-header">
         <span>Thông tin học viên</span>
     </div>
