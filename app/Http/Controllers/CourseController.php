@@ -166,7 +166,7 @@ class CourseController extends Controller
         foreach ($allResult as $row) {
             $uid[] = $row->user_id;
         }
-        $dataUser = DB::table('user')
+        $dataUser = DB::table('person')
             ->whereIn('id', $uid)
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
@@ -174,7 +174,7 @@ class CourseController extends Controller
         $users = \App\Utils::row2Array($dataUser);
 
         // Lấy toàn bộ danh sách học viên
-        $allUser = DB::table('user')
+        $allUser = DB::table('person')
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
         foreach ($allUser as $u) {
@@ -258,7 +258,7 @@ class CourseController extends Controller
         if ($request->hasFile('dshv') && ($fileimport->extension() == "xls" || $fileimport->extension() == "xlsx")) {
 
             // Lấy toàn bộ danh sách học viên
-            $allUser = DB::table('user')
+            $allUser = DB::table('person')
                 ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
                 ->get()->toArray();
             foreach ($allUser as $u) {
@@ -534,7 +534,7 @@ class CourseController extends Controller
             foreach ($userObjs as $item) {
                 $userIds[] = $item->userid;
             }
-            $users = DB::table('user')
+            $users = DB::table('person')
                 ->whereIn('id', $userIds)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();

@@ -37,11 +37,7 @@ Breadcrumbs::register('course-class', function($breadcrumbs,$category,$course,$c
 
     if(!empty($course))
         $breadcrumbs->push($course->fullname, route('course-classes',["c"=>$course->id]));
-
-
         $breadcrumbs->push("Danh sách lớp");
-
-
 });
 
 
@@ -81,3 +77,18 @@ Breadcrumbs::register('hocvien', function($breadcrumbs,$text="",$student = [])
 
 });
 
+// Index > Báo cáo
+Breadcrumbs::register('baocao', function($breadcrumbs)
+{
+    $breadcrumbs->push("Báo cáo",route('baocao-tonghop'));
+
+
+});
+
+// Index > Tra Cứu
+Breadcrumbs::register('tracuu', function($breadcrumbs)
+{
+    $breadcrumbs->push("Tra Cứu",route('tracuu'));
+
+
+});

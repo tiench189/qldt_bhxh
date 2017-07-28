@@ -53,7 +53,7 @@ class TraCuuController extends Controller
                     $userIds[] = $item->user_id;
                 }
 
-                $users = DB::table('user')
+                $users = DB::table('person')
                     ->whereIn('id', $userIds)
                     ->select('id', 'donvi')
                     ->get();

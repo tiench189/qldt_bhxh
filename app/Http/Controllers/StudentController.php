@@ -25,7 +25,7 @@ class StudentController extends Controller
             $query['donvi'] = $donvi;
         }
 
-        $users = DB::table('user')->where($query)->get();
+        $users = DB::table('person')->where($query)->get();
 
         //Lay thong tin don vi
         $iddv = array();
@@ -47,7 +47,7 @@ class StudentController extends Controller
             ->where('user_id', $uid)
             ->get();
         //Lay thong tin hoc vien
-//        $user = DB::table('user')
+//        $user = DB::table('person')
 //            ->where('id', $uid)
 //            ->first();
         $user = User::where('id', $uid)->first();
@@ -102,7 +102,7 @@ class StudentController extends Controller
     {
         $uid = intval($request->uid);
         if ($request->isMethod('get')) {
-            $user = DB::table('user')->where('id', $uid)->first();
+            $user = DB::table('person')->where('id', $uid)->first();
             $donvi = DB::table('donvi')->orderBy('id')->get();
             $donvi = Utils::row2Array($donvi);
 //            return response()->json(['user' => $user, 'donvi' => $donvi]);
@@ -120,7 +120,7 @@ class StudentController extends Controller
         if (isset($request->chucvu))
             $data['chucvu'] = $request->chucvu;
 //        dd($data);
-        DB::table('user')->where('id', $uid)->update($data);
+        DB::table('person')->where('id', $uid)->update($data);
         $request->session()->flash('message', 'Cập nhật thông tin học viên thành công');
         return redirect(route('hocvien-index'));
     }
@@ -128,7 +128,7 @@ class StudentController extends Controller
     public function remove(Request $request)
     {
         $uid = intval($request->uid);
-        DB::table('user')->where('id', $uid)->delete();
+        DB::table('person')->where('id', $uid)->delete();
         $request->session()->flash('message', 'Xóa học viên thành công');
         return redirect(route('hocvien-index'));
     }
