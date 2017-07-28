@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Psy\debug;
 use Validator;
+use App\Hocvien;
 
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -305,6 +306,12 @@ class CourseController extends Controller
                 $user_diemtb = $sheet->getCell('B' . $row)->getValue();
                 $user_xeploai = $sheet->getCell('C' . $row)->getValue();
                 $user_trangthai = $sheet->getCell('D' . $row)->getValue();
+                $user_firstname = $sheet->getCell('E' . $row)->getValue();
+                $user_lastname = $sheet->getCell('F' . $row)->getValue();
+                $user_donvi = $sheet->getCell('G' . $row)->getValue();
+                $user_chucvu = $sheet->getCell('H' . $row)->getValue();
+
+
 
                 // Kiểm tra User này tồn tại hay không?
                 if (isset($dduser[$user_email])) {
@@ -329,17 +336,37 @@ class CourseController extends Controller
                     $userimport[$user_email]["cou"] = $id;
                     $userimport[$user_email]["chk"] = $check;
                     $userimport[$user_email]["chkcat"] = $checkcat;
+                    $userimport[$user_email]["ins"] = false;
 
                 } else {
-                    $userimport[$user_email]["uar"] = $user_email;
+                    if (filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+                        $userimport[$user_email]["uar"] = (object) array(
+                            'id' => 0,
+                            'username' => $user_email,
+                            'email' => $user_email,
+                            'firstname' => $user_firstname,
+                            'lastname' => $user_lastname,
+                            //'donvi' => $user_donvi
+                        );
+                        $userimport[$user_email]["chk"] = 0;
+                        $userimport[$user_email]["ins"] = true;
+                        $userimport[$user_email]["chkcat"] = 0;
+                    } else {
+                        $userimport[$user_email]["uar"] = $user_email;
+                        $userimport[$user_email]["chk"] = -1;
+                        $userimport[$user_email]["chkcat"] = -1;
+                        $userimport[$user_email]["ins"] = false;
+
+                    }
+
                     $userimport[$user_email]["avg"] = 0;
                     $userimport[$user_email]["rnk"] = 0;
                     $userimport[$user_email]["stt"] = 0;
                     $userimport[$user_email]["cli"] = $cid;
                     $userimport[$user_email]["cln"] = $dataClass->ten_lop;
                     $userimport[$user_email]["cou"] = $id;
-                    $userimport[$user_email]["chk"] = -1;
-                    $userimport[$user_email]["chkcat"] = -1;
+
+
                 }
             }
             $request->session()->put('rsimport', $userimport);
@@ -364,15 +391,30 @@ class CourseController extends Controller
         if (is_array($allow)) {
             foreach ($allow as $email) {
                 if (isset($rs[$email])) {
-                    $result = DB::table('lop_hocvien')
-                        ->insert([
-                            'lop_id' => $rs[$email]["cli"],
-                            'user_id' => $rs[$email]["uar"]->id,
-                            'status' => ($rs[$email]["stt"] == "finished") ? 'finished' : 'inprogress',
-                            'grade' => $rs[$email]["avg"],
-                            'xeploai' => $rs[$email]["rnk"],
-                            'complete_at' => date('Y-m-d H:i:s'),
-                        ]);
+
+                    if($rs[$email]["ins"] == true) {
+                        $newdata = array();
+                        $newdata['firstname'] = $rs[$email]["uar"]->firstname;
+                        $newdata['lastname'] = $rs[$email]["uar"]->lastname;
+                        $newdata['email'] = $rs[$email]["uar"]->email;
+                        $newdata['donvi'] = $rs[$email]["uar"]->donvi;
+                        $newdata['username'] = $rs[$email]["uar"]->username;
+                        $insertID = Hocvien::insertGetId($newdata);
+                        $rs[$email]["uar"]->id  = $insertID;
+                    }
+                    if($rs[$email]["uar"]->id != 0) {
+                        $result = DB::table('lop_hocvien')
+                            ->insert([
+                                'lop_id' => $rs[$email]["cli"],
+                                'user_id' => $rs[$email]["uar"]->id,
+                                'status' => ($rs[$email]["stt"] == "finished") ? 'finished' : 'inprogress',
+                                'grade' => $rs[$email]["avg"],
+                                'xeploai' => $rs[$email]["rnk"],
+                                'complete_at' => date('Y-m-d H:i:s'),
+                            ]);
+                    } else $result = 0;
+
+
                     if ($result) {
                         $countrs["ok"]++;
                         $msg[$email]['rs'] = $result;
@@ -389,7 +431,7 @@ class CourseController extends Controller
         if ($importtype == "course") {
             return redirect(route('course-result', ['c' => $course_id]));
         } else {
-            return redirect()->route('course-result', ['class' => 44]);
+            return redirect()->route('course-result', ['class' => $class_id]);
         }
         $request->session()->flush();
         $request->session()->flash('message', "Đã import thành công " . $countrs["ok"] . " học viên. Thất bại " . $countrs["fail"] . " học viên.");
