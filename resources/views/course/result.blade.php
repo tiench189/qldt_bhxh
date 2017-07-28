@@ -257,7 +257,11 @@
                 <td>{{array_key_exists($users[$row->user_id]->donvi, $donvi)?$donvi[$users[$row->user_id]->donvi]->ten_donvi:''}}</td>
                 <td>{{\app\Utils::getStatus($row->status)}}</td>
                 <td>{{$row->grade}}</td>
-                <td>{{$xeploai[$row->xeploai]->name}}</td>
+                <td>
+                    @isset($xeploai[$row->xeploai])
+                        {{$xeploai[$row->xeploai]->name}}
+                    @endisset
+                </td>
                 <td>{{\app\Utils::formatTimestamp($row->complete_at)}}</td>
                 @if(\App\Roles::checkRole('student-remove'))
                     <td>

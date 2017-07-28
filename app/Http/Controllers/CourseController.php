@@ -339,22 +339,40 @@ class CourseController extends Controller
                     $userimport[$user_email]["ins"] = false;
 
                 } else {
-                    if (filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+                    if (filter_var($user_email, FILTER_VALIDATE_EMAIL) && !empty($user_firstname) && !empty($user_lastname) ) {
+
+
+                        $dvbh = DB::table('donvi')->where('ma_donvi', $user_donvi)->first();
+
+                        if (count($dvbh) > 0) {
+                            $donvi = $dvbh->id;
+                        } else $donvi = 0;
+
                         $userimport[$user_email]["uar"] = (object) array(
                             'id' => 0,
                             'username' => $user_email,
                             'email' => $user_email,
                             'firstname' => $user_firstname,
                             'lastname' => $user_lastname,
-                            //'donvi' => $user_donvi
+                            'donvi' => $donvi,
                         );
                         $userimport[$user_email]["chk"] = 0;
                         $userimport[$user_email]["ins"] = true;
                         $userimport[$user_email]["chkcat"] = 0;
                     } else {
                         $userimport[$user_email]["uar"] = $user_email;
-                        $userimport[$user_email]["chk"] = -1;
+
+                        if(empty($user_firstname) || empty($user_lastname)) {
+                            $userimport[$user_email]["chk"] = -2;
+                        } else {
+                            $userimport[$user_email]["chk"] = -1;
+                        }
+
+
                         $userimport[$user_email]["chkcat"] = -1;
+
+
+
                         $userimport[$user_email]["ins"] = false;
 
                     }
@@ -391,15 +409,21 @@ class CourseController extends Controller
         if (is_array($allow)) {
             foreach ($allow as $email) {
                 if (isset($rs[$email])) {
-
                     if($rs[$email]["ins"] == true) {
                         $newdata = array();
+
                         $newdata['firstname'] = $rs[$email]["uar"]->firstname;
                         $newdata['lastname'] = $rs[$email]["uar"]->lastname;
                         $newdata['email'] = $rs[$email]["uar"]->email;
                         $newdata['donvi'] = $rs[$email]["uar"]->donvi;
                         $newdata['username'] = $rs[$email]["uar"]->username;
-                        $insertID = Hocvien::insertGetId($newdata);
+                        $newdata['auth'] = 'manual';
+                        $newdata['confirmed'] = 1;
+                        $newdata['timecreated'] = time();
+                        $newdata['timemodified'] = time();
+
+                        $insertID = DB::table('person')->insertGetId($newdata);
+
                         $rs[$email]["uar"]->id  = $insertID;
                     }
                     if($rs[$email]["uar"]->id != 0) {
