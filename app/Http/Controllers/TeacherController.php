@@ -20,7 +20,7 @@ class TeacherController extends Controller
             foreach ($objects as $item){
                 $ids[] = $item->userid;
             }
-            $teachers = DB::table('user')
+            $teachers = DB::table('person')
                 ->whereIn('id', $ids)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();
@@ -30,7 +30,7 @@ class TeacherController extends Controller
 
     public function edit(Request $request){
         $teacherId = intval($request->id);
-        $teacher = DB::table('user')->where('id', $teacherId)->first();
+        $teacher = DB::table('person')->where('id', $teacherId)->first();
         return view('teacher.edit', ['teacher'=>$teacher]);
     }
 
@@ -51,7 +51,7 @@ class TeacherController extends Controller
                 ->withInput();
         }
 
-        $result = DB::table('user')
+        $result = DB::table('person')
             ->where('id', $id)
             ->update([
                 'username'=>$request->input('username'),
@@ -93,7 +93,7 @@ class TeacherController extends Controller
             foreach ($userObjs as $item){
                 $userIds[] = $item->userid;
             }
-            $users = DB::table('user')
+            $users = DB::table('person')
                 ->whereIn('id', $userIds)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();

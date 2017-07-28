@@ -15,10 +15,19 @@
             }
         }
     </script>
+
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('course',$parentcat,$category) !!}
+    </div>
+
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
-    <div class="page-title">Danh sách Khóa đào tạo {{$category == ''?'':': '. $category}}</div>
+    <div class="page-title">Danh sách Khóa đào tạo
+        @if($category)
+            {{$category->name}}
+        @endif
+    </div>
     @if(\App\Roles::checkRole('course-createCourse'))
         <a class="btn btn-primary btn-add" href="{{route('course-createCourse')}}">Thêm mới</a>
     @endif
@@ -41,9 +50,6 @@
             <th style="width: 60px">Thời gian<br><input type="text"></th>
             <th>Tổng quan<br><input type="text"></th>
             <th style="width: 60px">File</th>
-            @if(\App\Roles::checkRole('course-classes'))
-                <th class="action"></th>
-            @endif
             @if(\App\Roles::checkRole('course-result'))
                 <th class="action"></th>
             @endif
@@ -59,7 +65,16 @@
         @foreach ($course as $idx => $row)
             <tr>
                 <td> {{$idx + 1}} </td>
-                <td><strong> {{$row->fullname}} </strong></td>
+                <td>
+                @if(\App\Roles::checkRole('course-classes'))
+                        <a href="{{route('course-classes', ['c' => $row->id])}}">
+                            <strong> {{$row->fullname}} </strong>
+                        </a>
+                @else
+                        <strong> {{$row->fullname}} </strong>
+                @endif
+
+                </td>
                 <td>{{isset($row->category, $categories)?$categories[$row->category]->name:''}}</td>
                 <td>{{$row->doi_tuong}}</td>
                 <td>{{$row->thoi_gian}}</td>
@@ -67,13 +82,6 @@
                 <td> @if($row->overviewfile != '')
                         <a href="{{$_ENV['ALIAS']}}/uploads/docs/{{$row->overviewfile}}" download>Tải về</a>
                     @endif </td>
-                @if(\App\Roles::checkRole('course-classes'))
-                    <td>
-                        <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
-                            DS Lớp học
-                        </a>
-                    </td>
-                @endif
                 @if(\App\Roles::checkRole('course-result'))
                     <td>
                         <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-primary">

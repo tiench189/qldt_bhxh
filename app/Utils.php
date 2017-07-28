@@ -62,6 +62,11 @@ class Utils extends Model
         return $sessID;
     }
 
+    public static function getCoinStatus($url)
+    {
+
+    }
+
     public static function writeReport($data)
     {
         $xeploai = DB::table('xeploai')->get();

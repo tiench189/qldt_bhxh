@@ -5,7 +5,10 @@
 @stop
 
 @section('content')
-    <div class="page-title">Danh sách học viên</div>
+
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('hocvien') !!}
+    </div>
 
     {!! Form::open(array('route' => 'hocvien-remove', 'class' => 'form', 'id' => 'frmstudentremove')) !!}
     {{ Form::hidden('uid', 0, array('id' => 'studentid')) }}
