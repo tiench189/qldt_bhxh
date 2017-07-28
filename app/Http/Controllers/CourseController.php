@@ -377,9 +377,9 @@ class CourseController extends Controller
 
                     }
 
-                    $userimport[$user_email]["avg"] = 0;
-                    $userimport[$user_email]["rnk"] = 0;
-                    $userimport[$user_email]["stt"] = 0;
+                    $userimport[$user_email]["avg"] = $user_diemtb;
+                    $userimport[$user_email]["rnk"] = $user_xeploai;
+                    $userimport[$user_email]["stt"] = $user_trangthai;
                     $userimport[$user_email]["cli"] = $cid;
                     $userimport[$user_email]["cln"] = $dataClass->ten_lop;
                     $userimport[$user_email]["cou"] = $id;
@@ -387,6 +387,7 @@ class CourseController extends Controller
 
                 }
             }
+
             $request->session()->put('rsimport', $userimport);
 
             return view('course.import', ['rs' => $userimport, 'class' => $dataClass, 'course' => $dataCourse, 'xeploai' => $ddlxeploai, 'importtype' => $importtype]);
