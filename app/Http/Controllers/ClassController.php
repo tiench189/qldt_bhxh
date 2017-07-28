@@ -100,7 +100,7 @@ class ClassController extends Controller
             foreach ($objects as $object){
                 $userIds[] = $object->user_id;
             }
-            $users = DB::table('user')
+            $users = DB::table('person')
                 ->whereIn('id', $userIds)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();

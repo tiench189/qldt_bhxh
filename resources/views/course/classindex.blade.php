@@ -22,7 +22,11 @@
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
 
-    <div class="page-title">Danh sách lớp <strong>{{ $course->fullname }}</strong></div>
+
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('course-class',$category,$course,$class) !!}
+    </div>
+
     @if(\App\Roles::checkRole('class-edit'))
         <a class="btn btn-primary btn-add" href="{{route('class-edit', ['cid' => $course->id])}}" style="margin-bottom: 10px">Thêm
             mới</a>
@@ -35,10 +39,6 @@
             <th>Thời Gian Bắt đầu<br><input type="text"></th>
             <th>Thời Gian Kết Thúc<br><input type="text"></th>
             <th>Số lượng học viên<br><input type="text"></th>
-            {{--<th></th>--}}
-            @if(\App\Roles::checkRole('course-result'))
-                <th></th>
-            @endif
             @if(\App\Roles::checkRole('class-edit'))
                 <th></th>
             @endif
@@ -51,7 +51,15 @@
         @foreach ($class as $idx => $row)
             <tr>
                 <td> {{$idx + 1}}</td>
-                <td> {{$row->ten_lop}} </td>
+                <td>
+                    @if(\App\Roles::checkRole('course-result'))
+                        <a href="{{route('course-result', ['class' => $row->id])}}">
+                            {{$row->ten_lop}}
+                        </a>
+                    @else
+                        {{$row->ten_lop}}
+                    @endif
+                </td>
                 <td> {{\App\Utils::toTimeFormat($row->time_start)}} </td>
                 <td> {{\App\Utils::toTimeFormat($row->time_end)}} </td>
                 <td>
@@ -67,13 +75,6 @@
                 {{--DS Giáo Viên--}}
                 {{--</a>--}}
                 {{--</td>--}}
-                @if(\App\Roles::checkRole('course-result'))
-                    <td>
-                        <a href="{{route('course-result', ['class' => $row->id])}}" class="btn btn-xs btn-primary">
-                            DS Học Viên
-                        </a>
-                    </td>
-                @endif
                 @if(\App\Roles::checkRole('class-edit'))
                     <td>
                         <a href="{{route('class-edit', ['cid' => $course->id, 'id' => $row->id])}}"

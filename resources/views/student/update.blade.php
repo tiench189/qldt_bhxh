@@ -5,17 +5,29 @@
 @stop
 
 @section('content')
-    <div class="page-title">Cập nhật thông tin học viên<br><strong>{{$user->firstname}} {{$user->lastname}}
-            ({{$user->email}})</strong></div>
+
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('hocvien',"Cập nhật thông tin học viên",$user) !!}
+    </div>
+
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
     {!! Form::open(array('route' => 'hocvien-update', 'class' => 'form')) !!}
     <input type="hidden" name="uid" value="{{$user->id}}">
+
+    <div class="form-group form-inline">
+        <label>Email <span class="required">(*)</span> :</label>
+        <strong>{{$user->email}}</strong>
+    </div>
+
+
     <div class="form-group form-inline">
         <label>Họ tên <span class="required">(*)</span> :</label>
         <input type="text" name="name" class="form-control" required value="{{$user->firstname}}">
     </div>
+
+
     <div class="form-group form-inline">
         <label>Đơn vị <span class="required">(*)</span> :</label>
         <select name="donvi" class="form-control js-example-basic-single" required>

@@ -53,6 +53,7 @@
         </tr>
         </thead>
         <tbody>
+
         @foreach ($rs as $idx => $row)
 
         @if ($row["chk"] == -1)
@@ -86,7 +87,13 @@
                     @endif
                 </td>
                 <td>
-                    <span class="label label-success"> Học viên mới </span>
+
+                    @if ($row["ins"] == true)
+                        <span class="label label-info"> [+] Thêm mới </span>
+                    @else
+                        <span class="label label-success"> Chưa Đăng ký </span>
+                    @endif
+
                     @if ($row["chkcat"]["code"] == 1)
                         <span class="label label-warning"> Đã học nội dung đào tạo này.</span>
                     @endif

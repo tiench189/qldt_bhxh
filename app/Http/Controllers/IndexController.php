@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class IndexController extends Controller
 {
     public function index(Request $request){
-        $user = DB::table('user')->get();
+        $user = DB::table('person')->get();
         return view('index');
     }
 }
