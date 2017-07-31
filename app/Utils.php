@@ -62,6 +62,11 @@ class Utils extends Model
         return $sessID;
     }
 
+    public static function getCoinStatus($url)
+    {
+
+    }
+
     public static function writeReport($data)
     {
         $xeploai = DB::table('xeploai')->get();
@@ -92,7 +97,8 @@ class Utils extends Model
                 $excelobj->getActiveSheet()->setCellValue('B' . $crow, $course['fullname']);
                 $excelobj->getActiveSheet()->setCellValue('C' . $crow, $course['doi_tuong']);
                 $excelobj->getActiveSheet()->setCellValue('D' . $crow, $course['so_lop']);
-                $excelobj->getActiveSheet()->setCellValue('E' . $crow, $course['thoi_gian']);
+                $excelobj->getActiveSheet()->setCellValue('E' . $crow, $course['so_hv']);
+                $excelobj->getActiveSheet()->setCellValue('F' . $crow, $course['thoi_gian']);
                 foreach ($xeploai as $idxXL => $xl) {
                     if (array_key_exists($xl->id, $course)) {
                         $excelobj->getActiveSheet()->setCellValue($mapcol[$idxXL] . $crow, round($course[$xl->id] * 100 / $course['so_hv']) . '%');

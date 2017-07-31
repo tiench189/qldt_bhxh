@@ -18,7 +18,11 @@ class CasAuth
      */
     public function handle($request, Closure $next)
     {
-/*        $sessID = $request->session()->get('st');
+        $env = Config::get('app.env');
+        if ($env == 'local') {
+            return $next($request);
+        }
+        $sessID = $request->session()->get('st');
         $isAuth = MySession::isAuthen($sessID);
         if (!($isAuth == Config::get('ctx.is_login'))) {
             $request->session()->put('next_request', $request->url());
@@ -27,7 +31,7 @@ class CasAuth
             } else {
                 return redirect('/cas');
             }
-        }*/
+        }
         return $next($request);
     }
 }
