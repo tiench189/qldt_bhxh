@@ -2,12 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 
-class User extends Model
+class User extends Authenticatable
 {
     use Notifiable;
 
@@ -29,7 +29,7 @@ class User extends Model
         'password', 'remember_token',
     ];
 
-    protected $table = 'user';
+    protected $table = 'users';
 
     public function getDonvi()
     {
