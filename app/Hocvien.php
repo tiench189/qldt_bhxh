@@ -97,7 +97,6 @@ class Hocvien extends Model
 
         $result = DB::table('person')->insertGetId($data);
 
-        dd($result);
         return $result;
     }
 

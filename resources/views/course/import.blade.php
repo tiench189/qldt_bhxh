@@ -56,14 +56,22 @@
 
         @foreach ($rs as $idx => $row)
 
-        @if ($row["chk"] == -1)
+        @if ($row["chk"] < 0)
             <tr class="warning">
                 <td> {{ Form::checkbox('chkallow[]', $row["uar"], false, array("disabled")) }}  </td>
                 <td colspan="4">
                     <s>{{$row["uar"]}}</s>
                 </td>
                 <td>{{$row["cln"]}}</td>
-                <td colspan="4"> <span class="label label-danger"> Username/email không tồn tại! </span></td>
+                <td colspan="4">
+                    @if ($row["chk"] == -1)
+                        <span class="label label-danger"> Thông tin Học viên không hợp lệ </span>
+                    @else
+                        <span class="label label-danger"> Thông tin Học viên không đầy đủ </span>
+                    @endif
+
+
+                </td>
             </tr>
         @elseif ($row["chk"] == 0)
             <tr>
