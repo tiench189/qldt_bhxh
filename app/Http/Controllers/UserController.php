@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
     public function index(Request $request){
-        $users = DB::table('user')
-            ->leftJoin('donvi', 'donvi.id', '=', 'user.donvi')
+        $users = DB::table('users')
             ->leftJoin('group_permission', 'group_permission.id', '=', 'user.group_permission')
-            ->where('user.auth', '=', 'cas')
-            ->select('user.id', 'user.email', 'user.firstname', 'user.lastname', 'donvi.ten_donvi as ten_donvi', 'group_permission.name as group_name')
+//            ->where('user.auth', '=', 'cas')
+            ->select('user.id', 'user.email', 'user.firstname', 'user.lastname', 'group_permission.name as group_name')
             ->get();
         $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
 //        return response()->json($users);
@@ -23,14 +22,14 @@ class UserController extends Controller
     public function update(Request $request){
         $uid = intval($request->uid);
         if($request->isMethod('get')){
-            $user = DB::table('user')
+            $user = DB::table('users')
                 ->where('id', $uid)
                 ->first();
             $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
             return view('users.update', ['user' => $user, 'groups' => $groups]);
         }
         $group_permission = $request->group_permission;
-        DB::table('user')->where('id', $uid)->update(['group_permission' => $group_permission]);
+        DB::table('users')->where('id', $uid)->update(['group_permission' => $group_permission]);
         $request->session()->flash('message', 'Cập nhật quyền thành công');
         return redirect(route('user-index'));
 

@@ -10,17 +10,18 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 
-Route::get('/cas', 'CasController@login')->name('login');
-Route::get('/logout', 'CasController@logout')->name('logout');
-Route::post('/caslogout', 'CasController@caslogout');
+//Route::get('/cas', 'CasController@login')->name('login');
+//Route::get('/logout', 'CasController@logout')->name('logout');
+//Route::post('/caslogout', 'CasController@caslogout');
 
 Route::get('/errpermission', function () {
     return view('errpermission');
 });
 
-Route::group(['middleware' => 'cas_auth'], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'course'], function () {
         Route::get('getContents', 'CourseController@getContents')->name('course-getContents');
         Route::post('checkStudentCategory', 'CourseController@checkStudentCategory')->name('course-checkStudentCategory');
@@ -112,3 +113,7 @@ Route::group(['middleware' => 'cas_auth'], function () {
         });
     });
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
