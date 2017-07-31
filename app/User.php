@@ -38,7 +38,7 @@ class User extends Model
 
     public static function getUser($email)
     {
-        return DB::table('user')
+        return DB::table('users')
             ->where('email', '=', $email)
             ->first();
     }
@@ -52,7 +52,7 @@ class User extends Model
             $donvi = $dvbh->id;
         } else $donvi = 0;
 
-        $result = DB::table('user')
+        $result = DB::table('users')
             ->insert([
                 'auth' => $auth,
                 'confirmed' => 1,
@@ -77,14 +77,14 @@ class User extends Model
         $data['confirmed'] = 1;
         $data['timecreated'] = time();
         $data['timemodified'] = time();
-        $result = DB::table('user')->insert($data);
+        $result = DB::table('users')->insert($data);
         if ($result) return ['result' => true, 'mess' => 'Success'];
         return ['result' => false, 'mess' => $result];
     }
 
     public static function checkEmailExist($email)
     {
-        $user = DB::table('user')->where('email', '=', $email)->get();
+        $user = DB::table('users')->where('email', '=', $email)->get();
         return (count($user) > 0);
     }
 
