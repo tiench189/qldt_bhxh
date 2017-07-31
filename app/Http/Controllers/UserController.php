@@ -11,7 +11,6 @@ class UserController extends Controller
     public function index(Request $request){
         $users = DB::table('users')
             ->leftJoin('group_permission', 'group_permission.id', '=', 'user.group_permission')
-//            ->where('user.auth', '=', 'cas')
             ->select('user.id', 'user.email', 'user.firstname', 'user.lastname', 'group_permission.name as group_name')
             ->get();
         $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
