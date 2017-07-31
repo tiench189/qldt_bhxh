@@ -38,7 +38,7 @@
                 <td>{{$user->chucdanh}}</td>
             </tr>
             <tr>
-                <td>Chức vụ</td>
+                <td>Vị trí công tác</td>
                 <td>{{$user->chucvu}}</td>
             </tr>
             <tr>

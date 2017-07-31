@@ -31,7 +31,7 @@ class CasAuth
             } else {
                 return redirect('/cas');
             }
-        }*/
+        }
         return $next($request);
     }
 }
