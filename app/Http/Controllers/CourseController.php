@@ -242,7 +242,7 @@ class CourseController extends Controller
 
     public function checkStudentCategory(Request $request)
     {
-        dd($request);
+//        dd($request);
         $student_id = isset($request->s) ? intval($request->s) : 0;
         $course_id = isset($request->c) ? intval($request->c) : 0;
 
