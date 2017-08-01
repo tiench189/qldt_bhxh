@@ -17,7 +17,8 @@
         @endforeach
     @endif
 
-    {!! Form::open(array('route' => 'category-create', 'class' => 'form', 'files'=>'true')) !!}
+    {!! Form::open(array('route' => 'category-update', 'class' => 'form', 'files'=>'true')) !!}
+    {{ Form::hidden('id', $category->id, array('id' => 'catid')) }}
     <div class="form-group">
         <label>Tên nội dung: <span class="required">(*)</span></label>
         {!! Form::text('name', $category->name,

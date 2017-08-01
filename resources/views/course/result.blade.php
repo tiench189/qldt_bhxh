@@ -43,7 +43,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://duy.qldt.vn/course/checkStudentCategory',
+                    url: '{{ ENV("ALIAS") }}/course/checkStudentCategory',
                     data: { "_token": "{{ csrf_token() }}",c: course_id, s: student_id },
                     success: function (data) {
 
@@ -267,7 +267,7 @@
                     <td>
                         <a href="javascript:void(0)"
                            onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$course->id}})"
-                           class="btn btn-xs btn-primary">Xóa</a>
+                           class="btn btn-xs btn-danger">Xóa</a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('class-capnhathocvien'))

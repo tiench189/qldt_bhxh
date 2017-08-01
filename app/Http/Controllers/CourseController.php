@@ -242,9 +242,12 @@ class CourseController extends Controller
 
     public function checkStudentCategory(Request $request)
     {
+        dd($request);
         $student_id = isset($request->s) ? intval($request->s) : 0;
         $course_id = isset($request->c) ? intval($request->c) : 0;
+
         $allResult = $this->studentcat($student_id, $course_id);
+
         return response()->json($allResult);
     }
 
@@ -483,15 +486,15 @@ class CourseController extends Controller
         // Nếu học viên đã học trong lớp này rồi thì từ chối
         if ($check == 0) {
             //enrol quyền học viên
-            $params = array(
+/*            $params = array(
                 "enrolments[0][userid]" => $sid,
                 "enrolments[0][courseid]" => $id,
                 "enrolments[0][roleid]" => 5,
             );
             $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_enrol_users", $params);
-            $rs = json_decode($rs);
+            $rs = json_decode($rs);*/
 
-            if (!isset($rs->errorcode)) {
+//            if (!isset($rs->errorcode)) {
                 // them hoc vien vao lop
                 $result = DB::table('lop_hocvien')
                     ->insert([
@@ -512,9 +515,9 @@ class CourseController extends Controller
             }
 
 
-        } else {
+/*        } else {
             $request->session()->flash('message', "Học viên đã tồn tại trong lớp này.");
-        }
+        }*/
 
 
         return back()->withInput();;
@@ -650,7 +653,7 @@ class CourseController extends Controller
         $sid = $request->input('sid');
         $cid = $request->input('cid');
 
-        $params = array(
+/*        $params = array(
             "enrolments[0][userid]" => $sid,
             "enrolments[0][courseid]" => $courseid,
             "enrolments[0][roleid]" => 5,
@@ -658,7 +661,7 @@ class CourseController extends Controller
         $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_unenrol_users", $params);
         $rs = json_decode($rs);
 
-        if (is_null($rs)) {
+        if (is_null($rs)) {*/
             $result = DB::table('lop_hocvien')
                 ->where('lop_id', $cid)
                 ->where('user_id', $sid)
@@ -666,9 +669,9 @@ class CourseController extends Controller
 
             if ($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
             else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
-        } else {
+/*        } else {
             $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
-        }
+        }*/
 
         return back()->withInput();
     }
@@ -690,12 +693,11 @@ class CourseController extends Controller
             DB::table('lop')->whereIn('id', $classIds)->delete();
         }
 
-        // Xoa course
-        $params = array('courseids[0]' => $cid);
-        $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_delete_courses", $params);
-        $result = json_decode($rs);
+        $result = DB::table('course')
+            ->where('id', $cid)
+            ->delete();
 
-        if (!is_null($result) && empty($result->warnings)) {
+        if (!$result) {
             $request->session()->flash('message', "Xóa thành công khóa đào tạo");
         } else {
             $request->session()->flash('message', "Không thể xóa khóa đào tạo");
@@ -728,22 +730,22 @@ class CourseController extends Controller
             $summary = (isset($request->summary)) ? $request->summary : "";
             $doituong = (isset($request->doi_tuong)) ? $request->doi_tuong : "";
             $thoigian = (isset($request->thoi_gian)) ? $request->thoi_gian : "";
-            $params = array(
-                "courses[0][fullname]" => $fullname,
-                "courses[0][shortname]" => $shortname,
-                "courses[0][categoryid]" => $categoryid,
-                "courses[0][summary]" => $summary,
-                "courses[0][format]" => "topics",
-            );
 
-            $rs = MoodleRest::call(MoodleRest::METHOD_POST, "core_course_create_courses", $params);
-            $result = json_decode($rs);
+            $result = DB::table('course')
+                ->insertGetId([
+                    'fullname' => $fullname,
+                    'shortname' => $shortname,
+                    'category' => $categoryid,
+                    'summary' => $summary,
+                    'format' => "topics",
+                ]);
 
-            if (is_null($result) || isset($result->errorcode)) {
-                $request->session()->flash('message', "Có lỗi : " . $result->message);
+
+            if (!$result) {
+                $request->session()->flash('message', "Có lỗi xảy ra: Không thể thêm khóa học");
                 return view('course.create', ['cate' => $cate]);
             } else {
-                $id = intval($result[0]->id);
+                $id = intval($result);
                 if (isset($file)) {
                     $destinationPath = 'uploads/docs';
                     $file->move($destinationPath, $file_attach);

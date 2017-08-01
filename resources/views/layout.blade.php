@@ -126,6 +126,7 @@
 
                     @endif
                     {{--<li><a href="#">Phiếu khảo sát</a></li>--}}
+
                 </ul>
                 <form class="navbar-form navbar-left hidden" role="search">
                     <div class="form-group">
@@ -133,7 +134,7 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
+{{--                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
                     <ul class="nav navbar-nav my-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -144,7 +145,32 @@
                             </ul>
                         </li>
                     </ul>
-                @endif
+                @endif--}}
+
+                <ul class="nav navbar-nav my-nav navbar-right">
+                        @if (Auth::guest())
+                            <li><a href="{{ route('login') }}">Đăng nhập</a></li>
+                        @else
+                            <li class="dropdown">
+                                <a class="dropdown-toggle top-menu" data-toggle="dropdown"
+                                   href="#">{{\Illuminate\Support\Facades\Auth::user()->username}}
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+{{--
+                                    <li><a href="{{ route('user-changepass') }}" style="color: black !important;">Sửa mật khẩu</a></li>
+--}}
+                                    <li><a href="{{ route('logout') }}"
+                                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();"
+                                           style="color: black !important;">Đăng xuất</a></li>
+
+                                </ul>
+                            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        @endif
+                    </ul>
             </div>
         </div>
     </nav>
