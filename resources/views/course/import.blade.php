@@ -7,6 +7,32 @@
 @section('content')
     <script language="JavaScript" type="text/javascript">
         $(document).ready(function () {
+
+                $("#checkedAll").change(function(){
+                    if(this.checked){
+                        $(".checkSingle").each(function(){
+                            this.checked=true;
+                        })
+                    }else{
+                        $(".checkSingle").each(function(){
+                            this.checked=false;
+                        })
+                    }
+                });
+
+                $(".checkSingle").click(function () {
+                    if ($(this).is(":checked")){
+                        var isAllChecked = 0;
+                        $(".checkSingle").each(function(){
+                            if(!this.checked)
+                                isAllChecked = 1;
+                        })
+                        if(isAllChecked == 0){ $("#checkedAll").prop("checked", true); }
+                    }else {
+                        $("#checkedAll").prop("checked", false);
+                    }
+                });
+
             $('#tableimport tr').click(function (event) {
                 if (event.target.type !== 'checkbox') {
                     $(':checkbox', this).trigger('click');
@@ -40,7 +66,7 @@
     <table id="tableimport" class="table table-bordered table-hover">
         <thead>
         <tr>
-            <th class="chk" data-checkbox="true" style="min-width: 30px">Chọn</th>
+            <th class="chk" data-checkbox="true" style="min-width: 30px"><input type="checkbox" checked="checked" id="checkedAll" /></th>
             <th style="min-width: 150px">Username</th>
             <th style="min-width: 150px">Email</th>
             <th>Firstname</th>
@@ -75,7 +101,7 @@
             </tr>
         @elseif ($row["chk"] == 0)
             <tr>
-                <td> {{ Form::checkbox('chkallow[]', $row["uar"]->email, array("checked")) }}  </td>
+                <td> {{ Form::checkbox('chkallow[]', $row["uar"]->email, array("checked"), ['class'=>"checkSingle"]) }}  </td>
                 <td><strong> {{$row["uar"]->username}} </strong></td>
                 <td><strong> {{$row["uar"]->email}} </strong></td>
                 <td> {{$row["uar"]->firstname}} </td>
