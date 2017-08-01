@@ -42,7 +42,7 @@
                         <a class="btn btn-xs btn-primary" href="{{route('role-assign', ['gid' => $row->id])}}">Cập nhật</a>
                     @endif
                     @if(\App\Roles::checkRole('role-delete'))
-                        <a class="btn btn-xs btn-primary" href="javascript:removeRole({{$row->id}})">Xóa</a>
+                        <a class="btn btn-xs btn-danger" href="javascript:removeRole({{$row->id}})">Xóa</a>
                     @endif
                 </td>
             </tr>

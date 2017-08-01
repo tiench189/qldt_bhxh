@@ -98,7 +98,7 @@
                 @endif
                 @if(\App\Roles::checkRole('course-remove'))
                     <td>
-                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-primary">
+                        <a href="javascript:removeCourse({{$row->id}})" class="btn btn-xs btn-danger">
                             Xóa
                         </a>
                     </td>

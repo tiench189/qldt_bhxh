@@ -87,7 +87,7 @@
                     <td>
                         <a href="javascript:void(0)"
                            onclick="xoalophoc({{$row->id}}, {{$row->course_id}})"
-                           class="btn btn-xs btn-primary">Xóa</a>
+                           class="btn btn-xs btn-danger">Xóa</a>
                     </td>
                 @endif
             </tr>
