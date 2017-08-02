@@ -15,7 +15,6 @@
             <th class="stt">#</th>
             <th>Email<br><input type="text"></th>
             <th>Họ tên<br><input type="text"></th>
-            <th>Đơn vị<br><input type="text"></th>
             <th>Nhóm quyền<br>
                 <select>
                     <option></option>
@@ -36,7 +35,6 @@
                 <td>{{$idx + 1}}</td>
                 <td>{{$row->email}}</td>
                 <td>{{$row->firstname}} {{$row->lastname}}</td>
-                <td>{{$row->ten_donvi}}</td>
                 <td>{{$row->group_name}}</td>
                 @if(\App\Roles::checkRole('user-update-role'))
                     <td>
