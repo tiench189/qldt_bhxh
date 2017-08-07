@@ -142,66 +142,21 @@ class TeacherController extends Controller
         }
     }
 
-
-    public function danhsach(Request $request)
+    public function remove(Request $request)
     {
-        define('CONTEXT_COURSE', 50);
+        $uid = intval($request->uid);
+        try {
+            DB::beginTransaction();
 
-        $courseId = $request->input('courseId');
+            Person::where('id', $uid)->delete();
+            GiangVien::where('user_id', $uid)->delete();
 
-        $enrols = DB::table('enrol')->where('courseid', '=', $courseId)->get();
-
-        foreach ($enrols as $item) {
-            $enrolIds[] = $item->id;
+            DB::commit();
+            $request->session()->flash('message', 'Xóa giảng viên thành công');
+            return redirect(route('teacher-index'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            die($e->getMessage());
         }
-
-        $userObjs = DB::table('user_enrolments')
-            ->whereIn('enrolid', $enrolIds)
-            ->select('userid')
-            ->get();
-        $users = array();
-        if (!empty($userObjs)) {
-            foreach ($userObjs as $item) {
-                $userIds[] = $item->userid;
-            }
-            $users = DB::table('person')
-                ->whereIn('id', $userIds)
-                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
-                ->get();
-        }
-        $instances = DB::table('context')
-            ->where('contextlevel', '=', CONTEXT_COURSE)
-            ->where('instanceid', '=', $courseId)
-            ->select('id')
-            ->get();
-
-
-        if (!empty($instances)) {
-            foreach ($instances as $instance) {
-                $instanceIds[] = $instance->id;
-            }
-        }
-
-        $roles = DB::table('role_assignments')
-            ->whereIn('contextid', $instanceIds)
-            ->select('id', 'userid', 'roleid')
-            ->get();
-
-        $teacherIds = array();
-        foreach ($roles as $item) {
-            if ($item->roleid == 3 || $item->roleid == 4) { // editingteacher or teacher
-                $teacherIds[] = $item->userid;
-            }
-        }
-
-        $teachers = array();
-        foreach ($users as $user) {
-            if (in_array($user->id, $teacherIds)) {
-                $teachers[] = $user;
-            }
-        }
-
-        return view('teacher.danhsach', ['teachers' => $teachers]);
     }
-
 }
