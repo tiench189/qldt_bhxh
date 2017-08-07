@@ -72,6 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'teacher'], function () {
             Route::get('/', 'TeacherController@index')->name('teacher-index');
+            Route::get('/add', 'TeacherController@add')->name('teacher-add');
+            Route::post('/add', 'TeacherController@add')->name('teacher-add');
             Route::get('danhsach', 'TeacherController@danhsach')->name('teacher-danhsach');
             Route::get('/update', 'TeacherController@edit')->name('teacher-update');
             Route::post('/update', 'TeacherController@update')->name('teacher-update');

@@ -7,36 +7,91 @@
  */
 
 namespace App\Http\Controllers;
+
+use App\GiangVien;
+use App\Person;
+use App\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
 class TeacherController extends Controller
 {
-    public function index(Request $request){
-        $teachers = array();
-        $objects = DB::table('role_assignments')->where('roleid', '=', 4)->select('userid')->get();
-        if(!empty($objects)){
-            foreach ($objects as $item){
-                $ids[] = $item->userid;
-            }
-            $teachers = DB::table('person')
-                ->whereIn('id', $ids)
-                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
-                ->get();
-        }
-        return view('teacher.index',['teachers' => $teachers]);
+    public function index(Request $request)
+    {
+        $query = [
+            'type' => 'teacher'
+        ];
+
+        $teachers = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu')
+            ->where($query)->get();
+
+        return view('teacher.index', ['teachers' => $teachers]);
     }
 
-    public function edit(Request $request){
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function add(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            $donvi = DB::table('donvi')->orderBy('id')->get();
+            $data = [
+                'donvi' => $donvi
+            ];
+            return view('teacher.add', $data);
+        }
+
+        if ($request->isMethod('post')) {
+            DB::beginTransaction();
+
+            try {
+                $data = array();
+                $data['firstname'] = $request->name;
+                $data['lastname'] = '';
+                $data['type'] = 'teacher';
+                $data['email'] = $request->email;
+                $data['donvi'] = $request->donvi;
+                if (isset($request->birthday))
+                    $data['birthday'] = Utils::str2Date($request->birthday);
+                if (isset($request->sex))
+                    $data['sex'] = $request->sex;
+                if (isset($request->chucdanh))
+                    $data['chucdanh'] = $request->chucdanh;
+                if (isset($request->chucvu))
+                    $data['chucvu'] = $request->chucvu;
+                $teacher_id = Person::insertLastID($data);
+
+                if ($teacher_id && isset($request->hocham) && isset($request->chuyennganh)) {
+                    $giang_vien = new GiangVien();
+                    $giang_vien->user_id = $teacher_id;
+                    $giang_vien->hoc_ham = $request->hocham;
+                    $giang_vien->chuyen_nganh = $request->chuyennganh;
+                    $giang_vien->save();
+                }
+
+                DB::commit();
+                $request->session()->flash('message', 'Thêm thông tin Giảng viên thành công');
+                return redirect(route('teacher-index'));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $request->session()->flash('message', 'Thêm thông tin Giảng viên thất bại: ' . $e->getMessage());
+                return redirect(route('teacher-add'));
+            }
+        }
+    }
+
+    public function edit(Request $request)
+    {
         $teacherId = intval($request->id);
         $teacher = DB::table('person')->where('id', $teacherId)->first();
-        return view('teacher.edit', ['teacher'=>$teacher]);
+        return view('teacher.edit', ['teacher' => $teacher]);
     }
 
     public function update(Request $request)
     {
-        $id = intval( $request->input('id') );
+        $id = intval($request->input('id'));
         $messages = [
             'username.required' => 'Yêu cầu nhập tên giáo viên',
             'username.unique' => 'Tên đăng nhập đã tồn tại.',
@@ -46,7 +101,7 @@ class TeacherController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-            return redirect()->action('TeacherController@update',["id"=>$id])
+            return redirect()->action('TeacherController@update', ["id" => $id])
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -54,13 +109,13 @@ class TeacherController extends Controller
         $result = DB::table('person')
             ->where('id', $id)
             ->update([
-                'username'=>$request->input('username'),
-                'firstname'=>$request->input('firstname'),
-                'lastname'=>$request->input('lastname'),
-                'description'=>$request->input('description'),
-                'timemodified'=>time(),
+                'username' => $request->input('username'),
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'description' => $request->input('description'),
+                'timemodified' => time(),
             ]);
-        if($result) {
+        if ($result) {
             $request->session()->flash('message', "Cập nhật thành công.");
         } else {
             $request->session()->flash('message', "Cập nhật không thành công.");
@@ -72,15 +127,15 @@ class TeacherController extends Controller
     }
 
 
-
-    public function danhsach(Request $request){
+    public function danhsach(Request $request)
+    {
         define('CONTEXT_COURSE', 50);
 
         $courseId = $request->input('courseId');
 
         $enrols = DB::table('enrol')->where('courseid', '=', $courseId)->get();
 
-        foreach ($enrols as $item){
+        foreach ($enrols as $item) {
             $enrolIds[] = $item->id;
         }
 
@@ -89,8 +144,8 @@ class TeacherController extends Controller
             ->select('userid')
             ->get();
         $users = array();
-        if(!empty($userObjs)){
-            foreach ($userObjs as $item){
+        if (!empty($userObjs)) {
+            foreach ($userObjs as $item) {
                 $userIds[] = $item->userid;
             }
             $users = DB::table('person')
@@ -105,7 +160,7 @@ class TeacherController extends Controller
             ->get();
 
 
-        if(!empty($instances)){
+        if (!empty($instances)) {
             foreach ($instances as $instance) {
                 $instanceIds[] = $instance->id;
             }
@@ -117,20 +172,20 @@ class TeacherController extends Controller
             ->get();
 
         $teacherIds = array();
-        foreach ($roles as $item){
-            if($item->roleid == 3 || $item->roleid == 4){ // editingteacher or teacher
+        foreach ($roles as $item) {
+            if ($item->roleid == 3 || $item->roleid == 4) { // editingteacher or teacher
                 $teacherIds[] = $item->userid;
             }
         }
 
         $teachers = array();
-        foreach ($users as $user){
-            if(in_array($user->id, $teacherIds)){
+        foreach ($users as $user) {
+            if (in_array($user->id, $teacherIds)) {
                 $teachers[] = $user;
             }
         }
 
-        return view('teacher.danhsach',['teachers' => $teachers]);
+        return view('teacher.danhsach', ['teachers' => $teachers]);
     }
 
 }

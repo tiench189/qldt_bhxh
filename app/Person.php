@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 
-class Hocvien extends Model
+class Person extends Model
 {
     use Notifiable;
 
@@ -17,7 +17,8 @@ class Hocvien extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'donvi'
+        'firstname', 'lastname', 'type', 'email', 'donvi', 'sex', 'chucvu',
+        'chucdanh', 'auth', 'username', 'confirmed', 'timecreated', 'timemodified'
     ];
 
     /**
@@ -31,9 +32,16 @@ class Hocvien extends Model
 
     protected $table = 'person';
 
+    public $timestamps = false;
+
     public function getDonvi()
     {
         return $this->belongsTo('App\Donvi', 'donvi');
+    }
+
+    public function getGiangVien()
+    {
+        return $this->hasOne('App\GiangVien', 'user_id');
     }
 
     public static function getUser($email)
@@ -95,9 +103,11 @@ class Hocvien extends Model
         $data['timecreated'] = time();
         $data['timemodified'] = time();
 
-        $result = DB::table('person')->insertGetId($data);
+//        echo json_encode($data);die;
 
-        return $result;
+        $person = Person::create($data);
+
+        return $person->id;
     }
 
     public static function checkEmailExist($email)

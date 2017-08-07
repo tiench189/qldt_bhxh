@@ -101,6 +101,7 @@ class ClassController extends Controller
                 $userIds[] = $object->user_id;
             }
             $users = DB::table('person')
+                ->where('type', 'student')
                 ->whereIn('id', $userIds)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();

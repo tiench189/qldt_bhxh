@@ -86,7 +86,9 @@
                             </ul>
                         </li>
                     @endif
-                    {{--<li><a href="{{route('teacher-index')}}">Giảng viên</a></li>--}}
+                    @if(\App\Roles::checkRole('teacher-index'))
+                        <li><a href="{{route('teacher-index')}}">Giảng viên</a></li>
+                    @endif
                     @if(\App\Roles::checkRole('hocvien-index'))
                         <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
                     @endif
@@ -134,43 +136,43 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-{{--                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
-                    <ul class="nav navbar-nav my-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
-                                <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                @endif--}}
+                {{--                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
+                                    <ul class="nav navbar-nav my-nav navbar-right">
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
+                                                <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif--}}
 
                 <ul class="nav navbar-nav my-nav navbar-right">
-                        @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">Đăng nhập</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a class="dropdown-toggle top-menu" data-toggle="dropdown"
-                                   href="#">{{\Illuminate\Support\Facades\Auth::user()->username}}
-                                    <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-{{--
-                                    <li><a href="{{ route('user-changepass') }}" style="color: black !important;">Sửa mật khẩu</a></li>
---}}
-                                    <li><a href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
+                    @if (Auth::guest())
+                        <li><a href="{{ route('login') }}">Đăng nhập</a></li>
+                    @else
+                        <li class="dropdown">
+                            <a class="dropdown-toggle top-menu" data-toggle="dropdown"
+                               href="#">{{\Illuminate\Support\Facades\Auth::user()->username}}
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {{--
+                                                                    <li><a href="{{ route('user-changepass') }}" style="color: black !important;">Sửa mật khẩu</a></li>
+                                --}}
+                                <li><a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"
-                                           style="color: black !important;">Đăng xuất</a></li>
+                                       style="color: black !important;">Đăng xuất</a></li>
 
-                                </ul>
-                            </li>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                {{ csrf_field() }}
-                            </form>
-                        @endif
-                    </ul>
+                            </ul>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    @endif
+                </ul>
             </div>
         </div>
     </nav>
@@ -182,7 +184,7 @@
 </body>
 <script>
     function formatExport(data, header) {
-        if (header){
+        if (header) {
             data = data.split("<br>")[0];
         }
         return data.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g, '').replace(/&amp;/g, ' & ').replace(/&nbsp;/g, ' ');

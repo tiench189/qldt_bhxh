@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Psy\debug;
 use Validator;
-use App\Hocvien;
+use App\Person;
 
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -168,6 +168,7 @@ class CourseController extends Controller
             $uid[] = $row->user_id;
         }
         $dataUser = DB::table('person')
+            ->where('type', 'student')
             ->whereIn('id', $uid)
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
@@ -176,6 +177,7 @@ class CourseController extends Controller
 
         // Lấy toàn bộ danh sách học viên
         $allUser = DB::table('person')
+            ->where('type', 'student')
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
         foreach ($allUser as $u) {
@@ -263,6 +265,7 @@ class CourseController extends Controller
 
             // Lấy toàn bộ danh sách học viên
             $allUser = DB::table('person')
+                ->where('type', 'student')
                 ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
                 ->get()->toArray();
             foreach ($allUser as $u) {
@@ -605,6 +608,7 @@ class CourseController extends Controller
                 $userIds[] = $item->userid;
             }
             $users = DB::table('person')
+                ->where('type', 'student')
                 ->whereIn('id', $userIds)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();
