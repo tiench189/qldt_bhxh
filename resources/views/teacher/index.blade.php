@@ -11,6 +11,7 @@
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
+
     @if(\App\Roles::checkRole('teacher-add'))
         <a class="btn btn-primary btn-add" href="{{route('teacher-add')}}">Thêm mới</a>
     @endif
@@ -20,6 +21,7 @@
 
             <th width="20"># </th>
             <th>Tên giáo viên <br><input type="text"></th>
+            <th>Đơn vị <br><input type="text"></th>
             <th>Chức danh <br><input type="text"></th>
             <th>Vị trí công tác <br><input type="text"></th>
             <th>Học hàm <br><input type="text"></th>
@@ -33,6 +35,7 @@
             <tr>
                 <td> {{$row->id}} </td>
                 <td> <strong>{{$row->lastname}} {{$row->firstname}}</strong> </td>
+                <td>{{$row->getDonvi->ten_donvi}}</td>
                 <td>{{$row->chucdanh}}</td>
                 <td>{{$row->chucvu}}</td>
                 <td>{{$row->getGiangVien->hoc_ham or ''}}</td>

@@ -23,7 +23,7 @@ class TeacherController extends Controller
             'type' => 'teacher'
         ];
 
-        $teachers = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu')
+        $teachers = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi')
             ->where($query)->get();
 
         return view('teacher.index', ['teachers' => $teachers]);
@@ -85,45 +85,61 @@ class TeacherController extends Controller
     public function edit(Request $request)
     {
         $teacherId = intval($request->id);
-        $teacher = DB::table('person')->where('id', $teacherId)->first();
-        return view('teacher.edit', ['teacher' => $teacher]);
+        $teacher = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi', 'email', 'birthday', 'sex')
+            ->where('id', $teacherId)->first();
+        $donvi = DB::table('donvi')->orderBy('id')->get();
+        $data = [
+            'donvi' => $donvi,
+            'teacher' => $teacher
+        ];
+        return view('teacher.edit', $data);
     }
 
     public function update(Request $request)
     {
-        $id = intval($request->input('id'));
-        $messages = [
-            'username.required' => 'Yêu cầu nhập tên giáo viên',
-            'username.unique' => 'Tên đăng nhập đã tồn tại.',
-        ];
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|unique:user,username,' . $id,
-        ], $messages);
+        $teacher_id = intval($request->input('teacher_id'));
 
-        if ($validator->fails()) {
-            return redirect()->action('TeacherController@update', ["id" => $id])
-                ->withErrors($validator)
-                ->withInput();
+        if ($request->isMethod('post')) {
+            DB::beginTransaction();
+
+            try {
+                $data = array();
+                $data['firstname'] = $request->name;
+                $data['lastname'] = '';
+                $data['email'] = $request->email;
+                $data['donvi'] = $request->donvi;
+                $data['timemodified'] = time();
+                if (isset($request->birthday))
+                    $data['birthday'] = Utils::str2Date($request->birthday);
+                if (isset($request->sex))
+                    $data['sex'] = $request->sex;
+                if (isset($request->chucdanh))
+                    $data['chucdanh'] = $request->chucdanh;
+                if (isset($request->chucvu))
+                    $data['chucvu'] = $request->chucvu;
+                if (!array_key_exists('username', $data))
+                    $data['username'] = $data['email'];
+
+                Person::where('id', $teacher_id)->update($data);
+
+                if (isset($request->hocham) && isset($request->chuyennganh)) {
+                    $giangvien = [
+                        'hoc_ham' => $request->hocham,
+                        'chuyen_nganh' => $request->chuyennganh
+                    ];
+
+                    GiangVien::where('user_id', $teacher_id)->update($giangvien);
+                }
+
+                DB::commit();
+                $request->session()->flash('message', 'Cập nhật thông tin Giảng viên thành công');
+                return redirect(route('teacher-index'));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $request->session()->flash('message', 'Cập nhật thông tin Giảng viên thất bại: ' . $e->getMessage());
+                return redirect(route('teacher-update'));
+            }
         }
-
-        $result = DB::table('person')
-            ->where('id', $id)
-            ->update([
-                'username' => $request->input('username'),
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'description' => $request->input('description'),
-                'timemodified' => time(),
-            ]);
-        if ($result) {
-            $request->session()->flash('message', "Cập nhật thành công.");
-        } else {
-            $request->session()->flash('message', "Cập nhật không thành công.");
-        }
-
-        return redirect()->action(
-            'TeacherController@index', ['update' => $result]
-        );
     }
 
 

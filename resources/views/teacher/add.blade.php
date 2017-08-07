@@ -46,7 +46,7 @@
                 <label class="col-sm-2 control-label">Giới tính</label>
                 <div class="col-sm-9">
                     <input type="radio" name="sex" value="male" checked> Nam&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="sex" value="male"> Nữ
+                    <input type="radio" name="sex" value="female"> Nữ
                 </div>
             </div>
         </div>
