@@ -84,7 +84,7 @@ class TeacherController extends Controller
 
     public function edit(Request $request)
     {
-        $teacherId = intval($request->id);
+        $teacherId = $request->get('teacher_id');
         $teacher = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi', 'email', 'birthday', 'sex')
             ->where('id', $teacherId)->first();
         $donvi = DB::table('donvi')->orderBy('id')->get();

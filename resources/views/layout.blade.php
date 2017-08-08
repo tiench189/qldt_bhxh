@@ -68,13 +68,12 @@
             </div>
 
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav my-nav">
+                <ul class="nav navbar-nav my-nav" id="ul-menu">
                     @if(\App\Roles::checkRole('index'))
-                        <li class="dropdown active">
+                        <li class="dropdown" data-url="{{route('index')}}/course">
                             <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Nội dung đào
                                 tạo
-                                <b
-                                        class="caret"></b></a>
+                                <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <?php $categories = \App\Utils::listCategories()?>
                                 @foreach($categories as $idx=>$cate)
@@ -87,13 +86,13 @@
                         </li>
                     @endif
                     @if(\App\Roles::checkRole('teacher-index'))
-                        <li><a href="{{route('teacher-index')}}">Giảng viên</a></li>
+                        <li data-url="{{route('teacher-index')}}"><a href="{{route('teacher-index')}}">Giảng viên</a></li>
                     @endif
                     @if(\App\Roles::checkRole('hocvien-index'))
-                        <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
+                        <li data-url="{{route('hocvien-index')}}"><a href="{{route('hocvien-index')}}">Học viên</a></li>
                     @endif
                     @if(\App\Roles::checkRole('tracuu'))
-                        <li class="dropdown ">
+                        <li class="dropdown" data-url="{{route('tracuu')}}">
                             <a class="dropdown-toggle" data-toggle="dropdown">Tra cứu <b
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -104,7 +103,7 @@
                         </li>
                     @endif
                     @if(\App\Roles::checkRole('baocao'))
-                        <li class="dropdown ">
+                        <li class="dropdown" data-url="{{url('/baocao')}}">
                             <a class="dropdown-toggle" data-toggle="dropdown">Báo cáo <b
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -115,7 +114,7 @@
                         </li>
                     @endif
                     @if(\App\Roles::checkRole('user-index'))
-                        <li class="dropdown ">
+                        <li class="dropdown" data-url="{{url('/user')}}">
                             <a class="dropdown-toggle" data-toggle="dropdown">Quản lý tài khoản <b
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -190,6 +189,16 @@
         return data.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g, '').replace(/&amp;/g, ' & ').replace(/&nbsp;/g, ' ');
     }
     $(document).ready(function () {
+        var current_url = document.URL;
+
+        $("#ul-menu").find("li").each(function () {
+            $(this).removeClass("active");
+            var data_url = $(this).data('url');
+
+            if (current_url.includes(data_url)) {
+                $(this).addClass("active");
+            }
+        });
 
         //Datatables
         var colExport = $("#table").data('export');

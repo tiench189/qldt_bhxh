@@ -58,7 +58,7 @@
                 <td>{{$row->getGiangVien->hoc_ham or ''}}</td>
                 <td>{{$row->getGiangVien->chuyen_nganh or ''}}</td>
                 @if(\App\Roles::checkRole('teacher-update'))
-                    <td><a href="{{route('teacher-update', ['uid' => $row->id])}}" class="btn btn-xs btn-primary">
+                    <td><a href="{{route('teacher-update', ['teacher_id' => $row->id])}}" class="btn btn-xs btn-primary">
                             Cập nhật</a>
                     </td>
                 @endif

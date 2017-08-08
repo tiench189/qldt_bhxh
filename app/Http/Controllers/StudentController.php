@@ -93,6 +93,8 @@ class StudentController extends Controller
             $data['sex'] = $request->sex;
         if (isset($request->chucdanh))
             $data['chucdanh'] = $request->chucdanh;
+        if (isset($request->chucvu))
+            $data['chucvu'] = $request->chucvu;
         $result = Person::insert($data);
         if ($result['result']) {
             $request->session()->flash('message', 'Thêm học viên thành công');

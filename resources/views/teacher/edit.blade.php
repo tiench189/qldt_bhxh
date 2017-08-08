@@ -69,13 +69,13 @@
             <div class="form-group">
                 <label class="control-label col-sm-3">Học hàm</label>
                 <div class="col-sm-9">
-                    <input type="text" name="hocham" class="form-control" value="{{$teacher->getGiangVien->hoc_ham}}">
+                    <input type="text" name="hocham" class="form-control" value="{{$teacher->getGiangVien->hoc_ham or ''}}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-3">Chuyên ngành</label>
                 <div class="col-sm-9">
-                    <input type="text" name="chuyennganh" class="form-control" value="{{$teacher->getGiangVien->chuyen_nganh}}">
+                    <input type="text" name="chuyennganh" class="form-control" value="{{$teacher->getGiangVien->chuyen_nganh or ''}}">
                 </div>
             </div>
         </div>
