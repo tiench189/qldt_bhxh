@@ -28,7 +28,7 @@
         }
     </script>
 
-    <table id="table" class="table table-bordered table-hover">
+    <table id="table" class="table table-bordered table-hover" data-export="[0,1,2,3,4,5,6]">
         <thead>
         <tr>
 

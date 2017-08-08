@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\GiangVien;
+use App\Lop;
 use App\Person;
 use App\Utils;
 use Illuminate\Http\Request;
@@ -24,7 +25,9 @@ class TeacherController extends Controller
         ];
 
         $teachers = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi')
-            ->where($query)->get();
+            ->where($query)
+            ->orderBy('firstname', 'asc')
+            ->get();
 
         return view('teacher.index', ['teachers' => $teachers]);
     }
@@ -158,5 +161,23 @@ class TeacherController extends Controller
             DB::rollBack();
             die($e->getMessage());
         }
+    }
+
+    public function addTeacherToClass(Request $request)
+    {
+        $lop_id = (int)$request->lop_id;
+        $giangvien_id = (int)$request->giangvien_id;
+        $course_id = (int)$request->course_id;
+
+        $lop = Lop::find($lop_id);
+        $teacher = $lop->teachers()->find($giangvien_id);
+        if ($teacher) {
+            $request->session()->flash('message', 'Giảng viên ' . $teacher->firstname . ' đã được thêm vào lớp ' . $lop->ten_lop . ' trước đó');
+        } else {
+            $lop->teachers()->attach($giangvien_id);
+            $request->session()->flash('message', 'Thêm giảng viên vào lớp ' . $lop->ten_lop . ' thành công');
+        }
+
+        return redirect(route('course-classes', ['c' => $course_id]));
     }
 }

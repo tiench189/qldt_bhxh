@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/update', 'TeacherController@edit')->name('teacher-update');
             Route::post('/update', 'TeacherController@update')->name('teacher-update');
             Route::post('/remove', 'TeacherController@remove')->name('teacher-remove');
+            Route::post('/add-to-class', 'TeacherController@addTeacherToClass')->name('add-to-class');
         });
 
         Route::group(['prefix' => 'class'], function () {

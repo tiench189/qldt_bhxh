@@ -126,4 +126,9 @@ class Person extends Model
         self::adduser($ten, $email, $maCQ, 'cas');
         return true;
     }
+
+    public function classes()
+    {
+        return $this->belongsToMany('App\Lop', 'lop_giangvien', 'giangvien_id', 'lop_id');
+    }
 }

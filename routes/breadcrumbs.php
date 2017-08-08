@@ -44,7 +44,7 @@ Breadcrumbs::register('course-result', function ($breadcrumbs, $category = [], $
         $breadcrumbs->push($category->name, route('course-index', ["c" => $category->id]));
 
     if (!empty($course))
-        $breadcrumbs->push($course->fullname, route('course-result', ["c" => $course->id]));
+        $breadcrumbs->push($course->fullname, route('course-classes', ["c" => $course->id]));
 
     if (!empty($class))
         $breadcrumbs->push($class->ten_lop, route('course-result', ["class" => $class->id]));
