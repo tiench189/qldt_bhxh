@@ -51,7 +51,11 @@
         @foreach ($teachers as $row)
             <tr>
                 <td> {{$row->id}} </td>
-                <td><strong>{{$row->lastname}} {{$row->firstname}}</strong></td>
+                <td>
+                    <a href="{{route('teacher-profile', ['teacher_id' => $row->id])}}">
+                        <strong>{{$row->lastname}} {{$row->firstname}}</strong>
+                    </a>
+                </td>
                 <td>{{$row->getDonvi->ten_donvi}}</td>
                 <td>{{$row->chucdanh}}</td>
                 <td>{{$row->chucvu}}</td>

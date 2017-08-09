@@ -19,4 +19,9 @@ class Lop extends Model
     {
         return $this->belongsToMany('App\Person', 'lop_giangvien', 'lop_id', 'giangvien_id');
     }
+
+    public function course()
+    {
+        return $this->belongsTo('App\Course')->select(['id', 'fullname', 'shortname']);
+    }
 }

@@ -59,7 +59,7 @@ Breadcrumbs::register('class-list-teacher', function ($breadcrumbs, $course = []
     if (!empty($class))
         $breadcrumbs->push($class->ten_lop, route('course-result', ["class" => $class->id]));
 
-    $breadcrumbs->push("Danh sách giảng viên");
+    $breadcrumbs->push("Danh sách Giảng viên");
 });
 
 
@@ -74,6 +74,19 @@ Breadcrumbs::register('hocvien', function ($breadcrumbs, $text = "", $student = 
     } else {
         $breadcrumbs->push("Danh Sách Học viên");
     }
+});
+
+//Giang vien Profile
+Breadcrumbs::register('giang-vien-profile', function ($breadcrumbs, $teacher, $class = []) {
+    if (!empty($class)) {
+        $breadcrumbs->push($class->ten_lop, route('course-result', ["class" => $class->id]));
+        $breadcrumbs->push('Danh sách Giảng viên', route('teacher-class-list', ['class_id' => $class->id]));
+    } else {
+        $breadcrumbs->push('Danh sách Giảng viên', route('teacher-index'));
+    }
+
+    $breadcrumbs->push($teacher->firstname);
+    $breadcrumbs->push('Thông tin');
 });
 
 // Index > Giang Vien

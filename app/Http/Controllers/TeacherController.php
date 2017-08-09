@@ -230,4 +230,24 @@ class TeacherController extends Controller
             return back();
         }
     }
+
+    public function profile(Request $request)
+    {
+        $teacher = Person::find((int) $request->teacher_id);
+        if ($teacher) {
+            $classes = $teacher->classes()->get(['ten_lop', 'course_id']);
+            $from_class = Lop::find((int)$request->class_id);
+
+            $data = [
+                'teacher' => $teacher,
+                'from_class' => $from_class,
+                'classes' => $classes
+            ];
+
+            return view('teacher.profile', $data);
+        } else {
+            $request->session()->flash('message', 'Không tìm thấy thông tin');
+            return back();
+        }
+    }
 }

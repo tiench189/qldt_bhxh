@@ -91,15 +91,21 @@
         @foreach ($teachers as $row)
             <tr>
                 <td> {{$row->pivot->giangvien_id}} </td>
-                <td><strong>{{$row->lastname}} {{$row->firstname}}</strong></td>
+                <td>
+                    <a href="{{route('teacher-profile', ['teacher_id' => $row->pivot->giangvien_id, 'class_id' => $class->id])}}">
+                        <strong>{{$row->lastname}} {{$row->firstname}}</strong>
+                    </a>
+                </td>
                 <td>{{$row->getDonvi->ten_donvi}}</td>
                 <td>{{$row->chucdanh}}</td>
                 <td>{{$row->chucvu}}</td>
                 <td>{{$row->getGiangVien->hoc_ham or ''}}</td>
                 <td>{{$row->getGiangVien->chuyen_nganh or ''}}</td>
                 @if(\App\Roles::checkRole('teacher-remove'))
-                    <td><a href="javascript:removeTeacher({{$row->pivot->giangvien_id}})" class="btn btn-xs btn-danger">
-                            Xóa</a>
+                    <td>
+                        <a href="javascript:removeTeacher({{$row->pivot->giangvien_id}})" class="btn btn-xs btn-danger">
+                            Xóa
+                        </a>
                     </td>
                 @endif
             </tr>
