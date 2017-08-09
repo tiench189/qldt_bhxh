@@ -50,8 +50,16 @@ Breadcrumbs::register('course-result', function ($breadcrumbs, $category = [], $
         $breadcrumbs->push($class->ten_lop, route('course-result', ["class" => $class->id]));
 
     $breadcrumbs->push("Kết quả đào tạo");
+});
 
+Breadcrumbs::register('class-list-teacher', function ($breadcrumbs, $course = [], $class = []) {
+    if (!empty($course))
+        $breadcrumbs->push($course->fullname, route('course-classes', ["c" => $course->id]));
 
+    if (!empty($class))
+        $breadcrumbs->push($class->ten_lop, route('course-result', ["class" => $class->id]));
+
+    $breadcrumbs->push("Danh sách giảng viên");
 });
 
 

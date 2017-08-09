@@ -109,7 +109,7 @@
                 <td>{{\App\Utils::toTimeFormat($row->time_end)}} </td>
                 <td>{{ $hocvien[$row->id] or 0 }}</td>
                 <td width="25">
-                    <a href="{{route('class-danhsach', ['cid' => $row->id])}}" class="btn btn-xs btn-primary">
+                    <a href="{{route('teacher-class-list', ['class_id' => $row->id])}}" class="btn btn-xs btn-primary">
                         DS Giảng viên
                     </a>
                 </td>

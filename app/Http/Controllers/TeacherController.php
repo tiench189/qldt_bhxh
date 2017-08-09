@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\GiangVien;
 use App\Lop;
 use App\Person;
@@ -148,18 +149,32 @@ class TeacherController extends Controller
     public function remove(Request $request)
     {
         $uid = intval($request->uid);
-        try {
-            DB::beginTransaction();
+        $class_id = (int)$request->class_id;
 
-            Person::where('id', $uid)->delete();
-            GiangVien::where('user_id', $uid)->delete();
+        if ($class_id) {//remove teacher from a class
+            try {
+                $class = Lop::find($class_id);
+                $class->teachers()->detach($uid);
 
-            DB::commit();
-            $request->session()->flash('message', 'Xóa giảng viên thành công');
-            return redirect(route('teacher-index'));
-        } catch (\Exception $e) {
-            DB::rollBack();
-            die($e->getMessage());
+                $request->session()->flash('message', 'Xóa giảng viên thành công');
+            } catch (\Exception $e) {
+                $request->session()->flash('message', 'Lỗi hệ thống. Không xóa được giảng viên khỏi khóa học');
+            }
+            return redirect(route('teacher-class-list', ['class_id' => $class_id]));
+        } else {//delete teacher's profile
+            try {
+                DB::beginTransaction();
+
+                Person::where('id', $uid)->delete();
+                GiangVien::where('user_id', $uid)->delete();
+
+                DB::commit();
+                $request->session()->flash('message', 'Xóa giảng viên thành công');
+                return redirect(route('teacher-index'));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                die($e->getMessage());
+            }
         }
     }
 
@@ -168,6 +183,7 @@ class TeacherController extends Controller
         $lop_id = (int)$request->lop_id;
         $giangvien_id = (int)$request->giangvien_id;
         $course_id = (int)$request->course_id;
+        $from = trim($request->from);
 
         $lop = Lop::find($lop_id);
         $teacher = $lop->teachers()->find($giangvien_id);
@@ -178,6 +194,40 @@ class TeacherController extends Controller
             $request->session()->flash('message', 'Thêm giảng viên vào lớp ' . $lop->ten_lop . ' thành công');
         }
 
+        if ($from == 'teacher-class-list') {
+            return redirect(route('teacher-class-list', ['class_id' => $lop_id]));
+        }
         return redirect(route('course-classes', ['c' => $course_id]));
+    }
+
+    public function listTeacherOfClass(Request $request)
+    {
+        if ($request->class_id) {
+            $class = Lop::find((int)$request->class_id, ['ten_lop', 'id', 'course_id']);
+            if ($class) {
+                $course = Course::find($class->course_id, ['category', 'fullname', 'shortname']);
+                $teachers = $class->teachers()->select('firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi')->get();
+
+                $raw_teachers = Person::select('id', 'firstname')
+                    ->where('type', 'teacher')
+                    ->orderBy('firstname', 'asc')
+                    ->get();
+
+                $data = [
+                    'raw_teachers' => $raw_teachers,
+                    'teachers' => $teachers,
+                    'class' => $class,
+                    'course' => $course
+                ];
+
+                return view('teacher.dsgiaovien', $data);
+            } else {
+                $request->session()->flash('message', 'Không tìm thấy thông tin lớp');
+                return back();
+            }
+        } else {
+            $request->session()->flash('message', 'Truy cập không hợp lệ');
+            return back();
+        }
     }
 }
