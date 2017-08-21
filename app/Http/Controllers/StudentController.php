@@ -35,7 +35,6 @@ class StudentController extends Controller
             $iddv[] = $row->donvi;
         }
         $datadonvi = DB::table('donvi')
-            ->whereIn('id', $iddv)
             ->get();
         $datadonvi = \App\Utils::row2Array($datadonvi);
 
