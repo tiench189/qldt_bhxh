@@ -74,9 +74,14 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'teacher'], function () {
             Route::get('/', 'TeacherController@index')->name('teacher-index');
-            Route::get('danhsach', 'TeacherController@danhsach')->name('teacher-danhsach');
+            Route::get('/add', 'TeacherController@add')->name('teacher-add');
+            Route::post('/add', 'TeacherController@add')->name('teacher-add');
             Route::get('/update', 'TeacherController@edit')->name('teacher-update');
             Route::post('/update', 'TeacherController@update')->name('teacher-update');
+            Route::post('/remove', 'TeacherController@remove')->name('teacher-remove');
+            Route::post('/add-to-class', 'TeacherController@addTeacherToClass')->name('add-to-class');
+            Route::get('/ds-mot-lop', 'TeacherController@listTeacherOfClass')->name('teacher-class-list');
+            Route::get('/profile', 'TeacherController@profile')->name('teacher-profile');
         });
 
         Route::group(['prefix' => 'class'], function () {

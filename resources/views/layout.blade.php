@@ -68,13 +68,12 @@
             </div>
 
             <div class="collapse navbar-collapse no-padding" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav my-nav">
+                <ul class="nav navbar-nav my-nav" id="ul-menu">
                     @if(\App\Roles::checkRole('index'))
-                        <li class="dropdown active">
+                        <li class="dropdown" data-url="{{route('index')}}/course">
                             <a href="{{route('index')}}/course" class="dropdown-toggle" data-toggle="dropdown">Nội dung đào
                                 tạo
-                                <b
-                                        class="caret"></b></a>
+                                <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <?php $categories = \App\Utils::listCategories()?>
                                 @foreach($categories as $idx=>$cate)
@@ -86,12 +85,14 @@
                             </ul>
                         </li>
                     @endif
-                    {{--<li><a href="{{route('teacher-index')}}">Giảng viên</a></li>--}}
+                    @if(\App\Roles::checkRole('teacher-index'))
+                        <li data-url="{{route('teacher-index')}}"><a href="{{route('teacher-index')}}">Giảng viên</a></li>
+                    @endif
                     @if(\App\Roles::checkRole('hocvien-index'))
-                        <li><a href="{{route('hocvien-index')}}">Học viên</a></li>
+                        <li data-url="{{route('hocvien-index')}}"><a href="{{route('hocvien-index')}}">Học viên</a></li>
                     @endif
                     @if(\App\Roles::checkRole('tracuu'))
-                        <li class="dropdown ">
+                        <li class="dropdown" data-url="{{route('tracuu')}}">
                             <a class="dropdown-toggle" data-toggle="dropdown">Tra cứu <b
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -103,7 +104,7 @@
                         </li>
                     @endif
                     @if(\App\Roles::checkRole('baocao'))
-                        <li class="dropdown ">
+                        <li class="dropdown" data-url="{{url('/baocao')}}">
                             <a class="dropdown-toggle" data-toggle="dropdown">Báo cáo <b
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -114,7 +115,7 @@
                         </li>
                     @endif
                     @if(\App\Roles::checkRole('user-index'))
-                        <li class="dropdown ">
+                        <li class="dropdown" data-url="{{url('/user')}}">
                             <a class="dropdown-toggle" data-toggle="dropdown">Quản lý tài khoản <b
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -135,43 +136,43 @@
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-{{--                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
-                    <ul class="nav navbar-nav my-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
-                                <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                @endif--}}
+                {{--                @if(\Illuminate\Support\Facades\Session::get('isAuth', false))
+                                    <ul class="nav navbar-nav my-nav navbar-right">
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                {{\Illuminate\Support\Facades\Session::get('user')->firstname}} {{\Illuminate\Support\Facades\Session::get('user')->lastname}}
+                                                <b class="caret"></b></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{route('logout')}}">Đăng xuất</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif--}}
 
                 <ul class="nav navbar-nav my-nav navbar-right">
-                        @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">Đăng nhập</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a class="dropdown-toggle top-menu" data-toggle="dropdown"
-                                   href="#">{{\Illuminate\Support\Facades\Auth::user()->username}}
-                                    <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-{{--
-                                    <li><a href="{{ route('user-changepass') }}" style="color: black !important;">Sửa mật khẩu</a></li>
---}}
-                                    <li><a href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
+                    @if (Auth::guest())
+                        <li><a href="{{ route('login') }}">Đăng nhập</a></li>
+                    @else
+                        <li class="dropdown">
+                            <a class="dropdown-toggle top-menu" data-toggle="dropdown"
+                               href="#">{{\Illuminate\Support\Facades\Auth::user()->username}}
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {{--
+                                                                    <li><a href="{{ route('user-changepass') }}" style="color: black !important;">Sửa mật khẩu</a></li>
+                                --}}
+                                <li><a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"
-                                           style="color: black !important;">Đăng xuất</a></li>
+                                       style="color: black !important;">Đăng xuất</a></li>
 
-                                </ul>
-                            </li>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                {{ csrf_field() }}
-                            </form>
-                        @endif
-                    </ul>
+                            </ul>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    @endif
+                </ul>
             </div>
         </div>
     </nav>
@@ -183,12 +184,22 @@
 </body>
 <script>
     function formatExport(data, header) {
-        if (header){
+        if (header) {
             data = data.split("<br>")[0];
         }
         return data.replace(/<(?:.|\n)*?>/gm, '').replace(/(\r\n|\n|\r)/gm, "").replace(/ +(?= )/g, '').replace(/&amp;/g, ' & ').replace(/&nbsp;/g, ' ');
     }
     $(document).ready(function () {
+        var current_url = document.URL;
+
+        $("#ul-menu").find("li").each(function () {
+            $(this).removeClass("active");
+            var data_url = $(this).data('url');
+
+            if (current_url.includes(data_url)) {
+                $(this).addClass("active");
+            }
+        });
 
         //Datatables
         var colExport = $("#table").data('export');

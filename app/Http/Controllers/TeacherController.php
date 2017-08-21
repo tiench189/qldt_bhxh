@@ -7,130 +7,247 @@
  */
 
 namespace App\Http\Controllers;
+
+use App\Course;
+use App\GiangVien;
+use App\Lop;
+use App\Person;
+use App\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
 class TeacherController extends Controller
 {
-    public function index(Request $request){
-        $teachers = array();
-        $objects = DB::table('role_assignments')->where('roleid', '=', 4)->select('userid')->get();
-        if(!empty($objects)){
-            foreach ($objects as $item){
-                $ids[] = $item->userid;
-            }
-            $teachers = DB::table('person')
-                ->whereIn('id', $ids)
-                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
-                ->get();
-        }
-        return view('teacher.index',['teachers' => $teachers]);
+    public function index(Request $request)
+    {
+        $query = [
+            'type' => 'teacher'
+        ];
+
+        $teachers = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi')
+            ->where($query)
+            ->orderBy('firstname', 'asc')
+            ->get();
+
+        return view('teacher.index', ['teachers' => $teachers]);
     }
 
-    public function edit(Request $request){
-        $teacherId = intval($request->id);
-        $teacher = DB::table('person')->where('id', $teacherId)->first();
-        return view('teacher.edit', ['teacher'=>$teacher]);
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function add(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            $donvi = DB::table('donvi')->orderBy('id')->get();
+            $data = [
+                'donvi' => $donvi
+            ];
+            return view('teacher.add', $data);
+        }
+
+        if ($request->isMethod('post')) {
+            DB::beginTransaction();
+
+            try {
+                $data = array();
+                $data['firstname'] = $request->name;
+                $data['lastname'] = '';
+                $data['type'] = 'teacher';
+                $data['email'] = $request->email;
+                $data['donvi'] = $request->donvi;
+                if (isset($request->birthday))
+                    $data['birthday'] = Utils::str2Date($request->birthday);
+                if (isset($request->sex))
+                    $data['sex'] = $request->sex;
+                if (isset($request->chucdanh))
+                    $data['chucdanh'] = $request->chucdanh;
+                if (isset($request->chucvu))
+                    $data['chucvu'] = $request->chucvu;
+                $teacher_id = Person::insertLastID($data);
+
+                if ($teacher_id && isset($request->hocham) && isset($request->chuyennganh)) {
+                    $giang_vien = new GiangVien();
+                    $giang_vien->user_id = $teacher_id;
+                    $giang_vien->hoc_ham = $request->hocham;
+                    $giang_vien->chuyen_nganh = $request->chuyennganh;
+                    $giang_vien->save();
+                }
+
+                DB::commit();
+                $request->session()->flash('message', 'Thêm thông tin Giảng viên thành công');
+                return redirect(route('teacher-index'));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $request->session()->flash('message', 'Thêm thông tin Giảng viên thất bại: ' . $e->getMessage());
+                return redirect(route('teacher-add'));
+            }
+        }
+    }
+
+    public function edit(Request $request)
+    {
+        $teacherId = $request->get('teacher_id');
+        $teacher = Person::select('id', 'firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi', 'email', 'birthday', 'sex')
+            ->where('id', $teacherId)->first();
+        $donvi = DB::table('donvi')->orderBy('id')->get();
+        $data = [
+            'donvi' => $donvi,
+            'teacher' => $teacher
+        ];
+        return view('teacher.edit', $data);
     }
 
     public function update(Request $request)
     {
-        $id = intval( $request->input('id') );
-        $messages = [
-            'username.required' => 'Yêu cầu nhập tên giáo viên',
-            'username.unique' => 'Tên đăng nhập đã tồn tại.',
-        ];
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|unique:user,username,' . $id,
-        ], $messages);
+        $teacher_id = intval($request->input('teacher_id'));
 
-        if ($validator->fails()) {
-            return redirect()->action('TeacherController@update',["id"=>$id])
-                ->withErrors($validator)
-                ->withInput();
+        if ($request->isMethod('post')) {
+            DB::beginTransaction();
+
+            try {
+                $data = array();
+                $data['firstname'] = $request->name;
+                $data['lastname'] = '';
+                $data['email'] = $request->email;
+                $data['donvi'] = $request->donvi;
+                $data['timemodified'] = time();
+                if (isset($request->birthday))
+                    $data['birthday'] = Utils::str2Date($request->birthday);
+                if (isset($request->sex))
+                    $data['sex'] = $request->sex;
+                if (isset($request->chucdanh))
+                    $data['chucdanh'] = $request->chucdanh;
+                if (isset($request->chucvu))
+                    $data['chucvu'] = $request->chucvu;
+                if (!array_key_exists('username', $data))
+                    $data['username'] = $data['email'];
+
+                Person::where('id', $teacher_id)->update($data);
+
+                if (isset($request->hocham) && isset($request->chuyennganh)) {
+                    $giangvien = [
+                        'hoc_ham' => $request->hocham,
+                        'chuyen_nganh' => $request->chuyennganh
+                    ];
+
+                    GiangVien::where('user_id', $teacher_id)->update($giangvien);
+                }
+
+                DB::commit();
+                $request->session()->flash('message', 'Cập nhật thông tin Giảng viên thành công');
+                return redirect(route('teacher-index'));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $request->session()->flash('message', 'Cập nhật thông tin Giảng viên thất bại: ' . $e->getMessage());
+                return redirect(route('teacher-update'));
+            }
         }
+    }
 
-        $result = DB::table('person')
-            ->where('id', $id)
-            ->update([
-                'username'=>$request->input('username'),
-                'firstname'=>$request->input('firstname'),
-                'lastname'=>$request->input('lastname'),
-                'description'=>$request->input('description'),
-                'timemodified'=>time(),
-            ]);
-        if($result) {
-            $request->session()->flash('message', "Cập nhật thành công.");
+    public function remove(Request $request)
+    {
+        $uid = intval($request->uid);
+        $class_id = (int)$request->class_id;
+
+        if ($class_id) {//remove teacher from a class
+            try {
+                $class = Lop::find($class_id);
+                $class->teachers()->detach($uid);
+
+                $request->session()->flash('message', 'Xóa giảng viên thành công');
+            } catch (\Exception $e) {
+                $request->session()->flash('message', 'Lỗi hệ thống. Không xóa được giảng viên khỏi khóa học');
+            }
+            return redirect(route('teacher-class-list', ['class_id' => $class_id]));
+        } else {//delete teacher's profile
+            try {
+                DB::beginTransaction();
+
+                Person::where('id', $uid)->delete();
+                GiangVien::where('user_id', $uid)->delete();
+
+                DB::commit();
+                $request->session()->flash('message', 'Xóa giảng viên thành công');
+                return redirect(route('teacher-index'));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                die($e->getMessage());
+            }
+        }
+    }
+
+    public function addTeacherToClass(Request $request)
+    {
+        $lop_id = (int)$request->lop_id;
+        $giangvien_id = (int)$request->giangvien_id;
+        $course_id = (int)$request->course_id;
+        $from = trim($request->from);
+
+        $lop = Lop::find($lop_id);
+        $teacher = $lop->teachers()->find($giangvien_id);
+        if ($teacher) {
+            $request->session()->flash('message', 'Giảng viên ' . $teacher->firstname . ' đã được thêm vào lớp ' . $lop->ten_lop . ' trước đó');
         } else {
-            $request->session()->flash('message', "Cập nhật không thành công.");
+            $lop->teachers()->attach($giangvien_id);
+            $request->session()->flash('message', 'Thêm giảng viên vào lớp ' . $lop->ten_lop . ' thành công');
         }
 
-        return redirect()->action(
-            'TeacherController@index', ['update' => $result]
-        );
+        if ($from == 'teacher-class-list') {
+            return redirect(route('teacher-class-list', ['class_id' => $lop_id]));
+        }
+        return redirect(route('course-classes', ['c' => $course_id]));
     }
 
+    public function listTeacherOfClass(Request $request)
+    {
+        if ($request->class_id) {
+            $class = Lop::find((int)$request->class_id, ['ten_lop', 'id', 'course_id']);
+            if ($class) {
+                $course = Course::find($class->course_id, ['category', 'fullname', 'shortname']);
+                $teachers = $class->teachers()->select('firstname', 'lastname', 'chucdanh', 'chucvu', 'donvi')->get();
 
+                $raw_teachers = Person::select('id', 'firstname')
+                    ->where('type', 'teacher')
+                    ->orderBy('firstname', 'asc')
+                    ->get();
 
-    public function danhsach(Request $request){
-        define('CONTEXT_COURSE', 50);
+                $data = [
+                    'raw_teachers' => $raw_teachers,
+                    'teachers' => $teachers,
+                    'class' => $class,
+                    'course' => $course
+                ];
 
-        $courseId = $request->input('courseId');
-
-        $enrols = DB::table('enrol')->where('courseid', '=', $courseId)->get();
-
-        foreach ($enrols as $item){
-            $enrolIds[] = $item->id;
-        }
-
-        $userObjs = DB::table('user_enrolments')
-            ->whereIn('enrolid', $enrolIds)
-            ->select('userid')
-            ->get();
-        $users = array();
-        if(!empty($userObjs)){
-            foreach ($userObjs as $item){
-                $userIds[] = $item->userid;
+                return view('teacher.dsgiaovien', $data);
+            } else {
+                $request->session()->flash('message', 'Không tìm thấy thông tin lớp');
+                return back();
             }
-            $users = DB::table('person')
-                ->whereIn('id', $userIds)
-                ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
-                ->get();
+        } else {
+            $request->session()->flash('message', 'Truy cập không hợp lệ');
+            return back();
         }
-        $instances = DB::table('context')
-            ->where('contextlevel', '=', CONTEXT_COURSE)
-            ->where('instanceid', '=', $courseId)
-            ->select('id')
-            ->get();
-
-
-        if(!empty($instances)){
-            foreach ($instances as $instance) {
-                $instanceIds[] = $instance->id;
-            }
-        }
-
-        $roles = DB::table('role_assignments')
-            ->whereIn('contextid', $instanceIds)
-            ->select('id', 'userid', 'roleid')
-            ->get();
-
-        $teacherIds = array();
-        foreach ($roles as $item){
-            if($item->roleid == 3 || $item->roleid == 4){ // editingteacher or teacher
-                $teacherIds[] = $item->userid;
-            }
-        }
-
-        $teachers = array();
-        foreach ($users as $user){
-            if(in_array($user->id, $teacherIds)){
-                $teachers[] = $user;
-            }
-        }
-
-        return view('teacher.danhsach',['teachers' => $teachers]);
     }
 
+    public function profile(Request $request)
+    {
+        $teacher = Person::find((int) $request->teacher_id);
+        if ($teacher) {
+            $classes = $teacher->classes()->get(['ten_lop', 'course_id']);
+            $from_class = Lop::find((int)$request->class_id);
+
+            $data = [
+                'teacher' => $teacher,
+                'from_class' => $from_class,
+                'classes' => $classes
+            ];
+
+            return view('teacher.profile', $data);
+        } else {
+            $request->session()->flash('message', 'Không tìm thấy thông tin');
+            return back();
+        }
+    }
 }

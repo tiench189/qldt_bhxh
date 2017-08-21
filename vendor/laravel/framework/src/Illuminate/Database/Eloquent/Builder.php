@@ -730,6 +730,7 @@ class Builder
      */
     public function create(array $attributes = [])
     {
+
         return tap($this->newModelInstance($attributes), function ($instance) {
             $instance->save();
         });

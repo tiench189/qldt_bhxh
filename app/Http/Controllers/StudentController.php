@@ -9,7 +9,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Hocvien;
+use App\Person;
 use App\Utils;
 use Hamcrest\Util;
 use Illuminate\Http\Request;
@@ -19,7 +19,9 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = [];
+        $query = [
+            'type' => 'student'
+        ];
         if ($request->has('donvi')) {
             $donvi = (int) $request->get('donvi');
             $query['donvi'] = $donvi;
@@ -50,7 +52,7 @@ class StudentController extends Controller
 //        $user = DB::table('person')
 //            ->where('id', $uid)
 //            ->first();
-        $user = Hocvien::where('id', $uid)->first();
+        $user = Person::where('id', $uid)->first();
 
         //Lay thong tin lop va khoa hoc
         $lid = array();
@@ -81,6 +83,8 @@ class StudentController extends Controller
         }
         $data = array();
         $data['firstname'] = $request->name;
+        $data['lastname'] = '';
+        $data['type'] = 'student';
         $data['email'] = $request->email;
         $data['donvi'] = $request->donvi;
         if (isset($request->birthday))
@@ -89,7 +93,9 @@ class StudentController extends Controller
             $data['sex'] = $request->sex;
         if (isset($request->chucdanh))
             $data['chucdanh'] = $request->chucdanh;
-        $result = Hocvien::insert($data);
+        if (isset($request->chucvu))
+            $data['chucvu'] = $request->chucvu;
+        $result = Person::insert($data);
         if ($result['result']) {
             $request->session()->flash('message', 'Thêm học viên thành công');
             return redirect(route('hocvien-index'));

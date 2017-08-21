@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function Psy\debug;
 use Validator;
-use App\Hocvien;
+use App\Person;
 
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -168,6 +168,7 @@ class CourseController extends Controller
             $uid[] = $row->user_id;
         }
         $dataUser = DB::table('person')
+            ->where('type', 'student')
             ->whereIn('id', $uid)
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
@@ -176,6 +177,7 @@ class CourseController extends Controller
 
         // Lấy toàn bộ danh sách học viên
         $allUser = DB::table('person')
+            ->where('type', 'student')
             ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
             ->get();
         foreach ($allUser as $u) {
@@ -195,7 +197,7 @@ class CourseController extends Controller
             ->get();
         $donvi = \App\Utils::row2Array($datadonvi);
 
-        $output = ['category' => $category,'course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai, 'ddlxeploai' => $ddlxeploai,
+        $output = ['category' => $category, 'course' => $course, 'allResult' => $allResult, 'users' => $users, 'xeploai' => $xeploai, 'ddlxeploai' => $ddlxeploai,
             'donvi' => $donvi, 'courseID' => $courseId, 'classID' => $classID, 'class' => $class, "dduser" => $dduser, "ddclass" => $ddclass];
 //        return response()->json($output);
         return view('course.result', $output);
@@ -263,6 +265,7 @@ class CourseController extends Controller
 
             // Lấy toàn bộ danh sách học viên
             $allUser = DB::table('person')
+                ->where('type', 'student')
                 ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
                 ->get()->toArray();
             foreach ($allUser as $u) {
@@ -315,7 +318,6 @@ class CourseController extends Controller
                 $user_chucvu = $sheet->getCell('H' . $row)->getValue();
 
 
-
                 // Kiểm tra User này tồn tại hay không?
                 if (isset($dduser[$user_email])) {
 
@@ -342,7 +344,7 @@ class CourseController extends Controller
                     $userimport[$user_email]["ins"] = false;
 
                 } else {
-                    if (filter_var($user_email, FILTER_VALIDATE_EMAIL) && !empty($user_firstname) && !empty($user_lastname) ) {
+                    if (filter_var($user_email, FILTER_VALIDATE_EMAIL) && !empty($user_firstname) && !empty($user_lastname)) {
 
 
                         $dvbh = DB::table('donvi')->where('ma_donvi', $user_donvi)->first();
@@ -351,7 +353,7 @@ class CourseController extends Controller
                             $donvi = $dvbh->id;
                         } else $donvi = 0;
 
-                        $userimport[$user_email]["uar"] = (object) array(
+                        $userimport[$user_email]["uar"] = (object)array(
                             'id' => 0,
                             'username' => $user_email,
                             'email' => $user_email,
@@ -365,7 +367,7 @@ class CourseController extends Controller
                     } else {
                         $userimport[$user_email]["uar"] = $user_email;
 
-                        if(empty($user_firstname) || empty($user_lastname)) {
+                        if (empty($user_firstname) || empty($user_lastname)) {
                             $userimport[$user_email]["chk"] = -2;
                         } else {
                             $userimport[$user_email]["chk"] = -1;
@@ -373,7 +375,6 @@ class CourseController extends Controller
 
 
                         $userimport[$user_email]["chkcat"] = -1;
-
 
 
                         $userimport[$user_email]["ins"] = false;
@@ -413,7 +414,7 @@ class CourseController extends Controller
         if (is_array($allow)) {
             foreach ($allow as $email) {
                 if (isset($rs[$email])) {
-                    if($rs[$email]["ins"] == true) {
+                    if ($rs[$email]["ins"] == true) {
                         $newdata = array();
 
                         $newdata['firstname'] = $rs[$email]["uar"]->firstname;
@@ -428,9 +429,9 @@ class CourseController extends Controller
 
                         $insertID = DB::table('person')->insertGetId($newdata);
 
-                        $rs[$email]["uar"]->id  = $insertID;
+                        $rs[$email]["uar"]->id = $insertID;
                     }
-                    if($rs[$email]["uar"]->id != 0) {
+                    if ($rs[$email]["uar"]->id != 0) {
                         $result = DB::table('lop_hocvien')
                             ->insert([
                                 'lop_id' => $rs[$email]["cli"],
@@ -486,41 +487,41 @@ class CourseController extends Controller
         // Nếu học viên đã học trong lớp này rồi thì từ chối
         if ($check == 0) {
             //enrol quyền học viên
-/*            $params = array(
-                "enrolments[0][userid]" => $sid,
-                "enrolments[0][courseid]" => $id,
-                "enrolments[0][roleid]" => 5,
-            );
-            $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_enrol_users", $params);
-            $rs = json_decode($rs);*/
+            /*            $params = array(
+                            "enrolments[0][userid]" => $sid,
+                            "enrolments[0][courseid]" => $id,
+                            "enrolments[0][roleid]" => 5,
+                        );
+                        $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_enrol_users", $params);
+                        $rs = json_decode($rs);*/
 
 //            if (!isset($rs->errorcode)) {
-                // them hoc vien vao lop
-                $result = DB::table('lop_hocvien')
-                    ->insert([
-                        'lop_id' => $cid,
-                        'user_id' => $sid,
-                        'status' => $status,
-                        'grade' => $grade,
-                        'xeploai' => $xeploai,
-                        'complete_at' => date('Y-m-d H:i:s'),
-                    ]);
-                if ($result) {
-                    $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
-                } else {
-                    $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
-                }
+            // them hoc vien vao lop
+            $result = DB::table('lop_hocvien')
+                ->insert([
+                    'lop_id' => $cid,
+                    'user_id' => $sid,
+                    'status' => $status,
+                    'grade' => $grade,
+                    'xeploai' => $xeploai,
+                    'complete_at' => date('Y-m-d H:i:s'),
+                ]);
+            if ($result) {
+                $request->session()->flash('message', "Thêm học viên vào lớp thành công.");
             } else {
                 $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
             }
+        } else {
+            $request->session()->flash('message', "Thêm học viên vào lớp không thành công.");
+        }
 
 
-/*        } else {
-            $request->session()->flash('message', "Học viên đã tồn tại trong lớp này.");
-        }*/
+        /*        } else {
+                    $request->session()->flash('message', "Học viên đã tồn tại trong lớp này.");
+                }*/
 
 
-        return back()->withInput();;
+        return back()->withInput();
     }
 
     public function export(Request $request)
@@ -574,7 +575,19 @@ class CourseController extends Controller
             foreach ($lophocvien as $r) {
                 $hocvien[$r->lop_id] = $r->hoc_vien;
             }
-            $output = ["category"=>$category,'class' => $class, 'course' => $course, 'hocvien' => $hocvien];
+
+            $teachers = Person::select('id', 'firstname')
+                ->where('type', 'teacher')
+                ->orderBy('firstname', 'asc')
+                ->get();
+
+            $output = [
+                "category" => $category,
+                'class' => $class,
+                'course' => $course,
+                'hocvien' => $hocvien,
+                'teachers' => $teachers
+            ];
 //            dd($output);
             return view('course.classindex', $output);
 
@@ -605,6 +618,7 @@ class CourseController extends Controller
                 $userIds[] = $item->userid;
             }
             $users = DB::table('person')
+                ->where('type', 'student')
                 ->whereIn('id', $userIds)
                 ->select('id', 'username', 'firstname', 'lastname', 'email', 'description')
                 ->get();
@@ -653,25 +667,25 @@ class CourseController extends Controller
         $sid = $request->input('sid');
         $cid = $request->input('cid');
 
-/*        $params = array(
-            "enrolments[0][userid]" => $sid,
-            "enrolments[0][courseid]" => $courseid,
-            "enrolments[0][roleid]" => 5,
-        );
-        $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_unenrol_users", $params);
-        $rs = json_decode($rs);
+        /*        $params = array(
+                    "enrolments[0][userid]" => $sid,
+                    "enrolments[0][courseid]" => $courseid,
+                    "enrolments[0][roleid]" => 5,
+                );
+                $rs = MoodleRest::call(MoodleRest::METHOD_POST, "enrol_manual_unenrol_users", $params);
+                $rs = json_decode($rs);
 
-        if (is_null($rs)) {*/
-            $result = DB::table('lop_hocvien')
-                ->where('lop_id', $cid)
-                ->where('user_id', $sid)
-                ->delete();
+                if (is_null($rs)) {*/
+        $result = DB::table('lop_hocvien')
+            ->where('lop_id', $cid)
+            ->where('user_id', $sid)
+            ->delete();
 
-            if ($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
-            else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
-/*        } else {
-            $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
-        }*/
+        if ($result) $request->session()->flash('message', "Đã xóa học viên ra khỏi lớp học.");
+        else $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
+        /*        } else {
+                    $request->session()->flash('message', "Không thể xóa học viên khỏi lớp học.");
+                }*/
 
         return back()->withInput();
     }

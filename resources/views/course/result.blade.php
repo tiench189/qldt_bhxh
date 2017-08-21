@@ -27,8 +27,8 @@
         }
 
 
-        $( document ).ready(function() {
-            $( "#frmaddstudent" ).on("submit", function (event) {
+        $(document).ready(function () {
+            $("#frmaddstudent").on("submit", function (event) {
 
                 var $this = $(event.target);
 
@@ -44,21 +44,21 @@
                 $.ajax({
                     type: 'POST',
                     url: '{{ ENV("ALIAS") }}/course/checkStudentCategory',
-                    data: { "_token": "{{ csrf_token() }}",c: course_id, s: student_id },
+                    data: {"_token": "{{ csrf_token() }}", c: course_id, s: student_id},
                     success: function (data) {
 
-                        if(data["code"] == 1) {
+                        if (data["code"] == 1) {
                             var khoahoc = "";
-                            for(var row in data["data"]) {
+                            for (var row in data["data"]) {
                                 khoahoc += "    - " + data["data"][row]["lop_id"] + ". " + data["data"][row]["ten_lop"] + "\n";
                             }
 
-                            if(confirm("Học viên đã học các lớp dưới đây trong nội dung đào tạo này:\n\n" + khoahoc + "\nĐồng ý thêm?")) {
+                            if (confirm("Học viên đã học các lớp dưới đây trong nội dung đào tạo này:\n\n" + khoahoc + "\nĐồng ý thêm?")) {
                                 $this
                                     .data('passed', true)
                                     .trigger('submit');
                             }
-                        } else if(data["code"] == -1 || data["code"] == 0) {
+                        } else if (data["code"] == -1 || data["code"] == 0) {
                             $this
                                 .data('passed', true)
                                 .trigger('submit');
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <label>Học Viên: <span class="required">(*)</span></label>
                         {!! Form::select('sid', $dduser, '',
-                            array('class'=>'form-control','id'=>"addstdid")) !!}
+                            array('class'=>'form-control js-example-basic-single','id'=>"addstdid")) !!}
                     </div>
                     <div class="form-group">
                         <label>Điểm trung bình: <span class="required">(*)</span></label>
@@ -239,11 +239,11 @@
                 </select>
             </th>
             <th style="width: 110px">Ngày hoàn thành<br><input type="text"></th>
-            @if(\App\Roles::checkRole('student-remove'))
-                <th></th>
-            @endif
             @if(\App\Roles::checkRole('class-capnhathocvien'))
-                <th></th>
+                <th width="10"></th>
+            @endif
+            @if(\App\Roles::checkRole('student-remove'))
+                <th width="10"></th>
             @endif
         </tr>
         </thead>
@@ -259,21 +259,21 @@
                 <td>{{$row->grade}}</td>
                 <td>
                     @isset($xeploai[$row->xeploai])
-                        {{$xeploai[$row->xeploai]->name}}
+                    {{$xeploai[$row->xeploai]->name}}
                     @endisset
                 </td>
                 <td>{{\app\Utils::formatTimestamp($row->complete_at)}}</td>
+                @if(\App\Roles::checkRole('class-capnhathocvien'))
+                    <td><a class="btn btn-primary btn-xs"
+                           href="{{route('class-capnhathocvien', ['uid' => $row->user_id, 'cid' => $row->lop_id])}}">Cập
+                            nhật</a></td>
+                @endif
                 @if(\App\Roles::checkRole('student-remove'))
                     <td>
                         <a href="javascript:void(0)"
                            onclick="xoanguoidung({{$row->lop_id}},{{$row->user_id}},{{$course->id}})"
                            class="btn btn-xs btn-danger">Xóa</a>
                     </td>
-                @endif
-                @if(\App\Roles::checkRole('class-capnhathocvien'))
-                    <td><a class="btn btn-primary btn-xs"
-                           href="{{route('class-capnhathocvien', ['uid' => $row->user_id, 'cid' => $row->lop_id])}}">Cập
-                            nhật</a></td>
                 @endif
             </tr>
         @endforeach
