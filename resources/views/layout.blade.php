@@ -96,7 +96,8 @@
                                         class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 @if(\App\Roles::checkRole('tracuu-donvi'))
-                                    <li><a href="{{route('tracuu-donvi')}}">Theo đơn vị</a></li>
+                                    <li><a href="{{route('tracuu-donvi')}}">Theo Đơn vị</a></li>
+                                    <li><a href="{{route('tracuu-hocvien')}}">Theo Học Viên</a></li>
                                 @endif
                             </ul>
                         </li>

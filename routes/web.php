@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'TraCuuController@index')->name('tracuu');
             Route::get('/donvi', 'TraCuuController@donvi')->name('tracuu-donvi');
             Route::post('/donvi', 'TraCuuController@donvi')->name('tracuu-donvi');
+            Route::get('/hocvien', 'TraCuuController@hocvien')->name('tracuu-hocvien');
+            Route::post('/hocvien', 'TraCuuController@hocvien')->name('tracuu-hocvien');
         });
 
         Route::group(['prefix' => 'teacher'], function () {

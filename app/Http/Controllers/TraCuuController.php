@@ -103,6 +103,52 @@ class TraCuuController extends Controller
             return view('tracuu.donvi', $output);
         }
     }
+    public function hocvien(Request $request)
+    {
+        $courses = DB::table('course')
+            ->select('id', 'fullname')
+            ->get();
+
+        $cid = $request->input('course',0);
+        $year = $request->input('year',0);
+
+
+        if($cid == 0) {
+            $class = DB::select("select ID, TO_CHAR(TIME_START, 'YYYY') AS START_YEAR from M_LOP");
+        }else {
+            $class = DB::select("select ID, TO_CHAR(TIME_START, 'YYYY') AS START_YEAR from M_LOP where COURSE_ID = ?", [$cid]);
+        }
+
+        $users = [];
+        if (count($class) > 0) {
+            $classIds = array();
+            foreach ($class as $item) {
+                if ($year == 0 || $year == $item->start_year)
+                    $classIds[] = $item->id;
+            }
+            $lhv = DB::table('lop_hocvien')
+                ->whereIn('lop_id', $classIds)
+                ->select('*')
+                ->get();
+            $userIds = array();
+            foreach ($lhv as $item) {
+                $userIds[] = $item->user_id;
+            }
+
+            $users = DB::table('person')
+                ->whereIn('id', $userIds)
+                ->select('*')
+                ->get();
+            }
+
+
+        $datadonvi = DB::table('donvi')->get();
+        $donvi = \App\Utils::row2Array($datadonvi);
+
+
+        return view('tracuu.hocvien', ['courses' => $courses, 'cid' => $cid, 'year' => $year,'donvi'=>$donvi, "users"=>$users]);
+
+    }
 
 
 }
