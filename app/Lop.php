@@ -22,6 +22,6 @@ class Lop extends Model
 
     public function course()
     {
-        return $this->belongsTo('App\Course')->select(['id', 'fullname', 'shortname']);
+        return $this->belongsTo('App\Course')->select(['id', 'fullname', 'shortname', 'summary']);
     }
 }

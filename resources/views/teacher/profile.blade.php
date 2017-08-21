@@ -73,6 +73,7 @@
             <th class="stt">#</th>
             <th>Khóa học</th>
             <th>Lớp</th>
+            <th>Nội dung</th>
         </tr>
         </thead>
         <tbody>
@@ -89,6 +90,9 @@
                     <a href="{{route('course-result', ["class" => $item->pivot->lop_id])}}">
                         {{$item->ten_lop}}
                     </a>
+                </td>
+                <td>
+                    {{$item->course->summary}}
                 </td>
             </tr>
         @endforeach
