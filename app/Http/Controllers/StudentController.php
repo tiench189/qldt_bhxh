@@ -37,8 +37,16 @@ class StudentController extends Controller
         $datadonvi = DB::table('donvi')
             ->whereIn('id', $iddv)
             ->get();
-        $donvi = \App\Utils::row2Array($datadonvi);
-        return view('student.index', ['users' => $users, 'donvi' => $donvi]);
+        $datadonvi = \App\Utils::row2Array($datadonvi);
+
+        if(isset($donvi)) {
+            $infodonvi = $datadonvi[$donvi]->ten_donvi;
+        } else {
+            $infodonvi = "";
+        }
+
+
+        return view('student.index', ['users' => $users, 'donvi' => $datadonvi,"infodonvi" => $infodonvi]);
     }
 
     public function histories(Request $request)
