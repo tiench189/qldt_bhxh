@@ -254,7 +254,11 @@
                 <td>{{$users[$row->user_id]->firstname}} {{$users[$row->user_id]->lastname}}</td>
                 <td>{{$users[$row->user_id]->email}}</td>
                 <td class="{{$classID == 0?'':'hidden'}}">{{$row->ten_lop}}</td>
-                <td>{{array_key_exists($users[$row->user_id]->donvi, $donvi)?$donvi[$users[$row->user_id]->donvi]->ten_donvi:''}}</td>
+                <td>
+                    <a href="{{route('hocvien-index', ['donvi' => $users[$row->user_id]->donvi])}}">
+                        {{array_key_exists($users[$row->user_id]->donvi, $donvi)?$donvi[$users[$row->user_id]->donvi]->ten_donvi:''}}
+                    </a>
+                </td>
                 <td>{{\app\Utils::getStatus($row->status)}}</td>
                 <td>{{$row->grade}}</td>
                 <td>

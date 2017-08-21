@@ -72,7 +72,8 @@ Breadcrumbs::register('hocvien', function ($breadcrumbs, $text = "", $student = 
 
         $breadcrumbs->push($student->firstname . " " . $student->lastname);
     } else {
-        $breadcrumbs->push("Danh Sách Học viên");
+        $breadcrumbs->push("Danh Sách Học viên", route('hocvien-index'));
+        if($text) $breadcrumbs->push($text);
     }
 });
 

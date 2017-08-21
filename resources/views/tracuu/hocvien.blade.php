@@ -51,7 +51,14 @@
                 <td>{{$idx + 1}}</td>
                 <td> {{$row->firstname}} {{$row->lastname}}</td>
                 <td> {{$row->email}} </td>
-                <td> {{array_key_exists($row->donvi, $donvi)?$donvi[$row->donvi]->ten_donvi:''}} </td>
+                <td>
+
+                    <a href="{{route('hocvien-index', ['donvi' => $row->donvi])}}">
+                        {{array_key_exists($row->donvi, $donvi)?$donvi[$row->donvi]->ten_donvi:''}}
+                    </a>
+
+
+                </td>
                 <td>{{\App\Utils::toTimeFormat($row->birthday)}}</td>
                 <td>{{\App\Utils::formatSex($row->sex)}}</td>
                 <td>{{$row->chucdanh}}</td>
