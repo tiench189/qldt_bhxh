@@ -40,7 +40,7 @@ class CourseController extends Controller
         }
         $select_category = DB::table('course_categories')->get();
         $categories = Utils::row2Array($select_category);
-        return view('course.index', ['course' => $course, 'category' => $cat, 'parentcat' => $parentcat, 'categories' => $categories]);
+        return view('course.index', ['course' => $course, 'category' => $cat, 'parentcat' => $parentcat, 'categories' => $categories, 'cat' => $cate]);
     }
 
     public function edit(Request $request)
@@ -113,6 +113,79 @@ class CourseController extends Controller
         } else {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");
             return redirect()->action('CourseController@index');
+        }
+    }
+
+    public function createCourse(Request $request)
+    {
+        $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
+        $pids = array();
+        foreach ($select_parrent as $row) {
+            $pids[] = $row->id;
+        }
+        $cate = DB::table('course_categories')->whereIn('parent', $pids)->get();
+        if ($request->isMethod('get')) {
+
+            return view('course.create', ['cate' => $cate, 'cat' => $request->cat]);
+        } else if ($request->isMethod('post')) {
+            $messages = [
+                'fullname.required' => 'Yêu cầu nhập tên khóa học.',
+            ];
+            $validator = Validator::make($request->all(), [
+                'fullname' => 'required',
+            ], $messages);
+
+            if ($validator->fails()) {
+                return redirect()->action('CourseController@createCourse')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $file = $request->file('docs');
+            if (isset($file)) {
+                $file_attach = $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $file_attach = str_replace("/", "-", $file_attach);
+            }
+
+            $fullname = $request->fullname;
+            $shortname = 'DT' . date('ymdhis');
+            $categoryid = $request->categoryid;
+            $summary = (isset($request->summary)) ? $request->summary : "";
+            $doituong = (isset($request->doi_tuong)) ? $request->doi_tuong : "";
+            $thoigian = (isset($request->thoi_gian)) ? $request->thoi_gian : "";
+
+            $result = DB::table('course')
+                ->insertGetId([
+                    'fullname' => $fullname,
+                    'shortname' => $shortname,
+                    'category' => $categoryid,
+                    'summary' => $summary,
+                    'format' => "topics",
+                ]);
+
+
+            if (!$result) {
+                $request->session()->flash('message', "Có lỗi xảy ra: Không thể thêm khóa học");
+                return view('course.create', ['cate' => $cate]);
+            } else {
+                $id = intval($result);
+                if (isset($file)) {
+                    $destinationPath = 'uploads/docs';
+                    $file->move($destinationPath, $file_attach);
+                    $result = DB::table('course')
+                        ->where('id', $id)
+                        ->update([
+                            'overviewfile' => $file_attach,
+                        ]);
+                }
+                DB::table('course')->where('id', $id)
+                    ->update(['doi_tuong' => $doituong, 'thoi_gian' => $thoigian]);
+                $request->session()->flash('message', "Cập nhật thành công.");
+            }
+
+            return redirect()->action(
+                'CourseController@index', ['c' => $request->input('categoryid')]
+            );
         }
     }
 
@@ -711,7 +784,7 @@ class CourseController extends Controller
             ->where('id', $cid)
             ->delete();
 
-        if (!$result) {
+        if ($result) {
             $request->session()->flash('message', "Xóa thành công khóa đào tạo");
         } else {
             $request->session()->flash('message', "Không thể xóa khóa đào tạo");
@@ -719,66 +792,4 @@ class CourseController extends Controller
 
         return back()->withInput();
     }
-
-    public function createCourse(Request $request)
-    {
-        $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
-        $pids = array();
-        foreach ($select_parrent as $row) {
-            $pids[] = $row->id;
-        }
-        $cate = DB::table('course_categories')->whereIn('parent', $pids)->get();
-        if ($request->isMethod('get')) {
-
-            return view('course.create', ['cate' => $cate]);
-        } else if ($request->isMethod('post')) {
-            $file = $request->file('docs');
-            if (isset($file)) {
-                $file_attach = $request->input('fullname') . "." . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-                $file_attach = str_replace("/", "-", $file_attach);
-            }
-
-            $fullname = $request->fullname;
-            $shortname = 'DT' . date('ymdhis');
-            $categoryid = $request->categoryid;
-            $summary = (isset($request->summary)) ? $request->summary : "";
-            $doituong = (isset($request->doi_tuong)) ? $request->doi_tuong : "";
-            $thoigian = (isset($request->thoi_gian)) ? $request->thoi_gian : "";
-
-            $result = DB::table('course')
-                ->insertGetId([
-                    'fullname' => $fullname,
-                    'shortname' => $shortname,
-                    'category' => $categoryid,
-                    'summary' => $summary,
-                    'format' => "topics",
-                ]);
-
-
-            if (!$result) {
-                $request->session()->flash('message', "Có lỗi xảy ra: Không thể thêm khóa học");
-                return view('course.create', ['cate' => $cate]);
-            } else {
-                $id = intval($result);
-                if (isset($file)) {
-                    $destinationPath = 'uploads/docs';
-                    $file->move($destinationPath, $file_attach);
-                    $result = DB::table('course')
-                        ->where('id', $id)
-                        ->update([
-                            'overviewfile' => $file_attach,
-                        ]);
-                }
-                DB::table('course')->where('id', $id)
-                    ->update(['doi_tuong' => $doituong, 'thoi_gian' => $thoigian]);
-                $request->session()->flash('message', "Cập nhật thành công.");
-            }
-
-            return redirect()->action(
-                'CourseController@index', ['c' => $request->input('categoryid')]
-            );
-        }
-    }
-
-
 }

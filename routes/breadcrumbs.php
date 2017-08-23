@@ -8,8 +8,12 @@ Breadcrumbs::register('index', function ($breadcrumbs = [], $catinfo = []) {
         $breadcrumbs->push($catinfo->name, route('index', ["c" => $catinfo->id]));
         $breadcrumbs->push('Danh sách');
     }
+});
 
-
+//Category
+Breadcrumbs::register('category', function ($breadcrumbs, $sub = '') {
+    $breadcrumbs->push('Nội dung đào tạo', route('index'));
+    $breadcrumbs->push($sub);
 });
 
 // Index > Course
@@ -22,8 +26,6 @@ Breadcrumbs::register('course', function ($breadcrumbs, $nddt = [], $category = 
     if (!empty($category)) $breadcrumbs->push($category->name, route('course-index', ["c" => $category->id]));
 
     $breadcrumbs->push('Danh sách khóa học');
-
-
 });
 
 

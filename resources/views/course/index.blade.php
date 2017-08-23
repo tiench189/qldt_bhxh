@@ -29,7 +29,7 @@
         @endif
     </div>
     @if(\App\Roles::checkRole('course-createCourse'))
-        <a class="btn btn-primary btn-add" href="{{route('course-createCourse')}}">Thêm mới</a>
+        <a class="btn btn-primary btn-add" href="{{route('course-createCourse', ['cat' => $cat])}}">Thêm mới</a>
     @endif
     <table id="table" class="table table-bordered table-hover" data-export="[0,1,2]">
         <thead>
@@ -39,10 +39,10 @@
             <th style="min-width: 200px">Tên khóa đào tạo<br><input type="text"></th>
             <th>Nội dung đào tạo<br>
                 {{--<select>--}}
-                    {{--<option value=""></option>--}}
-                    {{--@foreach($categories as $row)--}}
-                        {{--<option value="{{$row->name}}">{{$row->name}}</option>--}}
-                    {{--@endforeach--}}
+                {{--<option value=""></option>--}}
+                {{--@foreach($categories as $row)--}}
+                {{--<option value="{{$row->name}}">{{$row->name}}</option>--}}
+                {{--@endforeach--}}
                 {{--</select>--}}
                 <input type="text">
             </th>
@@ -66,13 +66,13 @@
             <tr>
                 <td> {{$idx + 1}} </td>
                 <td>
-                @if(\App\Roles::checkRole('course-classes'))
+                    @if(\App\Roles::checkRole('course-classes'))
                         <a href="{{route('course-classes', ['c' => $row->id])}}">
                             <strong> {{$row->fullname}} </strong>
                         </a>
-                @else
+                    @else
                         <strong> {{$row->fullname}} </strong>
-                @endif
+                    @endif
 
                 </td>
                 <td>{{isset($row->category, $categories)?$categories[$row->category]->name:''}}</td>
@@ -82,10 +82,17 @@
                 <td> @if($row->overviewfile != '')
                         <a href="{{$_ENV['ALIAS']}}/uploads/docs/{{$row->overviewfile}}" download>Tải về</a>
                     @endif </td>
-                @if(\App\Roles::checkRole('course-result'))
+                {{--@if(\App\Roles::checkRole('course-result'))--}}
+                {{--<td>--}}
+                {{--<a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-primary">--}}
+                {{--DS Học viên--}}
+                {{--</a>--}}
+                {{--</td>--}}
+                {{--@endif--}}
+                @if(\App\Roles::checkRole('course-classes'))
                     <td>
-                        <a href="{{route('course-result', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
-                            DS Học viên
+                        <a href="{{route('course-classes', ['c' => $row->id])}}" class="btn btn-xs btn-primary">
+                            DS Lớp
                         </a>
                     </td>
                 @endif

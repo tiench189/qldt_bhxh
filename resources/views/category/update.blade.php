@@ -5,7 +5,9 @@
 @stop
 
 @section('content')
-    <div class="page-title">Cập nhật nội dung đào tạo</div>
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('category', 'Cập nhật Nội dung') !!}
+    </div>
 
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
@@ -17,33 +19,45 @@
         @endforeach
     @endif
 
-    {!! Form::open(array('route' => 'category-update', 'class' => 'form', 'files'=>'true')) !!}
+    {!! Form::open(array('route' => 'category-update', 'class' => 'form-horizontal', 'files'=>'true')) !!}
     {{ Form::hidden('id', $category->id, array('id' => 'catid')) }}
-    <div class="form-group">
-        <label>Tên nội dung: <span class="required">(*)</span></label>
-        {!! Form::text('name', $category->name,
-            array('class'=>'form-control',
-                  'placeholder'=>'Nội dung đào tạo')) !!}
-    </div>
-    <div class="form-group form-inline">
-        <label>Danh mục:</label>
-        <select name="parent" class="js-example-basic-single form-control">
-            @foreach($parents as $row)
-                <option value="{{$row->id}}" {{$row->id == $category->parent?'selected':''}}>{{$row->name}}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Mô tả: </label>
-        {!! Form::textarea('description', $category->description,
-            array('class'=>'form-control',
-                  'placeholder'=>'Tóm tắt nội dung',
-                  'rows'=>5)) !!}
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Tên nội dung: <span class="required text-danger">(*)</span></label>
+                <div class="col-sm-9">
+                    {!! Form::text('name', $category->name,
+                        array('class'=>'form-control',
+                              'placeholder'=>'Nội dung đào tạo',
+                              'required' => 'required')) !!}
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-3 control-label">Danh mục:</label>
+                <div class="col-sm-9">
+                    <select name="parent" class="js-example-basic-single form-control">
+                        @foreach($parents as $row)
+                            <option value="{{$row->id}}" {{$row->id == $category->parent?'selected':''}}>{{$row->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Mô tả: </label>
+                <div class="col-sm-9">
+                    {!! Form::textarea('description', $category->description,
+                        array('class'=>'form-control',
+                              'placeholder'=>'Tóm tắt nội dung',
+                              'rows'=>5)) !!}
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
+    <div class="row text-center">
         {!! Form::submit('Hoàn tất',
           array('class'=>'btn btn-primary')) !!}
+        <a href="{{URL::previous()}}" class="btn btn-default">Quay lại</a>
     </div>
     {!! Form::close() !!}
 @stop

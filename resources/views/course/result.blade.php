@@ -14,6 +14,11 @@
     {{ Form::hidden('sid', 0, array('id' => 'studentid')) }}
     {{ Form::hidden('courseid', 0, array('id' => 'courseid')) }}
     {!! Form::close() !!}
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
     <script language="javascript">
         function xoanguoidung(cid, sid, courseid) {
 
@@ -110,50 +115,55 @@
                 <div class="modal-body">
 
 
-                    {!! Form::open(array('route' => 'student-add', 'class' => 'form','id' => 'frmaddstudent')) !!}
+                    {!! Form::open(array('route' => 'student-add', 'class' => 'form-horizontal','id' => 'frmaddstudent')) !!}
                     {{ Form::hidden('id', $course->id, array('id' => 'addcourseid')) }}
                     @if($courseID != 0)
                         <div class="form-group">
-                            <label>Lớp: <span class="required">(*)</span></label>
-                            {!! Form::select('cid', $ddclass, '',
-                                array('class'=>'form-control','id'=>"addclassid")) !!}
+                            <label class="col-sm-4 control-label">Lớp: <span class="required">(*)</span></label>
+                            <div class="col-sm-8">
+                                {!! Form::select('cid', $ddclass, '',
+                                    array('class'=>'form-control','id'=>"addclassid")) !!}
+                            </div>
                         </div>
                     @else
                         {{ Form::hidden('cid', $class->id, array('id' => 'addclassid')) }}
                     @endif
                     <div class="form-group">
-                        <label>Học Viên: <span class="required">(*)</span></label>
-                        {!! Form::select('sid', $dduser, '',
-                            array('class'=>'form-control js-example-basic-single','id'=>"addstdid")) !!}
+                        <label class="col-sm-4 control-label">Học Viên: <span class="required">(*)</span></label>
+                        <div class="col-sm-8">
+                            {!! Form::select('sid', $dduser, '',
+                                array('class'=>'js-example-basic-single form-control','id'=>"addstdid")) !!}
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Điểm trung bình: <span class="required">(*)</span></label>
-                        {!! Form::number('grade', "",
-                            array('class'=>'form-control','style'=>"width: 70px")) !!}
+                        <label class="col-sm-4 control-label">Điểm trung bình: <span class="required">(*)</span></label>
+                        <div class="col-sm-8">
+                            {!! Form::number('grade', "",
+                                array('class'=>'form-control','style'=>"width: 50%")) !!}
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Xếp loại: <span class="required">(*)</span></label>
-                        {!! Form::select('xeploai', $ddlxeploai, '',
-                            array('class'=>'form-control')) !!}
+                        <label class="col-sm-4 control-label">Xếp loại: <span class="required">(*)</span></label>
+                        <div class="col-sm-8">
+                            {!! Form::select('xeploai', $ddlxeploai, '',
+                                array('class'=>'form-control')) !!}
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Trạng thái: <span class="required">(*)</span></label>
-                        {!! Form::select('status', ['finished'=>'Hoàn Thành','inprogress'=>"Đang học"], '',
-                            array('class'=>'form-control')) !!}
+                        <label class="col-sm-4 control-label">Trạng thái: <span class="required">(*)</span></label>
+                        <div class="col-sm-8">
+                            {!! Form::select('status', ['finished'=>'Hoàn Thành','inprogress'=>"Đang học"], '',
+                                array('class'=>'form-control')) !!}
+                        </div>
                     </div>
-
-
-                    <div class="form-group">
-                        {!! Form::submit('Cập nhật',
-                          array('class'=>'btn btn-primary')) !!}
-                    </div>
-                    {!! Form::close() !!}
-
 
                 </div>
                 <div class="modal-footer">
+                    {!! Form::submit('Cập nhật',
+                          array('class'=>'btn btn-primary')) !!}
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
+                {!! Form::close() !!}
             </div>
 
         </div>
