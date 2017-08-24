@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -24,48 +25,54 @@ use App\MoodleRest;
 class CategoryController extends Controller
 {
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $pcat = intval($request->c);
 
         $select_parrent = DB::table('course_categories')->where('parent', '=', 1)->get();
         $parents = array();
         $pids = array();
-        foreach ($select_parrent as $row){
+        foreach ($select_parrent as $row) {
             $parents[$row->id] = $row;
             $pids[] = $row->id;
         }
 
-        if($pcat > 0) {
-            $category =  DB::table('course_categories')->where('parent', '=', $pcat)->get();
+        if ($pcat > 0) {
+            $category = DB::table('course_categories')->where('parent', '=', $pcat)->get();
             $catinfo = DB::table('course_categories')->where('id', $pcat)->first();
 
         } else {
-            $category =  DB::table('course_categories')->whereIn('parent', $pids)->get();
+            $category = DB::table('course_categories')->whereIn('parent', $pids)->get();
             $catinfo = [];
         }
 
-        $output = ['category' => $category, 'parents' => $parents,'catinfo' => $catinfo];
+        $output = ['category' => $category, 'parents' => $parents, 'catinfo' => $catinfo];
 //        return response()->json($output);
         return view('category.index', $output);
     }
 
-    public function create(Request $request){
-        if($request->isMethod('get')){
+    public function create(Request $request)
+    {
+        if ($request->isMethod('get')) {
             $parents = DB::table('course_categories')->where('parent', '=', 1)->get();
             return view('category.create', ['parents' => $parents]);
         }
 
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $description = $request->description;
-            if(!isset($description)) $description = $request->name;
+            if (!isset($description)) $description = $request->name;
 
-            $result = DB::table('course_categories')
-                ->insert([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'parent' => $request->parent,
-                ]);
+            try {
+                $result = DB::table('course_categories')
+                    ->insert([
+                        'name' => $request->name,
+                        'description' => $request->description,
+                        'parent' => $request->parent,
+                    ]);
+            } catch (Exception $e) {
+                $request->session()->flash('message', "Có lỗi phát sinh: Không thể thêm Danh mục");
+            }
 
 
             if (!$result) {
@@ -84,22 +91,26 @@ class CategoryController extends Controller
     {
         $id = intval($request->input('id'));
         $category = DB::table('course_categories')->where('id', $id)->first();
-        if(!$category){
+        if (!$category) {
             $request->session()->flash('message', "ID Khóa học không hợp lệ.");
             return redirect()->action('CategoryController@index');
         }
 
-        if($request->isMethod('get')){
+        if ($request->isMethod('get')) {
             $parents = DB::table('course_categories')->where('parent', '=', 1)->get();
             return view('category.update', ['category' => $category, 'parents' => $parents]);
-        }else{
-            $result = DB::table('course_categories')
-                ->where('id', $id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'parent' => $request->parent,
-                ]);
+        } else {
+            try {
+                $result = DB::table('course_categories')
+                    ->where('id', $id)
+                    ->update([
+                        'name' => $request->name,
+                        'description' => $request->description,
+                        'parent' => $request->parent,
+                    ]);
+            } catch (Exception $e) {
+                $request->session()->flash('message', "Có lỗi phát sinh: Không thể cập nhật Danh mục");
+            }
 
 
             if (!$result) {
@@ -114,7 +125,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function remove(Request $request){
+    public function remove(Request $request)
+    {
 
         $result = DB::table('course_categories')
             ->where('id', $request->id)
@@ -122,7 +134,7 @@ class CategoryController extends Controller
 
         if (!$result) {
             $request->session()->flash('message', "Không thể xóa danh mục đào tạo");
-        }else{
+        } else {
             $request->session()->flash('message', "Xóa thành công danh mục đào tạo");
         }
 

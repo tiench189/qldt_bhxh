@@ -5,7 +5,9 @@
 @stop
 
 @section('content')
-    <div class="page-title">Tạo khóa đào tạo mới</div>
+    <div class="breadcrumbs">
+        {!! Breadcrumbs::render('category', 'Tạo khóa đào tạo mới') !!}
+    </div>
 
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
@@ -17,48 +19,67 @@
         @endforeach
     @endif
 
-    {!! Form::open(array('route' => 'course-createCourse', 'class' => 'form', 'files'=>'true')) !!}
-    <div class="form-group">
-        <label>Tên khóa học: <span class="required">(*)</span></label>
-        {!! Form::text('fullname', '',
-            array('class'=>'form-control',
-                  'placeholder'=>'Tên khóa đào tạo ')) !!}
-    </div>
-    <div class="form-group form-inline">
-        <label>Đối tượng đào tạo: </label>
-        <input type="text" name="doi_tuong" class="form-control" placeholder="VD: CBCC Bảo hiểm">
-    </div>
-    <div class="form-group form-inline">
-        <label>Thời gian đào tạo: </label>
-        <input type="text" name="thoi_gian" class="form-control" placeholder="VD: 1 tháng">
-    </div>
-    <div class="form-group form-inline">
-        <label>Danh mục:</label>
-        <select name="categoryid" class="js-example-basic-single form-control">
-            @foreach($cate as $row)
-                <option value="{{$row->id}}" >{{$row->name}}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Mô tả: </label>
-        {!! Form::textarea('summary', '',
-            array('class'=>'form-control',
-                  'placeholder'=>'Tóm tắt nội dung',
-                  'rows'=>5)) !!}
-    </div>
-    <div class="form-group form-inline">
-        <label style="float: left">File đính kèm:</label>
-        {!! Form::file('docs', array('class'=>'')) !!}
+    {!! Form::open(array('route' => 'course-createCourse', 'class' => 'form-horizontal', 'files'=>'true')) !!}
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Tên khóa học: <span class="required text-danger">(*)</span></label>
+
+                <div class="col-sm-9">
+                    {!! Form::text('fullname', '',
+                    array('class'=>'form-control',
+                          'placeholder'=>'Tên khóa học',
+                          'required' => 'required')) !!}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Đối tượng đào tạo: </label>
+                <div class="col-sm-9">
+                    <input type="text" name="doi_tuong" class="form-control" placeholder="VD: CBCC Bảo hiểm">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Thời gian đào tạo: </label>
+                <div class="col-sm-9">
+                    <input type="text" name="thoi_gian" class="form-control" placeholder="VD: 1 tháng">
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-3 control-label">Danh mục:</label>
+                <div class="col-sm-9">
+                    <select name="categoryid" class="js-example-basic-single form-control">
+                        @foreach($cate as $row)
+                            <option @if($row->id == $cat) selected @endif    value="{{$row->id}}">{{$row->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Mô tả: </label>
+                <div class="col-sm-9">
+                    {!! Form::textarea('summary', '',
+                        array('class'=>'form-control myTextEditor',
+                              'placeholder'=>'Tóm tắt nội dung',
+                              'rows'=>5)) !!}
+                </div>
+            </div>
+            <div class="form-group ">
+                <label class="col-sm-3 control-label">File đính kèm:</label>
+                <div class="col-sm-9">
+                    {!! Form::file('docs', array('class'=>'form-control')) !!}
+                </div>
+            </div>
+        </div>
     </div>
 
     {{--<div class="form-group">--}}
-        {{--<label>File đính kèm: </label>--}}
-        {{--<input type="file" name="file" id="file">--}}
+    {{--<label>File đính kèm: </label>--}}
+    {{--<input type="file" name="file" id="file">--}}
     {{--</div>--}}
-    <div class="form-group">
+    <div class="row text-center">
         {!! Form::submit('Cập nhật',
           array('class'=>'btn btn-primary')) !!}
+        <a href="{{URL::previous()}}" class="btn btn-default">Quay lại</a>
     </div>
     {!! Form::close() !!}
 @stop
