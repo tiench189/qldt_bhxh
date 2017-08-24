@@ -153,10 +153,10 @@ class UserController extends Controller
                 'firstname' => $request->firstname,
                 'email' => $request->email,
             ];
-            if (filter_var($request->email, FILTER_VALIDATE_EMAIL))  $dataupdate['email'] =  Hash::make($request->email);
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL))  $dataupdate['email'] =  $request->email;
 
             if($request->has("password")) $dataupdate['password'] =  Hash::make($request->password);
-            if($request->has("lastname")) $dataupdate['lastname'] =  Hash::make($request->lastname);
+            if($request->has("lastname")) $dataupdate['lastname'] =  $request->lastname;
 
             $rs = DB::table('users')->where('id', $uid)->update(
                 $dataupdate
