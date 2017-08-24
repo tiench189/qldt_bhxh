@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index(Request $request){
         $users = DB::table('users')
             ->leftJoin('group_permission', 'group_permission.id', '=', 'users.group_permission')
-            ->select('users.id', 'users.email', 'users.firstname', 'users.lastname', 'group_permission.name as group_name')
+            ->select('users.id', 'users.username', 'users.email', 'users.firstname', 'users.lastname', 'group_permission.name as group_name')
             ->get();
         $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
 //        return response()->json($users);
@@ -108,4 +109,66 @@ class UserController extends Controller
         $request->session()->flash('message', 'Xóa nhóm quyền thành công');
         return redirect(route('role-index'));
     }
+
+
+    public function add(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            return view('users.add');
+        }
+
+        $result = DB::table('users')
+            ->insertGetId([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'username' => $request->username,
+                'password' =>  Hash::make($request->password),
+            ]);
+
+        if ($result) {
+            $request->session()->flash('message', 'Thêm học viên thành công');
+            return redirect(route('user-index'));
+        } else {
+            $request->session()->flash('message', 'Thêm học viên thất bại');
+            return redirect(route('user-add'))->withInput();
+        }
+
+    }
+
+    public function updateuser(Request $request)
+    {
+        $uid = intval($request->uid);
+
+        if($request->isMethod('get')){
+            $user = DB::table('users')
+                ->where('id', $uid)
+                ->first();
+            $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
+            return view('users.updateuser', ['user' => $user, 'groups' => $groups]);
+        } else if($request->isMethod('post')) {
+
+
+            $dataupdate =  [
+                'firstname' => $request->firstname,
+                'email' => $request->email,
+            ];
+            if (filter_var($request->email, FILTER_VALIDATE_EMAIL))  $dataupdate['email'] =  Hash::make($request->email);
+
+            if($request->has("password")) $dataupdate['password'] =  Hash::make($request->password);
+            if($request->has("lastname")) $dataupdate['lastname'] =  Hash::make($request->lastname);
+
+            $rs = DB::table('users')->where('id', $uid)->update(
+                $dataupdate
+            );
+            if($rs) {
+                $request->session()->flash('message', 'Cập nhật thông tin tài khoản thành công!');
+                return redirect(route('user-index'));
+            } else {
+                $request->session()->flash('message', 'Cập nhật thông tin tài khoản không thành công!');
+                return redirect(route('user-index'));
+            }
+        }
+    }
+
 }

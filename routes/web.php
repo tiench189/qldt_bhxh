@@ -109,6 +109,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/createrole', 'UserController@createRole')->name('role-create');
             Route::post('/createrole', 'UserController@createRole')->name('role-create');
             Route::post('/deleterole', 'UserController@deleteRole')->name('role-delete');
+            Route::get('/add', 'UserController@add')->name('user-add');
+            Route::post('/add', 'UserController@add')->name('user-add');
+            Route::get('/update', 'UserController@updateuser')->name('user-update');
+            Route::post('/update', 'UserController@updateuser')->name('user-update');
         });
         Route::group(['prefix' => 'donvi'], function () {
             Route::get('/', 'DonviController@index')->name('donvi-index');

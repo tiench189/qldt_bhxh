@@ -9,10 +9,15 @@
     @if (Session::has('message'))
         <div class="alert alert-info">{!!  Session::get('message') !!}</div>
     @endif
+
+    {{--@if(\App\Roles::checkRole('hocvien-add'))--}}
+        <a class="btn btn-primary btn-add" href="{{route('user-add')}}">Thêm mới</a>
+    {{--@endif--}}
     <table id="table" class="table table-bordered">
         <thead>
         <tr>
             <th class="stt">#</th>
+            <th>Tài khoản<br><input type="text"></th>
             <th>Email<br><input type="text"></th>
             <th>Họ tên<br><input type="text"></th>
             <th>Nhóm quyền<br>
@@ -33,14 +38,14 @@
         @foreach($users as $idx => $row)
             <tr>
                 <td>{{$idx + 1}}</td>
+                <td>{{$row->username}}</td>
                 <td>{{$row->email}}</td>
                 <td>{{$row->firstname}} {{$row->lastname}}</td>
                 <td>{{$row->group_name}}</td>
                 @if(\App\Roles::checkRole('user-update-role'))
                     <td>
-                        <a href="{{route('user-update-role', ['uid' => $row->id])}}" class="btn btn-xs btn-primary">Cập
-                            nhật
-                            nhóm quyền</a>
+                        <a href="{{route('user-update-role', ['uid' => $row->id])}}" class="btn btn-xs btn-primary">Nhóm quyền</a>
+                        <a href="{{route('user-update', ['uid' => $row->id])}}" class="btn btn-xs btn-info">Sửa</a>
                     </td>
                 @endif
             </tr>
