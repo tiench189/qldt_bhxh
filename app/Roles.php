@@ -10,10 +10,11 @@ class Roles extends Model
 {
     public static function checkRole($route, $refresh = false)
     {
-        return true;
-        $user = Session::get('user');
+//        return true;
+//        $user = Session::get('user');
+        $user = \Auth::user();
         if (!isset($user)) return false;
-        if (!Session::has('role-' . $user->id) || $refresh){
+        if (!Session::has('role-' . $user->id) || $refresh) {
             $userGroup = intval($user->group_permission);
             $roles = DB::table('permission')
                 ->join('roles_group', 'permission.id', '=', 'roles_group.permission')
@@ -24,23 +25,25 @@ class Roles extends Model
         return in_array($route, $roles);
     }
 
-    public static function treeRoles(){
+    public static function treeRoles()
+    {
         $selectAllRoles = DB::table('permission')
             ->orderBy('permission_root', 'DESC')
             ->orderBy('id', 'ASC')->get();
         $allRoles = array();
-        foreach ($selectAllRoles as $row){
-            if ($row->permission_root == null){
+        foreach ($selectAllRoles as $row) {
+            if ($row->permission_root == null) {
                 $allRoles[$row->id] = $row;
                 $allRoles[$row->id]->children = array();
-            }else{
+            } else {
                 $allRoles[$row->permission_root]->children[] = $row;
             }
         }
         return $allRoles;
     }
 
-    public static function existRoles($groupid){
+    public static function existRoles($groupid)
+    {
         return DB::table('roles_group')
             ->where('group_id', $groupid)
             ->pluck('permission')->toArray();

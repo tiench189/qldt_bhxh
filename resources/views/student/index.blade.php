@@ -71,12 +71,12 @@
                 <td>{{$row->chucdanh}}</td>
                 <td>{{$row->chucvu}}</td>
                 @if(\App\Roles::checkRole('hocvien-update'))
-                    <td><a href="{{route('hocvien-update', ['uid' => $row->id])}}" class="btn btn-xs btn-primary {{$row->auth == 'cas'?'disabled':''}}">
+                    <td><a href="{{route('hocvien-update', ['uid' => $row->id])}}" class="btn btn-xs btn-primary">
                             Cập nhật</a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('hocvien-remove'))
-                    <td><a href="javascript:removeStudent({{$row->id}})" class="btn btn-xs btn-danger {{$row->auth == 'cas'?'disabled':''}}">
+                    <td><a href="javascript:removeStudent({{$row->id}})" class="btn btn-xs btn-danger">
                             Xóa</a>
                     </td>
                 @endif
