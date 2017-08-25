@@ -57,8 +57,10 @@ class TeacherController extends Controller
                 $data['type'] = 'teacher';
                 $data['email'] = $request->email;
                 $data['donvi'] = $request->donvi;
-                if (isset($request->birthday))
-                    $data['birthday'] = Utils::str2Date($request->birthday);
+                if (isset($request->birthday)) {
+                    $birthday = Utils::str2Date($request->birthday);
+                    $data['birthday'] = $birthday->format('Y-m-d H:i:s');
+                }
                 if (isset($request->sex))
                     $data['sex'] = $request->sex;
                 if (isset($request->chucdanh))
@@ -113,8 +115,10 @@ class TeacherController extends Controller
                 $data['email'] = $request->email;
                 $data['donvi'] = $request->donvi;
                 $data['timemodified'] = time();
-                if (isset($request->birthday))
-                    $data['birthday'] = Utils::str2Date($request->birthday);
+                if (isset($request->birthday)) {
+                    $birthday = Utils::str2Date($request->birthday);
+                    $data['birthday'] = $birthday->format('Y-m-d H:i:s');
+                }
                 if (isset($request->sex))
                     $data['sex'] = $request->sex;
                 if (isset($request->chucdanh))
@@ -233,7 +237,7 @@ class TeacherController extends Controller
 
     public function profile(Request $request)
     {
-        $teacher = Person::find((int) $request->teacher_id);
+        $teacher = Person::find((int)$request->teacher_id);
         if ($teacher) {
             $classes = $teacher->classes()->get(['ten_lop', 'course_id']);
             $from_class = Lop::find((int)$request->class_id);
