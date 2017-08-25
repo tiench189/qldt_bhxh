@@ -155,7 +155,7 @@
                     @else
                         <li class="dropdown">
                             <a class="dropdown-toggle top-menu" data-toggle="dropdown"
-                               href="#">{{\Illuminate\Support\Facades\Auth::user()->username}}
+                               href="#">{{\Illuminate\Support\Facades\Auth::user()->firstname}} {{\Illuminate\Support\Facades\Auth::user()->lastname}}
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 {{--
