@@ -141,4 +141,55 @@ class CategoryController extends Controller
         return back()->withInput();
     }
 
+    public function danhsachhocvien(Request $request){
+        $id = intval($request->input('id'));
+        $users = array();
+        // Danh sach cac course
+        $courses = DB::table('course')->where('category', $id)->get();
+        foreach ($courses as $course) {
+            $courseIds[] = $course->id;
+        }
+
+        if(count($courses) == 0) return view('category.danhsachhocvien', ['users' => $users]);
+        // Danh sach cac lop
+        $classes = DB::table('lop')
+            ->whereIn('course_id', $courseIds)
+            ->select('*')
+            ->get();
+
+        if(count($classes) == 0) return view('category.danhsachhocvien', ['users' => $users]);
+        foreach ($classes as $class) {
+            $classIds[] = $class->id;
+        }
+
+        //Lay danh sach ket qua
+        $allResult = DB::table('lop_hocvien')
+            ->join('lop', 'lop.id', '=', 'lop_hocvien.lop_id')
+            ->whereIn('lop.id', $classIds)
+            ->select('lop.ten_lop as ten_lop', 'lop.course_id as course_id', 'lop_hocvien.*')
+            ->get();
+
+        //Lay thong tin hoc vien
+        $uid = array();
+        foreach ($allResult as $row) {
+            $uid[] = $row->user_id;
+        }
+        $dataUser = DB::table('person')
+            ->where('type', 'student')
+            ->whereIn('id', $uid)
+            ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi', 'sex', 'chucdanh', 'chucvu')
+            ->get();
+
+        $users = \App\Utils::row2Array($dataUser);
+
+        //Lay thong tin don vi
+        $datadonvi = DB::table('donvi')
+            ->get();
+        $donvi = \App\Utils::row2Array($datadonvi);
+
+        //var_dump($users); die;
+
+        return view('category.danhsachhocvien', ['users' => $users, 'donvi' => $donvi]);
+    }
+
 }
