@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/remove', 'CategoryController@remove')->name('category-remove');
             Route::get('/update', 'CategoryController@update')->name('category-update');
             Route::post('/update', 'CategoryController@update')->name('category-update');
+            Route::get('/dshv', 'CategoryController@danhsachhocvien')->name('category-dshv');
         });
         Route::group(['prefix' => 'hocvien'], function () {
             Route::get('/', 'StudentController@index')->name('hocvien-index');

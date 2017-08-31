@@ -40,6 +40,9 @@
                 </select>
             </th>
             <th style="width: 300px">Mô tả<br><input type="text"></th>
+            @if(\App\Roles::checkRole('category-dshv'))
+                <th class="action"></th>
+            @endif
             @if(\App\Roles::checkRole('category-update'))
                 <th class="action"></th>
             @endif
@@ -61,6 +64,13 @@
                 </td>
                 <td>{{array_key_exists($row->parent, $parents)?$parents[$row->parent]->name:''}}</td>
                 <td>{{$row->description}}</td>
+                @if(\App\Roles::checkRole('category-dshv'))
+                <td>
+                    <a href="{{route('category-dshv', ['id' => $row->id])}}" class="btn btn-xs btn-primary">
+                        Danh sách học viên
+                    </a>
+                </td>
+                @endif
                 @if(\App\Roles::checkRole('category-update'))
                     <td>
                         <a href="{{route('category-update', ['id' => $row->id])}}" class="btn btn-xs btn-primary">
