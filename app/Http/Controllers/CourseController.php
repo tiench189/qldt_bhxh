@@ -389,6 +389,7 @@ class CourseController extends Controller
                 $user_lastname = $sheet->getCell('F' . $row)->getValue();
                 $user_donvi = $sheet->getCell('G' . $row)->getValue();
                 $user_chucvu = $sheet->getCell('H' . $row)->getValue();
+                $user_ngaysinh = $sheet->getCell('I' . $row)->getValue();
 
 
                 // Kiểm tra User này tồn tại hay không?
@@ -433,6 +434,7 @@ class CourseController extends Controller
                             'firstname' => $user_firstname,
                             'lastname' => $user_lastname,
                             'donvi' => $donvi,
+                            'birthday' => $user_ngaysinh,
                         );
                         $userimport[$user_email]["chk"] = 0;
                         $userimport[$user_email]["ins"] = true;
@@ -495,6 +497,7 @@ class CourseController extends Controller
                         $newdata['email'] = $rs[$email]["uar"]->email;
                         $newdata['donvi'] = $rs[$email]["uar"]->donvi;
                         $newdata['username'] = $rs[$email]["uar"]->username;
+                        $newdata['birthday'] = $rs[$email]["uar"]->birthday;
                         $newdata['auth'] = 'manual';
                         $newdata['confirmed'] = 1;
                         $newdata['timecreated'] = time();
