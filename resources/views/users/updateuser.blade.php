@@ -33,7 +33,8 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label"> Nhóm quyền <span class="required">(*)</span></label>
                 <div class="col-sm-9">
-                    <select name="group" class="form-control">
+                    <select name="group_permission" class="form-control">
+                        <option value=""></option>
                         @foreach($groups as $gr)
                             <option value="{{$gr->id}}" {{$gr->id == $user->group_permission ? 'selected' : ''}}>{{$gr->name}}</option>
                         @endforeach

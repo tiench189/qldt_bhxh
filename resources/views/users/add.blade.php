@@ -44,6 +44,17 @@
 
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"> Nhóm quyền <span class="required">(*)</span></label>
+                <div class="col-sm-9">
+                    <select name="group_permission" class="form-control">
+                        <option value=""></option>
+                        @foreach($groups as $gr)
+                            <option value="{{$gr->id}}">{{$gr->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
