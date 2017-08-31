@@ -7,9 +7,8 @@
 @section('content')
 
     <div class="breadcrumbs">
-        {!! Breadcrumbs::render('hocvien') !!}
+        {!! Breadcrumbs::render('hocvien',$infodonvi) !!}
     </div>
-
     {!! Form::open(array('route' => 'hocvien-remove', 'class' => 'form', 'id' => 'frmstudentremove')) !!}
     {{ Form::hidden('uid', 0, array('id' => 'studentid')) }}
     {!! Form::close() !!}
@@ -61,18 +60,23 @@
                         {{$row->firstname}} {{$row->lastname}} </a>
                 </td>
                 <td> {{$row->email}} </td>
-                <td> {{array_key_exists($row->donvi, $donvi)?$donvi[$row->donvi]->ten_donvi:''}} </td>
+                <td>
+
+                    <a href="{{route('hocvien-index', ['donvi' => $row->donvi])}}">
+                        {{array_key_exists($row->donvi, $donvi)?$donvi[$row->donvi]->ten_donvi:''}}
+                    </a>
+                </td>
                 <td>{{\App\Utils::toTimeFormat($row->birthday)}}</td>
                 <td>{{\App\Utils::formatSex($row->sex)}}</td>
                 <td>{{$row->chucdanh}}</td>
                 <td>{{$row->chucvu}}</td>
                 @if(\App\Roles::checkRole('hocvien-update'))
-                    <td><a href="{{route('hocvien-update', ['uid' => $row->id])}}" class="btn btn-xs btn-primary {{$row->auth == 'cas'?'disabled':''}}">
+                    <td><a href="{{route('hocvien-update', ['uid' => $row->id])}}" class="btn btn-xs btn-primary">
                             Cập nhật</a>
                     </td>
                 @endif
                 @if(\App\Roles::checkRole('hocvien-remove'))
-                    <td><a href="javascript:removeStudent({{$row->id}})" class="btn btn-xs btn-danger {{$row->auth == 'cas'?'disabled':''}}">
+                    <td><a href="javascript:removeStudent({{$row->id}})" class="btn btn-xs btn-danger">
                             Xóa</a>
                     </td>
                 @endif

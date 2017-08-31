@@ -29,6 +29,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/importstudent', 'CourseController@importstudent')->name('student-import');
 
     });
+    Route::group(['prefix' => 'teacher'], function () {
+        Route::get('/ds-mot-lop', 'TeacherController@listTeacherOfClass')->name('teacher-class-list');
+        Route::get('/profile', 'TeacherController@profile')->name('teacher-profile');
+    });
+
     Route::group(['middleware' => 'check_role'], function () {
         Route::get('/', 'CategoryController@index')->name('index');
         Route::group(['prefix' => 'course'], function () {
@@ -80,8 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update', 'TeacherController@update')->name('teacher-update');
             Route::post('/remove', 'TeacherController@remove')->name('teacher-remove');
             Route::post('/add-to-class', 'TeacherController@addTeacherToClass')->name('add-to-class');
-            Route::get('/ds-mot-lop', 'TeacherController@listTeacherOfClass')->name('teacher-class-list');
-            Route::get('/profile', 'TeacherController@profile')->name('teacher-profile');
+
         });
 
         Route::group(['prefix' => 'class'], function () {
@@ -109,6 +113,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/createrole', 'UserController@createRole')->name('role-create');
             Route::post('/createrole', 'UserController@createRole')->name('role-create');
             Route::post('/deleterole', 'UserController@deleteRole')->name('role-delete');
+            Route::get('/add', 'UserController@add')->name('user-add');
+            Route::post('/add', 'UserController@add')->name('user-add');
+            Route::get('/update', 'UserController@updateuser')->name('user-update');
+            Route::post('/update', 'UserController@updateuser')->name('user-update');
+            Route::post('/delete', 'UserController@deleteUser')->name('user-remove');
         });
         Route::group(['prefix' => 'donvi'], function () {
             Route::get('/', 'DonviController@index')->name('donvi-index');

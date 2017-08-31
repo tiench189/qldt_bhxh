@@ -74,7 +74,22 @@ Breadcrumbs::register('hocvien', function ($breadcrumbs, $text = "", $student = 
 
         $breadcrumbs->push($student->firstname . " " . $student->lastname);
     } else {
-        $breadcrumbs->push("Danh Sách Học viên");
+        $breadcrumbs->push("Danh Sách Học viên", route('hocvien-index'));
+        if($text) $breadcrumbs->push($text);
+    }
+});
+
+// Index > Hoc Vien
+Breadcrumbs::register('user', function ($breadcrumbs, $text = "", $student = []) {
+    $breadcrumbs->push("Tài khoản", route('user-index'));
+
+    if (!empty($student)) {
+        $breadcrumbs->push($text);
+
+        $breadcrumbs->push($student->firstname . " " . $student->lastname);
+    } else {
+        $breadcrumbs->push("Danh Sách Tài khoản", route('user-index'));
+        if($text) $breadcrumbs->push($text);
     }
 });
 

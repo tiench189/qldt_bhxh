@@ -50,7 +50,14 @@
             <tr>
                 <td> {{$idx + 1}} </td>
                 <td> {{\App\Utils::formatCapDV($row->cap_donvi)}} </td>
-                <td> {{$row->ten_donvi}} </td>
+                <td>
+
+                    <a href="{{route('hocvien-index', ['donvi' => $row->id])}}">
+                        {{$row->ten_donvi}}
+                    </a>
+
+
+                </td>
                 <td> {{$row->ma_donvi}} </td>
             </tr>
         @endforeach
