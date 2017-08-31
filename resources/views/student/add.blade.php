@@ -63,6 +63,17 @@
                     <input type="text" name="chucdanh" class="form-control">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Trình độ học vấn</label>
+                <div class="col-sm-9">
+                    <select name="hocvan" class="form-control js-example-basic-single">
+                        <option value="">&nbsp;</option>
+                        @foreach($hocvans as $hocvan)
+                            <option value="{{$hocvan->id}}">{{$hocvan->hocvan}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">

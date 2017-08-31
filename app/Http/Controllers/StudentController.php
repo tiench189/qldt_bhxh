@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Hocvan;
 use App\Person;
 use App\Utils;
 use Hamcrest\Util;
@@ -27,7 +28,7 @@ class StudentController extends Controller
             $query['donvi'] = $donvi;
         }
 
-        $users = DB::table('person')->where($query)->get();
+        $users = Person::where($query)->get();
 
         //Lay thong tin don vi
         $iddv = array();
@@ -86,7 +87,9 @@ class StudentController extends Controller
     {
         if ($request->isMethod('get')) {
             $donvi = DB::table('donvi')->orderBy('id')->get();
-            return view('student.add', ['donvi' => $donvi]);
+            $hocvans = Hocvan::all();
+
+            return view('student.add', ['donvi' => $donvi, 'hocvans' => $hocvans]);
         }
         $data = array();
         $data['firstname'] = $request->name;
@@ -94,6 +97,7 @@ class StudentController extends Controller
         $data['type'] = 'student';
         $data['email'] = $request->email;
         $data['donvi'] = $request->donvi;
+        $data['hocvan'] = $request->hocvan;
         if (isset($request->birthday))
             $data['birthday'] = Utils::str2Date($request->birthday);
         if (isset($request->sex))
@@ -118,12 +122,14 @@ class StudentController extends Controller
             $user = DB::table('person')->where('id', $uid)->first();
             $donvi = DB::table('donvi')->orderBy('id')->get();
             $donvi = Utils::row2Array($donvi);
+            $hocvans = Hocvan::all();
 //            return response()->json(['user' => $user, 'donvi' => $donvi]);
-            return view('student.update', ['user' => $user, 'donvi' => $donvi]);
+            return view('student.update', ['user' => $user, 'donvi' => $donvi, 'hocvans' => $hocvans]);
         }
         $data = array();
         $data['firstname'] = $request->name;
         $data['donvi'] = $request->donvi;
+        $data['hocvan'] = $request->hocvan;
         if (isset($request->birthday))
             $data['birthday'] = Utils::str2Date($request->birthday);
         if (isset($request->sex))

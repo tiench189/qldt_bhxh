@@ -34,6 +34,10 @@
                 <td>{{$user->email}}</td>
             </tr>
             <tr>
+                <td>Học vấn</td>
+                <td>{{($user->st_hocvan) ? $user->st_hocvan->hocvan : ''}}</td>
+            </tr>
+            <tr>
                 <td>Chức danh</td>
                 <td>{{$user->chucdanh}}</td>
             </tr>

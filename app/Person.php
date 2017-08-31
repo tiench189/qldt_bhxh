@@ -18,7 +18,7 @@ class Person extends Model
      */
     protected $fillable = [
         'firstname', 'lastname', 'type', 'email', 'donvi', 'sex', 'chucvu', 'birthday',
-        'chucdanh', 'auth', 'username', 'confirmed', 'timecreated', 'timemodified'
+        'chucdanh', 'auth', 'username', 'confirmed', 'timecreated', 'timemodified', 'hocvan'
     ];
 
     /**
@@ -130,5 +130,10 @@ class Person extends Model
     public function classes()
     {
         return $this->belongsToMany('App\Lop', 'lop_giangvien', 'giangvien_id', 'lop_id');
+    }
+
+    public function st_hocvan()
+    {
+        return $this->hasOne('App\Hocvan', 'id', 'hocvan');
     }
 }

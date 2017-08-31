@@ -44,6 +44,7 @@
             </th>
             <th>Chức danh<br><input type="text"></th>
             <th>Vị trí công tác<br><input type="text"></th>
+            <th>Học vấn<br><input type="text"></th>
             @if(\App\Roles::checkRole('hocvien-update'))
                 <th class="action"></th>
             @endif
@@ -70,6 +71,7 @@
                 <td>{{\App\Utils::formatSex($row->sex)}}</td>
                 <td>{{$row->chucdanh}}</td>
                 <td>{{$row->chucvu}}</td>
+                <td>{{($row->st_hocvan) ? $row->st_hocvan->hocvan : ''}}</td>
                 @if(\App\Roles::checkRole('hocvien-update'))
                     <td><a href="{{route('hocvien-update', ['uid' => $row->id])}}" class="btn btn-xs btn-primary">
                             Cập nhật</a>
