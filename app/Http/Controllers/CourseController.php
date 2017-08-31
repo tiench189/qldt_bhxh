@@ -20,6 +20,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Border;
 use PHPExcel_Settings;
+use PHPExcel_Shared_Date;
 
 use App\MoodleRest;
 
@@ -389,8 +390,7 @@ class CourseController extends Controller
                 $user_lastname = $sheet->getCell('F' . $row)->getValue();
                 $user_donvi = $sheet->getCell('G' . $row)->getValue();
                 $user_chucvu = $sheet->getCell('H' . $row)->getValue();
-                $user_ngaysinh = $sheet->getCell('I' . $row)->getValue();
-
+                $user_ngaysinh =  PHPExcel_Shared_Date::isDateTime($sheet->getCell('I' . $row)) ? date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($sheet->getCell('I' . $row)->getValue())) : "";
 
                 // Kiểm tra User này tồn tại hay không?
                 if (isset($dduser[$user_email])) {
@@ -499,6 +499,7 @@ class CourseController extends Controller
                         $newdata['username'] = $rs[$email]["uar"]->username;
                         $newdata['birthday'] = $rs[$email]["uar"]->birthday;
                         $newdata['auth'] = 'manual';
+                        $newdata['type'] = 'student';
                         $newdata['confirmed'] = 1;
                         $newdata['timecreated'] = time();
                         $newdata['timemodified'] = time();
