@@ -121,7 +121,8 @@ class UserController extends Controller
     public function add(Request $request)
     {
         if ($request->isMethod('get')) {
-            return view('users.add');
+            $groups = DB::table('group_permission')->orderBy('id', 'ASC')->get();
+            return view('users.add', ['groups' => $groups]);
         }
 
         $result = DB::table('users')
@@ -131,13 +132,14 @@ class UserController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
+                'group_permission' => $request->group_permission
             ]);
 
         if ($result) {
-            $request->session()->flash('message', 'Thêm học viên thành công');
+            $request->session()->flash('message', 'Thêm tài khoản thành công');
             return redirect(route('user-index'));
         } else {
-            $request->session()->flash('message', 'Thêm học viên thất bại');
+            $request->session()->flash('message', 'Thêm tài khoản thất bại');
             return redirect(route('user-add'))->withInput();
         }
 
@@ -164,10 +166,10 @@ class UserController extends Controller
 
             if ($request->has("password")) $dataupdate['password'] = Hash::make($request->password);
             if ($request->has("lastname")) $dataupdate['lastname'] = $request->lastname;
+            $dataupdate['group_permission'] = $request->get('group_permission', null);
 
-            $rs = DB::table('users')->where('id', $uid)->update(
-                $dataupdate
-            );
+
+            $rs = DB::table('users')->where('id', $uid)->update($dataupdate);
             if ($rs) {
                 $request->session()->flash('message', 'Cập nhật thông tin tài khoản thành công!');
                 return redirect(route('user-index'));
