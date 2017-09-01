@@ -262,7 +262,13 @@
             <tr>
                 <td>{{$idx + 1}}</td>
                 <td>{{$users[$row->user_id]->firstname}} {{$users[$row->user_id]->lastname}}</td>
-                <td>{{$users[$row->user_id]->email}}</td>
+                <td>
+                    @if(filter_var($users[$row->user_id]->email, FILTER_VALIDATE_EMAIL))
+                        {{$users[$row->user_id]->email}}
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
                 <td class="{{$classID == 0?'':'hidden'}}">{{$row->ten_lop}}</td>
                 <td>
                     <a href="{{route('hocvien-index', ['donvi' => $users[$row->user_id]->donvi])}}">

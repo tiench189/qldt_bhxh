@@ -50,7 +50,13 @@
             <tr>
                 <td>{{$idx + 1}}</td>
                 <td> {{$row->firstname}} {{$row->lastname}}</td>
-                <td> {{$row->email}} </td>
+                <td>
+                    @if(filter_var($row->email, FILTER_VALIDATE_EMAIL))
+                        {{$row->email}}
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
                 <td>
 
                     <a href="{{route('hocvien-index', ['donvi' => $row->donvi])}}">

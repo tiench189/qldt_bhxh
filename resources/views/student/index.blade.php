@@ -59,7 +59,13 @@
                 <td><a href="@if(\App\Roles::checkRole('hocvien-histories')) {{route('hocvien-histories', ['u' => $row->id])}} @endif">
                         {{$row->firstname}} {{$row->lastname}} </a>
                 </td>
-                <td> {{$row->email}} </td>
+                <td>
+                    @if(filter_var($row->email, FILTER_VALIDATE_EMAIL))
+                        {{$row->email}}
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
                 <td>
 
                     <a href="{{route('hocvien-index', ['donvi' => $row->donvi])}}">

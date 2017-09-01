@@ -25,7 +25,13 @@
                 <td> {{$row->id}} </td>
                 <td> <strong>{{$row->username}}</strong> </td>
                 <td> {{$row->lastname}} {{$row->firstname}} </td>
-                <td>  {{$row->email}} </td>
+                <td>
+                    @if(filter_var($row->email, FILTER_VALIDATE_EMAIL))
+                        {{$row->email}}
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
                 <td> {{$row->description}} </td>
                 <td>
                     <a href="{{route('class-capnhathocvien')}}" title="Chỉnh sửa" class="btn btn-xs btn-primary">

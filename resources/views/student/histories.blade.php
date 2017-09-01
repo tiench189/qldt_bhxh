@@ -31,7 +31,13 @@
             </tr>
             <tr>
                 <td>Email</td>
-                <td>{{$user->email}}</td>
+                <td>
+                    @if(filter_var($user->email, FILTER_VALIDATE_EMAIL))
+                        {{$user->email}}
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>Chức danh</td>

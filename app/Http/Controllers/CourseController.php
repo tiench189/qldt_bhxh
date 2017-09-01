@@ -423,7 +423,7 @@ class CourseController extends Controller
                     $userimport[$user_email]["ins"] = false;
 
                 } else {
-                    if (!empty($user_firstname) && !empty($user_firstname)) {
+                    if (!empty($user_firstname) && !empty($user_firstname) && (strcasecmp($user_firstname, "firstname") != 0) ) {
 
                         if(intval($user_donvi) > 999) $madxformat = sprintf('%05d', $user_donvi);
                         else $madxformat = sprintf('%03d', $user_donvi);
@@ -493,36 +493,55 @@ class CourseController extends Controller
         $msg = [];
         $countrs = ['ok' => 0, 'fail' => 0];
 
+        // Lấy toàn bộ danh sách học viên
+        $allUser = DB::table('person')
+            ->where('type', 'student')
+            ->select('id', 'username', 'email', 'firstname', 'lastname', 'donvi')
+            ->get()->toArray();
+        foreach ($allUser as $u) {
+            $dduser[$u->email] = $u;
+        }
+
+
         if (is_array($allow)) {
             foreach ($allow as $email) {
                 if (isset($rs[$email])) {
-                    if ($rs[$email]["ins"] == true) {
-                        $newdata = array();
+                    // Kiểm tra User này tồn tại hay không?
+                    if (!isset($dduser[$email])) {
 
-                        $newdata['firstname'] = $rs[$email]["uar"]->firstname;
-                        $newdata['lastname'] = $rs[$email]["uar"]->lastname;
-                        $newdata['email'] = $rs[$email]["uar"]->email;
-                        $newdata['donvi'] = $rs[$email]["uar"]->donvi;
-                        $newdata['username'] = $rs[$email]["uar"]->username;
-                        $newdata['birthday'] = $rs[$email]["uar"]->birthday;
-                        $newdata['auth'] = 'manual';
-                        $newdata['type'] = 'student';
-                        $newdata['confirmed'] = 1;
-                        $newdata['timecreated'] = time();
-                        $newdata['timemodified'] = time();
+                        if ($rs[$email]["ins"] == true) {
+                            $newdata = array();
 
-                        $insertID = DB::table('person')->insertGetId($newdata);
+                            $newdata['firstname'] = $rs[$email]["uar"]->firstname;
+                            $newdata['lastname'] = $rs[$email]["uar"]->lastname;
+                            $newdata['email'] = $rs[$email]["uar"]->email;
+                            $newdata['donvi'] = intval($rs[$email]["uar"]->donvi);
+                            $newdata['username'] = $rs[$email]["uar"]->username;
+                            $newdata['birthday'] = $rs[$email]["uar"]->birthday;
+                            $newdata['auth'] = 'manual';
+                            $newdata['type'] = 'student';
+                            $newdata['confirmed'] = 1;
+                            $newdata['timecreated'] = time();
+                            $newdata['timemodified'] = time();
 
-                        $rs[$email]["uar"]->id = $insertID;
+                            $insertID = DB::table('person')->insertGetId($newdata);
+
+                            $rs[$email]["uar"]->id = $insertID;
+                        }
+
+                    } else {
+                        $rs[$email]["uar"]->id = $dduser[$email]["uar"]->id;
+
                     }
+
                     if ($rs[$email]["uar"]->id != 0) {
                         $result = DB::table('lop_hocvien')
                             ->insert([
-                                'lop_id' => $rs[$email]["cli"],
-                                'user_id' => $rs[$email]["uar"]->id,
+                                'lop_id' => intval($rs[$email]["cli"]),
+                                'user_id' => intval($rs[$email]["uar"]->id),
                                 'status' => ($rs[$email]["stt"] == "finished") ? 'finished' : 'inprogress',
-                                'grade' => $rs[$email]["avg"],
-                                'xeploai' => $rs[$email]["rnk"],
+                                'grade' => floatval($rs[$email]["avg"]),
+                                'xeploai' => intval($rs[$email]["rnk"]),
                                 'complete_at' => date('Y-m-d H:i:s'),
                             ]);
                     } else $result = 0;
