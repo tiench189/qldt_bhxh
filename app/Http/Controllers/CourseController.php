@@ -392,6 +392,12 @@ class CourseController extends Controller
                 $user_chucvu = $sheet->getCell('H' . $row)->getValue();
                 $user_ngaysinh =  PHPExcel_Shared_Date::isDateTime($sheet->getCell('I' . $row)) ? date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($sheet->getCell('I' . $row)->getValue())) : "";
 
+                // Tạo Useremail để định danh nếu không có
+
+                if(!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+                    $user_email = Utils::createSlug($user_firstname . $user_firstname . " " . $user_ngaysinh . " " . $user_donvi);
+                }
+
                 // Kiểm tra User này tồn tại hay không?
                 if (isset($dduser[$user_email])) {
 
@@ -402,7 +408,6 @@ class CourseController extends Controller
                             ['user_id', '=', $dduser[$user_email]->id],
                         ])
                         ->count();
-
 
                     $checkcat = $this->studentcat($dduser[$user_email]->id, $id);
 
@@ -418,10 +423,12 @@ class CourseController extends Controller
                     $userimport[$user_email]["ins"] = false;
 
                 } else {
-                    if (filter_var($user_email, FILTER_VALIDATE_EMAIL) && !empty($user_firstname) && !empty($user_lastname)) {
+                    if (!empty($user_firstname) && !empty($user_firstname)) {
 
+                        if(intval($user_donvi) > 999) $madxformat = sprintf('%05d', $user_donvi);
+                        else $madxformat = sprintf('%03d', $user_donvi);
 
-                        $dvbh = DB::table('donvi')->where('ma_donvi', $user_donvi)->first();
+                        $dvbh = DB::table('donvi')->where('ma_donvi', $madxformat)->first();
 
                         if (count($dvbh) > 0) {
                             $donvi = $dvbh->id;
