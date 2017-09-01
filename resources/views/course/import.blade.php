@@ -67,8 +67,7 @@
         <thead>
         <tr>
             <th class="chk" data-checkbox="true" style="min-width: 30px"><input type="checkbox" checked="checked" id="checkedAll" /></th>
-            <th style="min-width: 150px">Username</th>
-            <th style="min-width: 150px">Email</th>
+            <th style="min-width: 150px">Username/Email</th>
             <th>Firstname</th>
             <th>Lastname</th>
             <th style="min-width: 200px">Lớp</th>
@@ -85,7 +84,7 @@
         @if ($row["chk"] < 0)
             <tr class="warning">
                 <td> {{ Form::checkbox('chkallow[]', $row["uar"], false, array("disabled")) }}  </td>
-                <td colspan="4">
+                <td colspan="3">
                     <s>{{$row["uar"]}}</s>
                 </td>
                 <td>{{$row["cln"]}}</td>
@@ -102,8 +101,13 @@
         @elseif ($row["chk"] == 0)
             <tr>
                 <td> {{ Form::checkbox('chkallow[]', $row["uar"]->email, array("checked"), ['class'=>"checkSingle"]) }}  </td>
-                <td><strong> {{$row["uar"]->username}} </strong></td>
-                <td><strong> {{$row["uar"]->email}} </strong></td>
+                <td>
+                    @if(filter_var($row["uar"]->email, FILTER_VALIDATE_EMAIL))
+                        <strong> {{$row["uar"]->email}} </strong>
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
                 <td> {{$row["uar"]->firstname}} </td>
                 <td> {{$row["uar"]->lastname}} </td>
                 <td> {{$row["cln"]}} </td>
@@ -137,8 +141,13 @@
         @else
             <tr class="warning">
                 <td> {{ Form::checkbox('chkallow[]', $row["uar"]->email, false, array("disabled")) }}  </td>
-                <td> <s> {{$row["uar"]->username}} </s> </td>
-                <td> <s> {{$row["uar"]->email}} </s> </td>
+                <td>
+                    @if(filter_var($row["uar"]->email, FILTER_VALIDATE_EMAIL))
+                        <strong> {{$row["uar"]->email}} </strong>
+                    @else
+                        <em>(Không khai báo)</em>
+                    @endif
+                </td>
                 <td> <s> {{$row["uar"]->firstname}} </s> </td>
                 <td> <s> {{$row["uar"]->lastname}} </s> </td>
                 <td> <s> {{$row["cln"]}} </s> </td>
