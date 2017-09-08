@@ -93,6 +93,10 @@
         <button type="button" class="btn btn-warning btn-import" data-toggle="modal" data-target="#modalImport"
                 style="margin-bottom: 10px">Import Học Viên (excel)
         </button>
+        <a href="{{route('export-ket-qua-hoc-vien', ['class_id' => $class->id])}}" type="button" class="btn btn-success btn-import"
+           style="margin-bottom: 10px; margin-left: 310px;">
+            Xuất Kết Quả
+        </a>
     @endif
 
     <!-- Modal -->

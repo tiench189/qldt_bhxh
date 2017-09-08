@@ -34,6 +34,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/profile', 'TeacherController@profile')->name('teacher-profile');
     });
 
+    Route::group(['prefix' => 'export'], function () {
+        Route::get('/course/ket-qua-hoc-vien', 'ExportController@export_score')->name('export-ket-qua-hoc-vien');
+    });
+
     Route::group(['middleware' => 'check_role'], function () {
         Route::get('/', 'CategoryController@index')->name('index');
         Route::group(['prefix' => 'course'], function () {
