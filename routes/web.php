@@ -61,6 +61,17 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update', 'CategoryController@update')->name('category-update');
             Route::get('/dshv', 'CategoryController@danhsachhocvien')->name('category-dshv');
         });
+
+        Route::group(['prefix' => 'khaosat'], function () {
+            Route::get('/', 'KhaosatController@index')->name('khaosat-index');
+
+            Route::post('create', 'KhaosatController@create')->name('khaosat-create');
+            Route::get('create', 'KhaosatController@create')->name('khaosat-create');
+            Route::post('/remove', 'KhaosatController@remove')->name('khaosat-remove');
+            Route::get('/update', 'KhaosatController@update')->name('khaosat-update');
+            Route::post('/update', 'KhaosatController@update')->name('khaosat-update');
+        });
+
         Route::group(['prefix' => 'hocvien'], function () {
             Route::get('/', 'StudentController@index')->name('hocvien-index');
             Route::get('/histories', 'StudentController@histories')->name('hocvien-histories');

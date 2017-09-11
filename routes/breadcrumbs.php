@@ -16,6 +16,12 @@ Breadcrumbs::register('category', function ($breadcrumbs, $sub = '') {
     $breadcrumbs->push($sub);
 });
 
+//Category
+Breadcrumbs::register('khaosat', function ($breadcrumbs, $sub = '') {
+    $breadcrumbs->push('Phiếu Khảo Sát', route('khaosat-index'));
+    $breadcrumbs->push($sub);
+});
+
 // Index > Course
 Breadcrumbs::register('course', function ($breadcrumbs, $nddt = [], $category = []) {
     if (!empty($nddt))

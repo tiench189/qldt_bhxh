@@ -27,6 +27,12 @@ use App\MoodleRest;
 
 class CourseController extends Controller
 {
+
+    public function __construct()
+    {
+        PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
+    }
+
     public function index(Request $request)
     {
         $cate = $request->c;
@@ -36,7 +42,7 @@ class CourseController extends Controller
             $parentcat = DB::table('course_categories')->where('id', $cat->parent)->first();
         } else {
             $course = DB::table('course')->get();
-            $cat = null;
+            $cat = DB::table('course_categories')->get();
             $parentcat = null;
         }
         $select_category = DB::table('course_categories')->get();
@@ -530,7 +536,7 @@ class CourseController extends Controller
                         }
 
                     } else {
-                        $rs[$email]["uar"]->id = $dduser[$email]["uar"]->id;
+                        $rs[$email]["uar"]->id = $dduser[$email]->id;
 
                     }
 
